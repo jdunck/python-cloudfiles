@@ -45,7 +45,7 @@ class Egg(object):
             raise ResponseError(response.status, response.reason)
         return response.read()
     
-    def stream(self, size=-1, offset=0, chunksize=8192):
+    def stream(self, chunksize=8192):
         """
         Returns a generator that can be used to iterate the egg data in 
         chunks of size "chunksize", (defaults to 8K bytes).
