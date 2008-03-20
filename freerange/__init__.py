@@ -30,15 +30,23 @@ bannana
 Creating baskets and adding eggs to them
 
 >> easter_basket = conn.create_basket('easter')
->> purple_egg = easter_basket['purple']
+>> purple_egg = easter_basket.create_egg('purple')
 >> purple_egg.load_from_file('images/easter/purple.jpg')
->> pink_egg = easter_basket['pink']
+>> pink_egg = easter_basket.create_egg('pink')
 >> f = open('images/easter/pink.gif', 'rb')
 >> pink_egg.write(f)
->> bad_egg = easter_basket['bad']
->> bad_egg.write('This is not the egg you are looking for.')
+>> bad_egg = easter_basket.create_egg('bad')
+>> bad_egg.write('This is not the egg you are looking for.\\n')
 >> bad_egg.read()
 'This is not the egg you are looking for.'
+
+Egg instances support streaming through the use of a generator.
+
+>> egg = easter_basket.get_egg('purple')
+>> f = open('/tmp/purple-egg.jpg', 'w')
+>> for chunk in egg.stream():
+..     f.write(chunk)
+>> f.close()
 """
 
 from freerange.connection  import Connection, ConnectionPool
