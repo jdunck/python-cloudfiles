@@ -1,3 +1,10 @@
+python-freerange (0.8.4-1) unstable; urgency=low
+
+  * Cast port to int when returning from parse_uri, (unlike the http
+    connection class, the https one won't accept a string).
+
+ -- Eric Evans <eevans@sym-link.com>  Wed, 09 Apr 2008 13:09:39 -0500
+
 python-freerange (0.8.3-1) unstable; urgency=low
 
   * Throw BasketNotEmpty exception when deleting a non-empty basket.

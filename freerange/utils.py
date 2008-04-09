@@ -27,4 +27,4 @@ def parse_url(url):
     else:
         raise InvalidUrl('Invalid host and/or port: %s' % netloc)
 
-    return (host, port, path.strip('/'), is_ssl)
+    return (host, int(port), path.strip('/'), is_ssl)
