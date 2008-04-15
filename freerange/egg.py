@@ -80,10 +80,19 @@ class Egg(object):
                 raise ResponseError(response.status, response.reason)
 
     # pylint: disable-msg=W0622
-    def write(self, data=''):
+    def write(self, data='', verify=True):
         """
         Write data to remote storage. Accepts either a string containing
         the data to be written, or an open file object.
+        
+        Server-side checksum verification can be disabled by passing a
+        value that will evaluate as False using the verify keyword 
+        argument. When the write is complete, the etag attribute will 
+        be populated with the value returned from the server, NOT one
+        calculated locally. Warning: When disabling verification, 
+        there is no guarantee that what you think was uploaded matches
+        what was actually stored. Use this optional carefully. You have
+        been warned.
         """
         if isinstance(data, file):
             # pylint: disable-msg=E1101
@@ -94,7 +103,7 @@ class Egg(object):
             self.size = data.len
             
         # Headers
-        self.etag = Egg.compute_md5sum(data)
+        self.etag = verify and Egg.compute_md5sum(data) or None
         if not self.content_type:
             # pylint: disable-msg=E1101
             type = None
@@ -136,6 +145,13 @@ class Egg(object):
 
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
+
+        # If verification has been disabled for this write, then set the 
+        # instances etag attribute to what the server returns to us.
+        if not verify:
+            for hdr in response.getheaders():
+                if hdr[0].lower() == 'etag':
+                    self.etag = hdr[1]
 
     def load_from_filename(self, filename):
         """
