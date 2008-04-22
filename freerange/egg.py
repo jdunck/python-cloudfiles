@@ -22,14 +22,21 @@ class Egg(object):
     Object representing an Egg, (metadata and data).
     """
     # R/O support of the legacy eggsum attr.
-    eggsum = property(lambda self: self.etag)
+    eggsum = property(lambda self: self._etag)
+    
+    def __set_etag(self, value):
+        self._etag = value
+        self._etag_override = True
+    
+    etag = property(lambda self: self._etag, __set_etag)
     
     def __init__(self, basket, name=None, force_exists=False):
         self.name = name
         self.basket = basket
         self.content_type = None
         self.size = None
-        self.etag = None
+        self._etag = None
+        self._etag_override = False
         self.metadata = {}
         if not self._initialize() and force_exists:
             raise NoSuchEgg(self.name)
@@ -94,7 +101,13 @@ class Egg(object):
             self.size = data.len
             
         # Headers
-        self.etag = Egg.compute_md5sum(data)
+        
+        # If override is set (and _etag is not None), then the etag has
+        # been manually assigned and we will not calculate our own.
+        if not (self._etag and self._etag_override):
+            self._etag = Egg.compute_md5sum(data)
+            self._etag_override = False
+            
         if not self.content_type:
             # pylint: disable-msg=E1101
             type = None
@@ -163,7 +176,8 @@ class Egg(object):
             if hdr[0].lower().startswith('x-egg-meta-'):
                 self.metadata[hdr[0][11:]] = hdr[1]
             if hdr[0].lower() == 'etag':
-                self.etag = hdr[1]
+                self._etag = hdr[1]
+                self._etag_override = False
             if hdr[0].lower() == 'content-length':
                 self.size = int(hdr[1])
         return True
@@ -178,7 +192,7 @@ class Egg(object):
         """
         headers = {}
         headers['Content-Length'] = self.size and self.size or 0
-        if self.etag: headers['ETag'] = self.etag
+        if self._etag: headers['ETag'] = self._etag
 
         if self.content_type: headers['Content-Type'] = self.content_type
         else: headers['Content-Type'] = 'application/octet-stream'
