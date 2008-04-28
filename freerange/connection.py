@@ -73,8 +73,7 @@ class Connection(object):
     def _get_http_conn_instance(self):
         return self.conn_class(self.host, port=self.port)
 
-    def make_request(self, method, path=list(), data=str(), hdrs=dict(), 
-                     parms=dict()):
+    def make_request(self, method, path=[], data='', hdrs={}, parms={}):
         """
         Given a method (i.e. GET, PUT, POST, etc), a path, data, header and
         metadata dicts, and an option dictionary of query parameters, 
@@ -87,22 +86,21 @@ class Connection(object):
             query_args = \
                 ['%s=%s' % (quote(x),quote(str(y))) for (x,y) in parms.items()]
             path = '%s?%s' % (path, '&'.join(query_args))
-
-        if not hdrs.has_key('Content-Length'):
-            hdrs['Content-Length'] = len(data)
-
-        if not hdrs.has_key('User-Agent'):
-            hdrs['User-Agent'] = user_agent
             
-        if not hdrs.has_key('X-Storage-Token'):
-            hdrs['X-Storage-Token'] = self.token
-
+        headers = {'Content-Length': len(data), 'User-Agent': user_agent, 
+               'X-Storage-Token': self.token}
+        
+        # Allow overriding of header values
+        for item in ('Content-Length', 'User-Agent', 'X-Storage-Token'):
+            if hdrs.has_key(item):
+                headers[item] = hdrs[item]
+            
         # Send the request
-        self.connection.request(method, path, data, hdrs)
+        self.connection.request(method, path, data, headers)
 
         def retry_request():
             self.http_connect()
-            self.connection.request(method, path, data, hdrs)
+            self.connection.request(method, path, data, headers)
             return self.connection.getresponse()
 
         try:
