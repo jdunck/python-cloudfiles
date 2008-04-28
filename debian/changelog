@@ -1,3 +1,11 @@
+python-freerange (0.8.5-1) unstable; urgency=low
+
+  * Fixed a bug that prevent using more than one connection instance
+    within the same scope.
+  * Added the ability to turn on debugging in httplib.
+
+ -- Eric Evans <eevans@racklabs.com>  Mon, 28 Apr 2008 11:44:58 -0500
+
 python-freerange (0.8.4-1) unstable; urgency=low
 
   * Cast port to int when returning from parse_uri, (unlike the http
