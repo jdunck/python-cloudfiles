@@ -42,6 +42,7 @@ class Connection(object):
         timeout values using the api_version and timeout keyword 
         arguments respectively.
         """
+        self.debuglevel = int(kwargs.get('debuglevel', 0))
         socket.setdefaulttimeout = int(kwargs.get('timeout', 5))
         self.api_version = kwargs.get('api_version', default_api_version)
         self.auth = kwargs.has_key('auth') and kwargs['auth'] or None
@@ -69,6 +70,7 @@ class Connection(object):
         Setup the http connection instance.
         """
         self.connection = self._get_http_conn_instance()
+        self.connection.set_debuglevel(self.debuglevel)
         
     def _get_http_conn_instance(self):
         return self.conn_class(self.host, port=self.port)
