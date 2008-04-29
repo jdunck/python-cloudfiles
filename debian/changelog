@@ -1,3 +1,10 @@
+python-freerange (0.8.6-1) unstable; urgency=low
+
+  * Fixed a new bug introduced in 0.8.5 which prevented the metadata
+    headers from being set (gah).
+
+ -- Eric Evans <eevans@racklabs.com>  Tue, 29 Apr 2008 11:26:49 -0500
+
 python-freerange (0.8.5-1) unstable; urgency=low
 
   * Fixed a bug that prevent using more than one connection instance

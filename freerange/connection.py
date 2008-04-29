@@ -91,12 +91,8 @@ class Connection(object):
             
         headers = {'Content-Length': len(data), 'User-Agent': user_agent, 
                'X-Storage-Token': self.token}
+        isinstance(hdrs, dict) and headers.update(hdrs)
         
-        # Allow overriding of header values
-        for item in ('Content-Length', 'User-Agent', 'X-Storage-Token'):
-            if hdrs.has_key(item):
-                headers[item] = hdrs[item]
-            
         # Send the request
         self.connection.request(method, path, data, headers)
 
