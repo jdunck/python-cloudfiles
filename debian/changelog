@@ -1,3 +1,10 @@
+python-freerange (0.8.7-1) unstable; urgency=low
+
+  * Allow user assignment of an Egg instance's etag attribute, and
+    do not (re)calculate if they have.
+
+ -- Eric Evans <eevans@racklabs.com>  Wed, 30 Apr 2008 10:27:13 -0500
+
 python-freerange (0.8.6-1) unstable; urgency=low
 
   * Fixed a new bug introduced in 0.8.5 which prevented the metadata
