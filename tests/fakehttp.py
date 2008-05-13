@@ -3,7 +3,7 @@
 fakehttp/socket implementation
 
 - TrackerSocket: an object which masquerades as a socket and responds to
-  requests in a manner consistent with a *very* stupid Nast tracker. 
+  requests in a manner consistent with a *very* stupid CloudFS tracker. 
    
 - CustomHTTPConnection: an object which subclasses httplib.HTTPConnection
   in order to replace it's socket with a TrackerSocket instance.
@@ -56,19 +56,19 @@ class TrackerSocket(FakeSocket):
         if len(path) == 2:
             self.write('Content-Length: 24\n')
             self.write('Connection: close\n\n')
-            self.write('basket1\n')
-            self.write('basket2\n')
-            self.write('basket3\n')
+            self.write('container1\n')
+            self.write('container2\n')
+            self.write('container3\n')
         if len(path) == 3:
-            eggs = ['eggggg%s\n' % i for i in range(1,9)]
+            objects = ['object%s\n' % i for i in range(1,9)]
             resrc = path[2]
             # Support for the optional limit query parm
             if '?' in resrc:
                 query = resrc[resrc.find('?')+1:].strip('&').split('&')
                 args = dict([tuple(i.split('=', 1)) for i in query])
                 if args.has_key('limit'):
-                    eggs = eggs[:int(args['limit'])]
-            content = ''.join(eggs)
+                    objects = objects[:int(args['limit'])]
+            content = ''.join(objects)
             self.write('Content-Length: %d\n' % len(content))
             self.write('Connection: close\n\n')
             self.write(content)
@@ -120,7 +120,7 @@ class CustomHTTPConnection(connbase):
 
 if __name__ == '__main__':
     conn = CustomHTTPConnection('localhost', 8000)
-    conn.request('HEAD', '/v1/account/basket/egg')
+    conn.request('HEAD', '/v1/account/container/object')
     response = conn.getresponse()
     print "Status:", response.status, response.reason
     for (key, value) in response.getheaders():

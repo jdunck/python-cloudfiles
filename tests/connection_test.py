@@ -3,7 +3,7 @@
 import unittest
 from misc       import printdoc
 from fakehttp   import CustomHTTPConnection
-from freerange  import Connection, Basket
+from freerange  import Connection, Container
 from freerange.authentication import MockAuthentication as Auth
 
 class ConnectionTest(unittest.TestCase):
@@ -11,46 +11,46 @@ class ConnectionTest(unittest.TestCase):
     Freerange Connection class tests.
     """
     @printdoc
-    def test_create_basket(self):
+    def test_create_container(self):
         """
-        Verify that Connection.create_basket() returns a Basket instance.
+        Verify that Connection.create_container() returns a Container instance.
         """
-        basket = self.conn.create_basket('basket1')
-        assert isinstance(basket, Basket)
+        container = self.conn.create_container('container1')
+        assert isinstance(container, Container)
 
     @printdoc
-    def test_delete_basket(self):
+    def test_delete_container(self):
         """
-        Simple sanity check of Connection.delete_basket()
+        Simple sanity check of Connection.delete_container()
         """
-        self.conn.delete_basket('basket1')
+        self.conn.delete_container('container1')
 
     @printdoc
-    def test_get_all_baskets(self):
+    def test_get_all_containers(self):
         """
-        Iterate a BasketResults and verify that it returns Basket instances.
+        Iterate a ContainerResults and verify that it returns Container instances.
         Validate that the count() and index() methods work as expected.
         """
-        baskets = self.conn.get_all_baskets()
-        for instance in baskets:
-            assert isinstance(instance, Basket)
-        assert baskets.count('basket1') == 1
-        assert baskets.index('basket3') == 2
+        containers = self.conn.get_all_containers()
+        for instance in containers:
+            assert isinstance(instance, Container)
+        assert containers.count('container1') == 1
+        assert containers.index('container3') == 2
 
     @printdoc
-    def test_get_basket(self):
+    def test_get_container(self):
         """
-        Verify that Connection.get_basket() returns a Basket instance.
+        Verify that Connection.get_container() returns a Container instance.
         """
-        basket = self.conn.get_basket('basket1')
-        assert isinstance(basket, Basket)
+        container = self.conn.get_container('container1')
+        assert isinstance(container, Container)
 
     @printdoc
-    def test_list_baskets(self):
+    def test_list_containers(self):
         """
-        Verify that Connection.list_baskets() returns a list object.
+        Verify that Connection.list_containers() returns a list object.
         """
-        assert isinstance(self.conn.list_baskets(), list)
+        assert isinstance(self.conn.list_containers(), list)
 
     def setUp(self):
         self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')

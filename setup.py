@@ -4,8 +4,8 @@ from distutils.core import setup
 setup(
     name='freerange',
     version='0.1',
-    description='Nast client library for python',
+    description='CloudFS client library for python',
     author='Racklabs',
-    url='https://ryder.racklabs.com/trac',
+    url='https://www.mosso.com/cloudfs',
     packages=['freerange']
 )

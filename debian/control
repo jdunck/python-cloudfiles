@@ -10,9 +10,9 @@ Package: python-freerange
 Architecture: all
 Depends: ${python:Depends}
 Provides: ${python:Provides}
-Description: python client library for Nast storage system
- Nast is a parallel virtualized distributed storage system being developed
- by Racklabs. Unlike a traditional POSIX compliant filesystem, Nast 
+Description: python client library for CloudFS storage system
+ CloudFS is a parallel virtualized distributed storage system being developed
+ by Racklabs. Unlike a traditional POSIX compliant filesystem, CloudFS 
  requires that applications access storage through the use of a web 
  services API. Freerange provides a client-side library for these web
  services in Python.

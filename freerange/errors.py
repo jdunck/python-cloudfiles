@@ -18,30 +18,30 @@ class ResponseError(Exception):
     def __repr__(self):
         return '%d: %s' % (self.status, self.reason)
 
-class NoSuchBasket(Exception):
+class NoSuchContainer(Exception):
     """
-    Raised on a non-existent basket.
-    """
-    pass
-
-class NoSuchEgg(Exception):
-    """
-    Raised on a non-existent egg.
+    Raised on a non-existent Container.
     """
     pass
 
-class BasketNotEmpty(Exception):
+class NoSuchObject(Exception):
     """
-    Raised when attempting to delete a basket that still contains eggs.
+    Raised on a non-existent Object.
     """
-    def __init__(self, basket_name):
-        self.basket_name = basket_name
+    pass
+
+class ContainerNotEmpty(Exception):
+    """
+    Raised when attempting to delete a Container that still contains Objects.
+    """
+    def __init__(self, container_name):
+        self.container_name = container_name
         
     def __str__(self):
-        return "Cannot delete non-empty basket %s" % self.basket_name
+        return "Cannot delete non-empty Container %s" % self.container_name
     
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__, self.basket_name)
+        return "%s(%s)" % (self.__class__.__name__, self.container_name)
 
 class InvalidUrl(Exception):
     """
