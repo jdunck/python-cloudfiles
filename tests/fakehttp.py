@@ -54,7 +54,7 @@ class TrackerSocket(FakeSocket):
         self.write('HTTP/1.1 200 Ok\n')
         self.write('Content-Type: text/plain\n')
         if len(path) == 2:
-            self.write('Content-Length: 24\n')
+            self.write('Content-Length: 33\n')
             self.write('Connection: close\n\n')
             self.write('container1\n')
             self.write('container2\n')

@@ -74,7 +74,7 @@ class ContainerResults(object):
     An iterable results set object for Containers. 
     """
     def __init__(self, conn, containers=list()):
-        self._conainers = conainers
+        self._containers = containers
         self.conn = conn
 
     def __getitem__(self, key):
