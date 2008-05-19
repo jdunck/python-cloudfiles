@@ -1,3 +1,9 @@
+python-freerange (0.9.0-1) unstable; urgency=low
+
+  * Refactored to eliminate avian references.
+
+ -- Eric Evans <eevans@racklabs.com>  Mon, 19 May 2008 15:03:20 -0500
+
 python-freerange (0.8.7-1) unstable; urgency=low
 
   * Allow user assignment of an Egg instance's etag attribute, and
