@@ -174,7 +174,7 @@ class Object(object):
             if hdr[0].lower() == 'content-type':
                 self.content_type = hdr[1]
             if hdr[0].lower().startswith('x-object-meta-'):
-                self.metadata[hdr[0][11:]] = hdr[1]
+                self.metadata[hdr[0][14:]] = hdr[1]
             if hdr[0].lower() == 'etag':
                 self._etag = hdr[1]
                 self._etag_override = False
