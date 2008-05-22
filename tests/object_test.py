@@ -1,60 +1,60 @@
 #!/usr/bin/python
 
 import unittest, md5
-from freerange         import Egg, Connection
+from freerange         import Object, Connection
 from freerange.errors  import ResponseError
 from freerange.authentication import MockAuthentication as Auth
 from fakehttp          import CustomHTTPConnection
 from misc              import printdoc
 import os
 
-class EggTest(unittest.TestCase):
+class ObjectTest(unittest.TestCase):
     """
-    Freerange Egg class tests.
+    Freerange Object class tests.
     """
     @printdoc
     def test_read(self):
         """
-        Test an eggs ability to read.
+        Test an Object's ability to read.
         """
-        assert "teapot" in self.egg.read()
+        assert "teapot" in self.storage_object.read()
 
     @printdoc
     def test_response_error(self):
         """
-        Verify that reading a non-existent egg raises a ResponseError
+        Verify that reading a non-existent Object raises a ResponseError
         exception.
         """
-        egg = self.basket.create_egg('bogus')
-        self.assertRaises(ResponseError, egg.read)
+        storage_object = self.container.create_object('bogus')
+        self.assertRaises(ResponseError, storage_object.read)
 
     @printdoc
     def test_write(self):
         """
-        Simple sanity test of Egg.write()
+        Simple sanity test of Object.write()
         """
-        self.egg.write('the rain in spain ...')
+        self.storage_object.write('the rain in spain ...')
 
     @printdoc
     def test_sync_metadata(self):
         """
-        Sanity check of Egg.sync_metadata()
+        Sanity check of Object.sync_metadata()
         """
-        self.egg.metadata['unit'] = 'test'
-        self.egg.sync_metadata()
+        self.storage_object.metadata['unit'] = 'test'
+        self.storage_object.sync_metadata()
 
     @printdoc
     def test_load_from_file(self):
         """
-        Simple sanity test of Egg.load_from_file().
+        Simple sanity test of Object.load_from_file().
         """
-        self.egg.load_from_filename(os.path.dirname(__file__) \
+        self.storage_object.load_from_filename(os.path.dirname(__file__) \
                 + '/../tests/samplefile.txt')
 
     @printdoc
     def test_compute_md5sum(self):
         """
-        Verify that the Egg.compute_md5sum() class method returns an 
+        Verify that the Object.compute_md5sum() class method returns an 
         accurate md5 sum value.
         """
         f = open('/bin/ls', 'r')
@@ -63,7 +63,7 @@ class EggTest(unittest.TestCase):
         sum1 = m.hexdigest()
         f.seek(0)
         try:
-            sum2 = Egg.compute_md5sum(f)
+            sum2 = Object.compute_md5sum(f)
             assert sum1 == sum2, "%s != %s" % (sum1, sum2)
         finally:
             f.close()
@@ -73,11 +73,11 @@ class EggTest(unittest.TestCase):
         self.conn = Connection(auth=self.auth)
         self.conn.conn_class = CustomHTTPConnection
         self.conn.http_connect()
-        self.basket = self.conn.get_basket('basket1')
-        self.egg = self.basket.get_egg('eggggg1')
+        self.container = self.conn.get_container('container1')
+        self.storage_object = self.container.get_object('object1')
     def tearDown(self):
-        del self.egg
-        del self.basket
+        del self.storage_object
+        del self.container
         del self.conn
         del self.auth
 

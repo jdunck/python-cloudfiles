@@ -3,19 +3,19 @@
 connection operations
 
 Connection instances are used to communicate with the remote service at
-the account level creating, listing and deleting baskets, and returning
-Basket instances.
+the account level creating, listing and deleting Containers, and returning
+Container instances.
 """
 
 import  socket
-from    urllib   import quote
-from    httplib  import HTTPSConnection, HTTPConnection, HTTPException
-from    basket   import Basket, BasketResults
-from    utils    import parse_url
-from    errors   import ResponseError, NoSuchBasket, BasketNotEmpty
-from    Queue    import Queue, Empty, Full
-from    time     import time
-from    consts   import __version__, user_agent, default_api_version
+from    urllib    import quote
+from    httplib   import HTTPSConnection, HTTPConnection, HTTPException
+from    container import Container, ContainerResults
+from    utils     import parse_url
+from    errors    import ResponseError, NoSuchContainer, ContainerNotEmpty
+from    Queue     import Queue, Empty, Full
+from    time      import time
+from    consts    import __version__, user_agent, default_api_version
 from    authentication import Authentication
 
 # TODO: there should probably be a way of getting at the account and 
@@ -29,7 +29,7 @@ from    authentication import Authentication
 class Connection(object):
     """
     Manages the connection to the storage system and serves as a factory 
-    for Basket instances.
+    for Container instances.
     """
     def __init__(self, account=None, username=None, password=None, \
             authurl=None, **kwargs):
@@ -42,6 +42,7 @@ class Connection(object):
         timeout values using the api_version and timeout keyword 
         arguments respectively.
         """
+        self.debuglevel = int(kwargs.get('debuglevel', 0))
         socket.setdefaulttimeout = int(kwargs.get('timeout', 5))
         self.api_version = kwargs.get('api_version', default_api_version)
         self.auth = kwargs.has_key('auth') and kwargs['auth'] or None
@@ -69,12 +70,12 @@ class Connection(object):
         Setup the http connection instance.
         """
         self.connection = self._get_http_conn_instance()
+        self.connection.set_debuglevel(self.debuglevel)
         
     def _get_http_conn_instance(self):
         return self.conn_class(self.host, port=self.port)
 
-    def make_request(self, method, path=list(), data=str(), hdrs=dict(), 
-                     parms=dict()):
+    def make_request(self, method, path=[], data='', hdrs={}, parms={}):
         """
         Given a method (i.e. GET, PUT, POST, etc), a path, data, header and
         metadata dicts, and an option dictionary of query parameters, 
@@ -87,22 +88,17 @@ class Connection(object):
             query_args = \
                 ['%s=%s' % (quote(x),quote(str(y))) for (x,y) in parms.items()]
             path = '%s?%s' % (path, '&'.join(query_args))
-
-        if not hdrs.has_key('Content-Length'):
-            hdrs['Content-Length'] = len(data)
-
-        if not hdrs.has_key('User-Agent'):
-            hdrs['User-Agent'] = user_agent
             
-        if not hdrs.has_key('X-Storage-Token'):
-            hdrs['X-Storage-Token'] = self.token
-
+        headers = {'Content-Length': len(data), 'User-Agent': user_agent, 
+               'X-Storage-Token': self.token}
+        isinstance(hdrs, dict) and headers.update(hdrs)
+        
         # Send the request
-        self.connection.request(method, path, data, hdrs)
+        self.connection.request(method, path, data, headers)
 
         def retry_request():
             self.http_connect()
-            self.connection.request(method, path, data, hdrs)
+            self.connection.request(method, path, data, headers)
             return self.connection.getresponse()
 
         try:
@@ -116,60 +112,60 @@ class Connection(object):
 
         return response
 
-    def create_basket(self, basket_name):
+    def create_container(self, container_name):
         """
-        Given a basket name, returns a Basket object, creating a new
-        basket if one does not already exist.
+        Given a Container name, returns a Container item, creating a new
+        Container if one does not already exist.
         """
-        response = self.make_request('PUT', [basket_name])
+        response = self.make_request('PUT', [container_name])
         buff = response.read()
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
-        return Basket(self, basket_name)
+        return Container(self, container_name)
 
-    def delete_basket(self, basket_name):
+    def delete_container(self, container_name):
         """
-        Given a basket name, delete it.
+        Given a Container name, delete it.
         """
-        if isinstance(basket_name, Basket):
-            basket_name = basket_name.name
-        response = self.make_request('DELETE', [basket_name])
+        if isinstance(container_name, Container):
+            container_name = container_name.name
+        response = self.make_request('DELETE', [container_name])
         buff = response.read()
         
         if (response.status == 409):
-            raise BasketNotEmpty(basket_name)
+            raise ContainerNotEmpty(container_name)
         elif (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
 
-    def get_all_baskets(self):
+    def get_all_containers(self):
         """
-        Returns a Basket object result set.
+        Returns a Container item result set.
         """
-        return BasketResults(self, self.list_baskets())
+        return ContainerResults(self, self.list_containers())
 
-    def get_basket(self, basket_name):
+    def get_container(self, container_name):
         """
-        Return a single Basket object for the given basket.
+        Return a single Container item for the given Container.
         """
-        response = self.make_request('HEAD', [basket_name])
+        response = self.make_request('HEAD', [container_name])
         count = size = None
         for hdr in response.getheaders():
-            if hdr[0].lower() == 'x-basket-egg-count':
+            if hdr[0].lower() == 'x-container-object-count':
                 try: count = int(hdr[1])
                 except: count = 0
-            if hdr[0].lower() == 'x-basket-bytes-used':
+            if hdr[0].lower() == 'x-container-bytes-used':
                 try: size = int(hdr[1])
                 except: size = 0
         buff = response.read()
         if response.status == 404:
-            raise NoSuchBasket(basket_name)
+            raise NoSuchContainer(container_name)
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
-        return Basket(self, basket_name, count, size)
+        return Container(self, container_name, count, size)
 
-    def list_baskets(self):
+    def list_containers(self):
         """
-        Returns a list of baskets.
+        Returns a list of Containers.
         """
         response = self.make_request('GET', [''])
         if (response.status < 200) or (response.status > 299):
@@ -177,7 +173,7 @@ class Connection(object):
         return response.read().splitlines()
 
     def __getitem__(self, key):
-        return self.get_basket(key)
+        return self.get_container(key)
 
 
 class ConnectionPool(Queue):
@@ -218,10 +214,10 @@ if __name__ == '__main__':
     from authentication import MockAuthentication
     auth = MockAuthentication('eevans', 'eevans', 'bogus', 'http://10.0.0.4/')
     conn = Connection(auth=auth)
-    baskets = conn.get_all_baskets()
+    containers = conn.get_all_containers()
     print auth.account
-    for basket in baskets:
-        print " \_", basket.name
-        print "   \_", ', '.join(basket.list_eggs())
+    for container in containers:
+        print " \_", container.name
+        print "   \_", ', '.join(container.list_objects())
 
 # vim:set ai sw=4 ts=4 tw=0 expandtab:
