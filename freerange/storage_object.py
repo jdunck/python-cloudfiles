@@ -111,9 +111,11 @@ class Object(object):
             
         # If override is set (and _etag is not None), then the etag has
         # been manually assigned and we will not calculate our own.
-        if not (self._etag and self._etag_override):
-            self._etag = Object.compute_md5sum(data)
-            self._etag_override = False
+        if verify:
+            if not self._etag_override:
+                self._etag = Object.compute_md5sum(data)
+        else:
+            self._etag = None
             
         if not self.content_type:
             # pylint: disable-msg=E1101
@@ -162,14 +164,14 @@ class Object(object):
         if not verify:
             for hdr in response.getheaders():
                 if hdr[0].lower() == 'etag':
-                    self.etag = hdr[1]
+                    self._etag = hdr[1]
 
-    def load_from_filename(self, filename):
+    def load_from_filename(self, filename, verify=True):
         """
         Put the contents of the named file into remote storage.
         """
         fobj = open(filename, 'rb+')
-        self.write(fobj)
+        self.write(fobj, verify=verify)
         fobj.close()
         
     def _initialize(self):
