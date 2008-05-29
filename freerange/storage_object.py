@@ -170,7 +170,7 @@ class Object(object):
         """
         Put the contents of the named file into remote storage.
         """
-        fobj = open(filename, 'rb+')
+        fobj = open(filename, 'rb')
         self.write(fobj, verify=verify)
         fobj.close()
         
