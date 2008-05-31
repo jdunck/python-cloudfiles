@@ -41,18 +41,18 @@ class Object(object):
         if not self._initialize() and force_exists:
             raise NoSuchObject(self.name)
 
-    def read(self, size=-1, offset=0):
+    def read(self, size=-1, offset=0, hdrs=None):
         """
         Returns the Object data. The optional size and offset arguments are 
         reserved for a future enhancement and currently have no effect.
         """
         response = self.container.conn.make_request('GET', 
-                [self.container.name, self.name])
+                path = [self.container.name, self.name], hdrs = hdrs)
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
         return response.read()
     
-    def stream(self, chunksize=8192):
+    def stream(self, chunksize=8192, hdrs=None):
         """
         Returns a generator that can be used to iterate the Object data in 
         chunks of size "chunksize", (defaults to 8K bytes).
@@ -62,7 +62,7 @@ class Object(object):
         this has occurred.
         """
         response = self.container.conn.make_request('GET', 
-                [self.container.name, self.name])
+                path = [self.container.name, self.name], hdrs = hdrs)
         if response.status < 200 or response.status > 299:
             raise ResponseError(response.status, response.reason)
         buff = response.read(chunksize)
