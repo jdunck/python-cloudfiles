@@ -20,6 +20,17 @@ class ObjectTest(unittest.TestCase):
         assert "teapot" in self.storage_object.read()
 
     @printdoc
+    def test_read_pass_headers(self):
+        """
+        Test an Object's ability to read when it has 
+        extra headers passed in.
+        """
+        hdrs = {}
+        hdrs['x-bogus-header-1'] = 'bogus value'
+        hdrs['x-bogus-header-2'] = 'boguser value'
+        assert "teapot" in self.storage_object.read(hdrs=hdrs)
+
+    @printdoc
     def test_response_error(self):
         """
         Verify that reading a non-existent Object raises a ResponseError
