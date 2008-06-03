@@ -35,6 +35,7 @@ class Object(object):
         self.container = container
         self.content_type = None
         self.size = None
+        self.last_modified = None
         self._etag = None
         self._etag_override = False
         self.metadata = {}
@@ -196,6 +197,8 @@ class Object(object):
                 self._etag_override = False
             if hdr[0].lower() == 'content-length':
                 self.size = int(hdr[1])
+            if hdr[0].lower() == 'last-modified':
+                self.last_modified = hdr[1]
         return True
 
     def __str__(self):
