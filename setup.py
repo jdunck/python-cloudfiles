@@ -3,7 +3,7 @@
 from distutils.core import setup
 setup(
     name='freerange',
-    version='0.9.1',
+    version='0.9.3',
     description='CloudFS client library for python',
     author='Racklabs',
     url='https://www.mosso.com/cloudfs',
