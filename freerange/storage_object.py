@@ -50,6 +50,7 @@ class Object(object):
         response = self.container.conn.make_request('GET', 
                 path = [self.container.name, self.name], hdrs = hdrs)
         if (response.status < 200) or (response.status > 299):
+            buff = response.read()
             raise ResponseError(response.status, response.reason)
         return response.read()
     
@@ -65,6 +66,7 @@ class Object(object):
         response = self.container.conn.make_request('GET', 
                 path = [self.container.name, self.name], hdrs = hdrs)
         if response.status < 200 or response.status > 299:
+            buff = response.read()
             raise ResponseError(response.status, response.reason)
         buff = response.read(chunksize)
         while len(buff) > 0:

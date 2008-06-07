@@ -79,6 +79,7 @@ class Authentication(BaseAuthentication):
         conn = self.conn_class(self.host, self.port)
         conn.request('GET', self._get_uri(version), '', self.headers)
         response = conn.getresponse()
+        buff = response.read()
 
         # A status code of 401 indicates that the supplied credentials
         # were not accepted by the authentication service.

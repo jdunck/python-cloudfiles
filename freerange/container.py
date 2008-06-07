@@ -49,6 +49,7 @@ class Container(object):
         """
         response = self.conn.make_request('GET', [self.name], parms=parms)
         if (response.status < 200) or (response.status > 299):
+            buff = response.read()
             raise ResponseError(response.status, response.reason)
         return response.read().splitlines()
 
@@ -66,6 +67,7 @@ class Container(object):
             object_name = object_name.name
         response = self.conn.make_request('DELETE', [self.name, object_name])
         if (response.status < 200) or (response.status > 299):
+            buff = response.read()
             raise ResponseError(response.status, response.reason)
         buff = response.read()
 

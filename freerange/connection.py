@@ -103,7 +103,42 @@ class Connection(object):
 
         try:
             response = self.connection.getresponse()
+# in case you ever really, really need to know
+#         except httplib.NotConnected:
+#             print "NotConnected"
+#             response = retry_request()
+#         except httplib.InvalidURL:
+#             print "InvalidURL"
+#             response = retry_request()
+#         except httplib.UnknownProtocol:
+#             print "UnknownProtocol"
+#             response = retry_request()
+#         except httplib.UnknownTransferEncoding:
+#             print "UnknownTransferEncoding"
+#             response = retry_request()
+#         except httplib.UnimplementedFileMode:
+#             print "UnimplementedFileMode"
+#             response = retry_request()
+#         except httplib.IncompleteRead:
+#             print "IncompleteRead"
+#             response = retry_request()
+#         except httplib.CannotSendRequest:
+#             print "CannotSendRequest"
+#             response = retry_request()
+#         except httplib.CannotSendHeader:
+#             print "CannotSendHeader"
+#             response = retry_request()
+#         except httplib.ResponseNotReady:
+#             print "ResponseNotReady"
+#             response = retry_request()
+#         except httplib.BadStatusLine:
+#             print "BadStatusLine"
+#             response = retry_request()
+#         except httplib.ImproperConnectionState:
+#             print "ImproperConnectionState"
+#             response = retry_request()
         except HTTPException:
+#            print "HTTPException"
             response = retry_request()
             
         if response.status == 401:
@@ -169,6 +204,7 @@ class Connection(object):
         """
         response = self.make_request('GET', [''])
         if (response.status < 200) or (response.status > 299):
+            buff = response.read()
             raise ResponseError(response.status, response.reason)
         return response.read().splitlines()
 
