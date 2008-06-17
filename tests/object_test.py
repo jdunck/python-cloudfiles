@@ -59,8 +59,8 @@ class ObjectTest(unittest.TestCase):
         """
         Simple sanity test of Object.load_from_file().
         """
-        self.storage_object.load_from_filename(os.path.dirname(__file__) \
-                + '/../tests/samplefile.txt')
+        path = os.path.join(os.path.dirname(__file__), 'samplefile.txt')
+        self.storage_object.load_from_filename(path)
 
     @printdoc
     def test_compute_md5sum(self):

@@ -106,7 +106,10 @@ class Object(object):
         """
         if isinstance(data, file):
             # pylint: disable-msg=E1101
-            data.flush()
+            try:
+                data.flush()
+            except IOError:
+                pass # If the file descriptor is read-only this will fail
             self.size = int(os.fstat(data.fileno())[6])
         else:
             data = StringIO.StringIO(data)
