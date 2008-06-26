@@ -90,7 +90,7 @@ class Object(object):
                 raise ResponseError(response.status, response.reason)
 
     # pylint: disable-msg=W0622
-    def write(self, data='', verify=True):
+    def write(self, data='', verify=True, callback=None):
         """
         Write data to remote storage. Accepts either a string containing
         the data to be written, or an open file object.
@@ -103,6 +103,11 @@ class Object(object):
         there is no guarantee that what you think was uploaded matches
         what was actually stored. Use this optional carefully. You have
         been warned.
+        
+        A callback can be passed in for reporting on the progress of
+        the upload. The callback should accept two integers, the first
+        will be for the amount of data written so far, the second for
+        the total size of the transfer.
         """
         if isinstance(data, file):
             # pylint: disable-msg=E1101
@@ -147,12 +152,16 @@ class Object(object):
         http.endheaders()
 
         response = None
+        transfered = 0
 
         buff = data.read(4096)
         try:
             while len(buff) > 0:
                 http.send(buff)
                 buff = data.read(4096)
+                transfered += len(buff)
+                if callable(callback):
+                    callback(transfered, self.size)
             response = http.getresponse()
             buff = response.read()
         except timeout, err:
@@ -172,12 +181,12 @@ class Object(object):
                 if hdr[0].lower() == 'etag':
                     self._etag = hdr[1]
 
-    def load_from_filename(self, filename, verify=True):
+    def load_from_filename(self, filename, verify=True, callback=None):
         """
         Put the contents of the named file into remote storage.
         """
         fobj = open(filename, 'rb')
-        self.write(fobj, verify=verify)
+        self.write(fobj, verify=verify, callback=callback)
         fobj.close()
         
     def _initialize(self):
