@@ -5,6 +5,7 @@ from misc       import printdoc
 from fakehttp   import CustomHTTPConnection
 from freerange  import Connection, Container
 from freerange.authentication import MockAuthentication as Auth
+from freerange.errors import InvalidContainerName
 
 class ConnectionTest(unittest.TestCase):
     """
@@ -52,6 +53,17 @@ class ConnectionTest(unittest.TestCase):
         """
         assert isinstance(self.conn.list_containers(), list)
 
+    @printdoc
+    def test_bad_names(self):
+        """
+        Verify that methods do not accept invalid container names.
+        """
+        exccls = InvalidContainerName
+        for badname in ('', 'yougivelove/abadname'):
+            self.assertRaises(exccls, self.conn.create_container, badname)
+            self.assertRaises(exccls, self.conn.get_container, badname)
+            self.assertRaises(exccls, self.conn.delete_container, badname)
+        
     def setUp(self):
         self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
         self.conn = Connection(auth=self.auth)

@@ -9,9 +9,10 @@ arbitrary metadata with them.
 
 import md5, StringIO, mimetypes, os, tempfile
 from urllib  import quote
-from errors  import ResponseError, NoSuchObject
+from errors  import ResponseError, NoSuchObject, InvalidObjectName
 from socket  import timeout
 from consts  import user_agent
+from utils   import requires_name
 
 # Because HTTPResponse objects *have* to have read() called on them 
 # before they can be used again ...
@@ -42,10 +43,18 @@ class Object(object):
         if not self._initialize() and force_exists:
             raise NoSuchObject(self.name)
 
+    @requires_name(InvalidObjectName)
     def read(self, size=-1, offset=0, hdrs=None):
         """
-        Returns the Object data. The optional size and offset arguments are 
-        reserved for a future enhancement and currently have no effect.
+        Return the content of the remote storage object.
+        
+        Keyword arguments:
+        size -- currently unimplemented
+        offset -- currently unimplemented
+        hdrs -- an optional dict of headers to send in the request
+        
+        Note: This method will buffer the entire response in memory. Use
+        the stream() method if this isn't acceptable.
         """
         response = self.container.conn.make_request('GET', 
                 path = [self.container.name, self.name], hdrs = hdrs)
@@ -54,10 +63,14 @@ class Object(object):
             raise ResponseError(response.status, response.reason)
         return response.read()
     
+    @requires_name(InvalidObjectName)
     def stream(self, chunksize=8192, hdrs=None):
         """
-        Returns a generator that can be used to iterate the Object data in 
-        chunks of size "chunksize", (defaults to 8K bytes).
+        Return a generator of the remote storage object data.
+        
+        Keyword arguments:
+        chunksize -- size in bytes yielded by the generator
+        hdrs -- an optional dict of headers to send in the request
         
         Warning: The HTTP response is only complete after this generator
         has raised a StopIteration. No other methods can be called until
@@ -74,10 +87,11 @@ class Object(object):
             buff = response.read(chunksize)
         # I hate you httplib
         buff = response.read()
-            
+    
+    @requires_name(InvalidObjectName)
     def sync_metadata(self):
         """
-        Writes all metadata for the Object.
+        Commits the metadata to the remote storage system.
         """
         if self.metadata:
             headers = self._make_headers()
@@ -90,19 +104,23 @@ class Object(object):
                 raise ResponseError(response.status, response.reason)
 
     # pylint: disable-msg=W0622
+    @requires_name(InvalidObjectName)
     def write(self, data='', verify=True, callback=None):
         """
-        Write data to remote storage. Accepts either a string containing
-        the data to be written, or an open file object.
+        Write data to the remote storage system.
         
-        Server-side checksum verification can be disabled by passing a
-        value that will evaluate as False using the verify keyword 
-        argument. When the write is complete, the etag attribute will 
-        be populated with the value returned from the server, NOT one
-        calculated locally. Warning: When disabling verification, 
-        there is no guarantee that what you think was uploaded matches
-        what was actually stored. Use this optional carefully. You have
-        been warned.
+        Keyword arguments:
+        data -- the data to be written, a string or a file-like object
+        verify -- enable/disable server-side checksum verification
+        callback -- function to be used as a progress callback
+
+        By default, server-side verification is enabled, (verify=True), and
+        end-to-end verification is performed using an md5 checksum. When
+        verification is disabled, (verify=False), the etag attribute will 
+        be set to the value returned by the server, not one calculated 
+        locally. When disabling verification, there is no guarantee that 
+        what you think was uploaded matches what was actually stored. Use 
+        this optional carefully. You have been warned.
         
         A callback can be passed in for reporting on the progress of
         the upload. The callback should accept two integers, the first
@@ -193,6 +211,9 @@ class Object(object):
         """
         Initialize the Object with values from the remote service, (if any).
         """
+        if not self.name:
+            return False
+        
         response = self.container.conn.make_request(
                 'HEAD', [self.container.name, self.name]
         )

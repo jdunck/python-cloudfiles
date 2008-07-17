@@ -12,7 +12,8 @@ from    urllib    import quote
 from    httplib   import HTTPSConnection, HTTPConnection, HTTPException
 from    container import Container, ContainerResults
 from    utils     import parse_url
-from    errors    import ResponseError, NoSuchContainer, ContainerNotEmpty
+from    errors    import ResponseError, NoSuchContainer, ContainerNotEmpty, \
+                         InvalidContainerName
 from    Queue     import Queue, Empty, Full
 from    time      import time
 from    consts    import __version__, user_agent, default_api_version
@@ -152,6 +153,9 @@ class Connection(object):
         Given a Container name, returns a Container item, creating a new
         Container if one does not already exist.
         """
+        if not container_name or '/' in container_name:
+            raise InvalidContainerName(container_name)
+        
         response = self.make_request('PUT', [container_name])
         buff = response.read()
         if (response.status < 200) or (response.status > 299):
@@ -164,6 +168,9 @@ class Connection(object):
         """
         if isinstance(container_name, Container):
             container_name = container_name.name
+        if not container_name or '/' in container_name:
+            raise InvalidContainerName(container_name)
+        
         response = self.make_request('DELETE', [container_name])
         buff = response.read()
         
@@ -182,6 +189,9 @@ class Connection(object):
         """
         Return a single Container item for the given Container.
         """
+        if not container_name or '/' in container_name:
+            raise InvalidContainerName(container_name)
+        
         response = self.make_request('HEAD', [container_name])
         count = size = None
         for hdr in response.getheaders():

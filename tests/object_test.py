@@ -2,7 +2,7 @@
 
 import unittest, md5
 from freerange         import Object, Connection
-from freerange.errors  import ResponseError
+from freerange.errors  import ResponseError, InvalidObjectName
 from freerange.authentication import MockAuthentication as Auth
 from fakehttp          import CustomHTTPConnection
 from misc              import printdoc
@@ -78,7 +78,24 @@ class ObjectTest(unittest.TestCase):
             assert sum1 == sum2, "%s != %s" % (sum1, sum2)
         finally:
             f.close()
-
+            
+    @printdoc
+    def test_bad_name(self):
+        """
+        Ensure you can't assign an invalid object name.
+        """
+        obj = Object(self.container)    # name is None
+        self.assertRaises(InvalidObjectName, obj.read)
+        self.assertRaises(InvalidObjectName, obj.stream)
+        self.assertRaises(InvalidObjectName, obj.sync_metadata)
+        self.assertRaises(InvalidObjectName, obj.write, '')
+        
+        obj.name = ''    # name is zero-length string
+        self.assertRaises(InvalidObjectName, obj.read)
+        self.assertRaises(InvalidObjectName, obj.stream)
+        self.assertRaises(InvalidObjectName, obj.sync_metadata)
+        self.assertRaises(InvalidObjectName, obj.write, '')
+        
     def setUp(self):
         self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
         self.conn = Connection(auth=self.auth)

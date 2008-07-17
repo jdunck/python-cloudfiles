@@ -28,3 +28,15 @@ def parse_url(url):
         raise InvalidUrl('Invalid host and/or port: %s' % netloc)
 
     return (host, int(port), path.strip('/'), is_ssl)
+
+def requires_name(exc_class):
+    """Decorator to guard against invalid or unset names."""
+    def wrapper(f):
+        def decorator(*args, **kwargs):
+            if hasattr(args[0], 'name') and not args[0].name:
+                raise exc_class(args[0].name)
+            return f(*args, **kwargs)
+        decorator.__doc__ = f.__doc__
+        decorator.__name__ = f.__name__
+        return decorator
+    return wrapper

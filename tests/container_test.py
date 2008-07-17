@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
 import unittest
-from freerange  import Connection, Object
+from freerange  import Connection, Container, Object
 from freerange.authentication import MockAuthentication as Auth
+from freerange.errors import InvalidContainerName, InvalidObjectName
 from fakehttp   import CustomHTTPConnection
 from misc       import printdoc
 
@@ -58,7 +59,26 @@ class ContainerTest(unittest.TestCase):
         Verify that query parameter passing works by passing a limit.
         """
         assert len(self.container.list_objects(limit=3)) == 3
+        
+    @printdoc
+    def test_bad_name_assignment(self):
+        """
+        Ensure you can't assign an invalid name.
+        """
+        basket = Container(self.conn) 
+        try:
+            basket.name = 'yougivelove/abadname'
+            self.fail("InvalidContainerName exception not raised!")
+        except InvalidContainerName:
+            pass
 
+    @printdoc
+    def test_bad_object_name(self):
+        """
+        Verify that methods do not accept invalid container names.
+        """
+        self.assertRaises(InvalidObjectName, self.container.delete_object, '')
+            
     def setUp(self):
         self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
         self.conn = Connection(auth=self.auth)
