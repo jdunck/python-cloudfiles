@@ -6,6 +6,7 @@ from freerange.errors  import ResponseError, InvalidObjectName
 from freerange.authentication import MockAuthentication as Auth
 from fakehttp          import CustomHTTPConnection
 from misc              import printdoc
+from tempfile          import mktemp
 import os
 
 class ObjectTest(unittest.TestCase):
@@ -61,6 +62,19 @@ class ObjectTest(unittest.TestCase):
         """
         path = os.path.join(os.path.dirname(__file__), 'samplefile.txt')
         self.storage_object.load_from_filename(path)
+        
+    @printdoc
+    def test_save_to_filename(self):
+        """Sanity test of Object.save_to_filename()."""
+        tmpnam = mktemp()
+        self.storage_object.save_to_filename(tmpnam)
+        rdr = open(tmpnam, 'r')
+        try:
+            assert rdr.read() == self.storage_object.read(), \
+                   "save_to_filename() stored invalid content!"
+        finally:
+            rdr.close()
+            os.unlink(tmpnam)
 
     @printdoc
     def test_compute_md5sum(self):
