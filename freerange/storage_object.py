@@ -10,7 +10,7 @@ arbitrary metadata with them.
 import md5, StringIO, mimetypes, os, tempfile
 from urllib  import quote
 from errors  import ResponseError, NoSuchObject, InvalidObjectName, \
-                    InvalidObjectSize
+                    InvalidObjectSize, IncompleteSend
 from socket  import timeout
 from consts  import user_agent
 from utils   import requires_name
@@ -215,8 +215,10 @@ class Object(object):
         
         You must set the size attribute of the instance prior to calling
         this method. Failure to do so will result in an 
-        InvalidObjectSize exception. Assigning an incorrect size will
-        result in a failed transfer.
+        InvalidObjectSize exception.
+        
+        If the generator raises StopIteration prior to yielding the 
+        right number of bytes, an IncompleteSend exception is raised.
         
         If the content_type attribute is not set then a value of
         application/octet-stream will be used.
@@ -240,10 +242,15 @@ class Object(object):
         http = self.__get_conn_for_write()
         
         response = None
+        transferred = 0
 
         try:
             for chunk in iterable:
                 http.send(chunk)
+                transferred += len(chunk)
+            # If the generator didn't yield enough data, stop, drop, and roll.
+            if transferred < self.size:
+                raise IncompleteSend()
             response = http.getresponse()
             buff = response.read()
         except timeout, err:
