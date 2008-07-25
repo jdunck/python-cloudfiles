@@ -44,25 +44,56 @@ class Object(object):
             raise NoSuchObject(self.name)
 
     @requires_name(InvalidObjectName)
-    def read(self, size=-1, offset=0, hdrs=None):
+    def read(self, size=-1, offset=0, hdrs=None, buffer=None, callback=None):
         """
-        Return the content of the remote storage object.
+        Read the content from the remote storage object.
         
         Keyword arguments:
         size -- currently unimplemented
         offset -- currently unimplemented
         hdrs -- an optional dict of headers to send in the request
+        buffer -- an optional file-like object to write the content to
+        callback -- function to be used as a progress callback
+
+        By default this method will buffer the response in memory and
+        return it as a string. However, if a file-like object is passed
+        in using the buffer keyword, the response will be written to it
+        instead.
         
-        Note: This method will buffer the entire response in memory. Use
-        the stream() method if this isn't acceptable.
+        A callback can be passed in for reporting on the progress of
+        the download. The callback should accept two integers, the first
+        will be for the amount of data written so far, the second for
+        the total size of the transfer. Note: This option is only
+        applicable when used in conjunction with the buffer option.
         """
         response = self.container.conn.make_request('GET', 
                 path = [self.container.name, self.name], hdrs = hdrs)
         if (response.status < 200) or (response.status > 299):
             buff = response.read()
             raise ResponseError(response.status, response.reason)
-        return response.read()
+        
+        if hasattr(buffer, 'write'):
+            transferred = 0
+            scratch = response.read(8192)
+            
+            while len(scratch) > 0:
+                buffer.write(scratch)
+                scratch = response.read(8192)
+                transferred += len(scratch)
+                if callable(callback):
+                    callback(transfered, self.size)
+            return None
+        else:
+            return response.read()
     
+    def save_to_filename(self, filename, callback=None):
+        """
+        Save the contents of the object to filename.
+        """
+        fobj = open(filename, 'wb')
+        self.read(buffer=fobj, callback=callback)
+        fobj.close()
+        
     @requires_name(InvalidObjectName)
     def stream(self, chunksize=8192, hdrs=None):
         """
