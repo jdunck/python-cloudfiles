@@ -9,7 +9,8 @@ arbitrary metadata with them.
 
 import md5, StringIO, mimetypes, os, tempfile
 from urllib  import quote
-from errors  import ResponseError, NoSuchObject, InvalidObjectName
+from errors  import ResponseError, NoSuchObject, InvalidObjectName, \
+                    InvalidObjectSize
 from socket  import timeout
 from consts  import user_agent
 from utils   import requires_name
@@ -103,6 +104,25 @@ class Object(object):
             if response.status != 202:
                 raise ResponseError(response.status, response.reason)
 
+    def __get_conn_for_write(self):
+        headers = self._make_headers()
+
+        headers['X-Storage-Token'] = self.container.conn.token
+
+        path = "/%s/%s/%s" % (self.container.conn.uri.rstrip('/'), \
+                quote(self.container.name), quote(self.name))
+
+        # Requests are handled a little differently for writes ...
+        http = self.container.conn._get_http_conn_instance()
+        
+        # TODO: more/better exception handling please
+        http.putrequest('PUT', path)
+        for hdr in headers:
+            http.putheader(hdr, headers[hdr])
+        http.putheader('User-Agent', user_agent)
+        http.endheaders()
+        return http
+            
     # pylint: disable-msg=W0622
     @requires_name(InvalidObjectName)
     def write(self, data='', verify=True, callback=None):
@@ -152,23 +172,9 @@ class Object(object):
             if hasattr(data, 'name'):
                 type = mimetypes.guess_type(data.name)[0]
             self.content_type = type and type or 'application/octet-stream'
-        headers = self._make_headers()
 
-        headers['X-Storage-Token'] = self.container.conn.token
-
-        path = "/%s/%s/%s" % (self.container.conn.uri.rstrip('/'), \
-                quote(self.container.name), quote(self.name))
-
-        # Requests are handled a little differently here ...
-        http = self.container.conn._get_http_conn_instance()
-
-        # TODO: more/better exception handling please --------------------
-        http.putrequest('PUT', path)
-        for hdr in headers:
-            http.putheader(hdr, headers[hdr])
-        http.putheader('User-Agent', user_agent)
-        http.endheaders()
-
+        http = self.__get_conn_for_write()
+        
         response = None
         transfered = 0
 
@@ -199,6 +205,60 @@ class Object(object):
                 if hdr[0].lower() == 'etag':
                     self._etag = hdr[1]
 
+    @requires_name(InvalidObjectName)
+    def send(self, iterable):
+        """
+        Write data to the remote storage system using a generator.
+        
+        Arguments:
+        iterable -- a generator which yields the content to upload
+        
+        You must set the size attribute of the instance prior to calling
+        this method. Failure to do so will result in an 
+        InvalidObjectSize exception. Assigning an incorrect size will
+        result in a failed transfer.
+        
+        If the content_type attribute is not set then a value of
+        application/octet-stream will be used.
+        
+        Server-side verification will be performed if an md5 checksum is 
+        assigned to the etag property before calling this method, 
+        otherwise no verification will be performed, (verification
+        can be performed afterward though by using the etag attribute
+        which is set to the value returned by the server).
+        """
+        if not isinstance(self.size, (int, long)):
+            raise InvalidObjectSize(self.size)
+        
+        # This method implicitly diables verification
+        if not self._etag_override:
+            self._etag = None
+        
+        if not self.content_type:
+            self.content_type = 'application/octet-stream'
+            
+        http = self.__get_conn_for_write()
+        
+        response = None
+
+        try:
+            for chunk in iterable:
+                http.send(chunk)
+            response = http.getresponse()
+            buff = response.read()
+        except timeout, err:
+            if response:
+                # pylint: disable-msg=E1101
+                buff = response.read()
+            raise err
+        
+        if (response.status < 200) or (response.status > 299):
+            raise ResponseError(response.status, response.reason)
+
+        for hdr in response.getheaders():
+            if hdr[0].lower() == 'etag':
+                self._etag = hdr[1]
+            
     def load_from_filename(self, filename, verify=True, callback=None):
         """
         Put the contents of the named file into remote storage.

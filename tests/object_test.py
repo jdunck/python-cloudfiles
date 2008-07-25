@@ -45,6 +45,14 @@ class ObjectTest(unittest.TestCase):
         Simple sanity test of Object.write()
         """
         self.storage_object.write('the rain in spain ...')
+        
+    @printdoc
+    def test_send(self):
+        """Sanity test of Object.send()."""
+        gener = (part for part in ('the ', 'rain ', 'in ', 'spain ...'))
+        self.storage_object.size = 21
+        self.storage_object.content_type = "text/plain"
+        self.storage_object.send(gener)
 
     @printdoc
     def test_sync_metadata(self):
