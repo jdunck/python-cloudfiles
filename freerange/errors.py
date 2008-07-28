@@ -59,3 +59,15 @@ class InvalidUrl(Exception):
     Not a valid url for use with this software.
     """
     pass
+
+class InvalidObjectSize(Exception):
+    """
+    Not a valid storage_object size attribute.
+    """
+    pass
+
+class IncompleteSend(Exception):
+    """
+    Raised when there is a insufficient amount of data to send.
+    """
+    pass
