@@ -73,15 +73,15 @@ class Object(object):
             raise ResponseError(response.status, response.reason)
         
         if hasattr(buffer, 'write'):
-            transferred = 0
             scratch = response.read(8192)
+            transferred = 0
             
             while len(scratch) > 0:
                 buffer.write(scratch)
-                scratch = response.read(8192)
                 transferred += len(scratch)
                 if callable(callback):
-                    callback(transfered, self.size)
+                    callback(transferred, self.size)
+                scratch = response.read(8192)
             return None
         else:
             return response.read()
@@ -90,9 +90,12 @@ class Object(object):
         """
         Save the contents of the object to filename.
         """
-        fobj = open(filename, 'wb')
-        self.read(buffer=fobj, callback=callback)
-        fobj.close()
+        # Pedantry rocks!
+        try:
+            fobj = open(filename, 'wb')
+            self.read(buffer=fobj, callback=callback)
+        finally:
+            fobj.close()
         
     @requires_name(InvalidObjectName)
     def stream(self, chunksize=8192, hdrs=None):
