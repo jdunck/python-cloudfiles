@@ -67,6 +67,12 @@ class Object(object):
         the total size of the transfer. Note: This option is only
         applicable when used in conjunction with the buffer option.
         """
+        if size > 0:
+            range = 'bytes=%d-%d' % (offset, (offset + size) - 1)
+            if hdrs:
+                hdrs['Range'] = range
+            else:
+                hdrs = {'Range': range}
         response = self.container.conn.make_request('GET', 
                 path = [self.container.name, self.name], hdrs = hdrs)
         if (response.status < 200) or (response.status > 299):
