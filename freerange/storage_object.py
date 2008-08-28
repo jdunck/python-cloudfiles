@@ -5,6 +5,8 @@ Object operations
 An Object is analogous to a file on a conventional filesystem. You can
 read data from, or write data to your Objects. You can also associate 
 arbitrary metadata with them.
+
+See COPYING for license information.
 """
 
 import md5, StringIO, mimetypes, os, tempfile

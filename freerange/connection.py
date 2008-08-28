@@ -5,6 +5,8 @@ connection operations
 Connection instances are used to communicate with the remote service at
 the account level creating, listing and deleting Containers, and returning
 Container instances.
+
+See COPYING for license information.
 """
 
 import  socket

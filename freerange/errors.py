@@ -1,6 +1,8 @@
 
 """
 exception classes
+
+See COPYING for license information.
 """
 
 class ResponseError(Exception):

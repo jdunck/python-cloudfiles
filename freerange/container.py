@@ -6,6 +6,8 @@ Containers are storage compartments where you put your data (objects).
 A container is similar to a directory or folder on a conventional filesystem
 with the exception that they exist in a flat namespace, you can not create
 containers inside of containers.
+
+See COPYING for license information.
 """
 
 from storage_object import Object, ObjectResults

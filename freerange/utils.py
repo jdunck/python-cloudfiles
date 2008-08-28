@@ -1,3 +1,4 @@
+""" See COPYING for license information. """
 
 import re
 from urlparse  import urlparse

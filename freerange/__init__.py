@@ -45,6 +45,8 @@ Object instances support streaming through the use of a generator.
 >> for chunk in deb_iso.stream():
 ..     f.write(chunk)
 >> f.close()
+
+See COPYING for license information.
 """
 
 from freerange.connection     import Connection, ConnectionPool
