@@ -150,7 +150,7 @@ class Connection(object):
 
     def get_info(self):
         """
-        Return a tuple of number of containers and the total bytes in the account
+        Return tuple for number of containers and total bytes in the account
         """
         response = self.make_request('HEAD')
         count = size = None
@@ -162,8 +162,6 @@ class Connection(object):
                 try: size = int(hdr[1])
                 except: size = 0
         buff = response.read()
-        if response.status == 404:
-            raise NoSuchContainer(container_name)
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
         return tuple(count, size)
