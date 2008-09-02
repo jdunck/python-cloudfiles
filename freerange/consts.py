@@ -1,4 +1,4 @@
 
-__version__ = "0.9.6"
+__version__ = "1.0.0"
 user_agent = "Freerange/%s" % __version__
 default_api_version = 1

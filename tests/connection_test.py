@@ -63,7 +63,15 @@ class ConnectionTest(unittest.TestCase):
             self.assertRaises(exccls, self.conn.create_container, badname)
             self.assertRaises(exccls, self.conn.get_container, badname)
             self.assertRaises(exccls, self.conn.delete_container, badname)
-        
+
+    @printdoc
+    def test_account_info(self):
+        """
+        Test to see if the account has only one container
+        """
+        container = self.conn.get_container('container1')
+        assert self.conn.get_info()[0] == 1
+
     def setUp(self):
         self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
         self.conn = Connection(auth=self.auth)
