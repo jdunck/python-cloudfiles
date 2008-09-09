@@ -150,6 +150,24 @@ class Connection(object):
 
         return response
 
+    def get_info(self):
+        """
+        Return tuple for number of containers and total bytes in the account
+        """
+        response = self.make_request('HEAD')
+        count = size = None
+        for hdr in response.getheaders():
+            if hdr[0].lower() == 'x-account-container-count':
+                try: count = int(hdr[1])
+                except: count = 0
+            if hdr[0].lower() == 'x-account-bytes-used':
+                try: size = int(hdr[1])
+                except: size = 0
+        buff = response.read()
+        if (response.status < 200) or (response.status > 299):
+            raise ResponseError(response.status, response.reason)
+        return tuple(count, size)
+
     def create_container(self, container_name):
         """
         Given a Container name, returns a Container item, creating a new

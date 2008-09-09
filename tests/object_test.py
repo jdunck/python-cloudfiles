@@ -117,7 +117,14 @@ class ObjectTest(unittest.TestCase):
         self.assertRaises(InvalidObjectName, obj.stream)
         self.assertRaises(InvalidObjectName, obj.sync_metadata)
         self.assertRaises(InvalidObjectName, obj.write, '')
-        
+ 
+    @printdoc
+    def test_account_size(self):
+        """
+        Test to see that the total bytes on the account is size of the samplefile
+        """
+        assert self.conn.get_info()[1] == 79
+       
     def setUp(self):
         self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
         self.conn = Connection(auth=self.auth)
