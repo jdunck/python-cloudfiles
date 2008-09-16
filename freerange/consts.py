@@ -3,3 +3,4 @@
 __version__ = "1.0.0"
 user_agent = "Freerange/%s" % __version__
 default_api_version = 1
+default_authurl = 'https://api.mosso.com/'

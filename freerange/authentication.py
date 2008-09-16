@@ -13,7 +13,7 @@ import urllib
 from httplib  import HTTPSConnection, HTTPConnection, HTTPException
 from utils    import parse_url
 from errors   import ResponseError
-from consts   import user_agent, default_api_version
+from consts   import user_agent, default_api_version, default_authurl
 
 class BaseAuthentication(object):
     """
@@ -21,16 +21,19 @@ class BaseAuthentication(object):
     """
     def __init__(self, account, username, password, url):
         self.account = account
-        self.url = url
+        self.url = url or default_authurl
         self.headers = dict()
-        self.headers['X-Storage-User'] = username
-        self.headers['X-Storage-Pass'] = password
+        self.headers['x-storage-user'] = username
+        self.headers['x-storage-pass'] = password
         self.headers['User-Agent'] = user_agent
-        (self.host, self.port, self.uri, self.is_ssl) = parse_url(url)
+        (self.host, self.port, self.uri, self.is_ssl) = parse_url(self.url)
         self.conn_class = self.is_ssl and HTTPSConnection or HTTPConnection
         
     def _get_uri(self, version):
-        auth_uri = "/v%d/%s/auth" % (int(version), self.account)
+        if self.account:
+            auth_uri = "/v%d/%s/auth" % (int(version), self.account)
+        else:
+            auth_uri = "/auth"
         
         # Prefix the uri with any fragment parsed from the original url.
         if len(self.uri):

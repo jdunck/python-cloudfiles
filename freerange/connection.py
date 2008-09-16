@@ -34,7 +34,7 @@ class Connection(object):
     Manages the connection to the storage system and serves as a factory 
     for Container instances.
     """
-    def __init__(self, account=None, username=None, password=None, \
+    def __init__(self, username=None, password=None, account=None,\
             authurl=None, **kwargs):
         """
         Accepts keyword arguments for account, username, password and
@@ -51,7 +51,8 @@ class Connection(object):
         self.auth = kwargs.has_key('auth') and kwargs['auth'] or None
         
         if not self.auth:
-            if (account and username and password and authurl):
+            if (username and password and (authurl or (authurl and account)
+                    or (not authurl and not account))):
                 self.auth = Authentication(account, username, password, authurl)
             else:
                 raise TypeError("Incorrect or invalid arguments supplied")
