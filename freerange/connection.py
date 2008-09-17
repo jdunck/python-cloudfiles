@@ -167,7 +167,7 @@ class Connection(object):
         buff = response.read()
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
-        return tuple(count, size)
+        return (count, size)
 
     def create_container(self, container_name):
         """
