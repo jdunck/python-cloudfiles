@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>cloudfiles.container.Container</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="cloudfiles-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.mosso.com/">Cloud Files Python API</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="cloudfiles-module.html">Package&nbsp;cloudfiles</a> ::
+        <a href="cloudfiles.container-module.html">Module&nbsp;container</a> ::
+        Class&nbsp;Container
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="cloudfiles.container.Container-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Container</h1><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container">source&nbsp;code</a></span><br /><br />
+<p>Container object and Object instance factory.</p>
+  If your account has the feature enabled, containers can be publically 
+  shared over a global content delivery network.<br /><br />
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">connection</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">count</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Containers will rarely if ever need to be instantiated directly by
+      the user.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#make_public" class="summary-sig-name">make_public</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ttl</span>=<span class="summary-sig-default">3600</span>,
+        <span class="summary-sig-arg">user_agent_acl</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">referer_acl</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Either publishes the current container to the CDN or updates its 
+      CDN attributes.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#make_private" class="summary-sig-name">make_private</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Disables CDN access to this container.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">bool</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#is_public" class="summary-sig-name">is_public</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns a boolean indicating whether or not this container is 
+      publically accessible via the CDN.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.is_public">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">str</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#public_uri" class="summary-sig-name">public_uri</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return the URI for this container, if it is publically accessible 
+      via the CDN.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><a href="cloudfiles.storage_object.Object-class.html" 
+      class="link">Object</a></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#create_object" class="summary-sig-name">create_object</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">object_name</span>)</span><br />
+      Return an <a href="cloudfiles.storage_object.Object-class.html" 
+      class="link">Object</a> instance, creating it if necessary.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><a href="cloudfiles.storage_object.ObjectResults-class.html" 
+      class="link">ObjectResults</a></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#get_objects" class="summary-sig-name">get_objects</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**parms</span>)</span><br />
+      Return a result set of all Objects in the Container.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><a href="cloudfiles.storage_object.Object-class.html" 
+      class="link">Object</a></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#get_object" class="summary-sig-name">get_object</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">object_name</span>)</span><br />
+      Return an Object instance for an existing storage object.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list(str)</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#list_objects" class="summary-sig-name">list_objects</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**parms</span>)</span><br />
+      Returns a list of storage object names.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#delete_object" class="summary-sig-name">delete_object</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">object_name</span>)</span><br />
+      Permanently remove a storage object.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== INSTANCE VARIABLES ==================== -->
+<a name="section-InstanceVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">str</span>
+    </td><td class="summary">
+        <a href="cloudfiles.container.Container-class.html#name" class="summary-name">name</a><br />
+      the container's name (generally treated as read-only)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">number</span>
+    </td><td class="summary">
+        <a name="cdn_ttl"></a><span class="summary-name">cdn_ttl</span><br />
+      the time-to-live of the CDN's public cache of this container 
+      (cached, use make_public to alter)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">number</span>
+    </td><td class="summary">
+        <a name="object_count"></a><span class="summary-name">object_count</span><br />
+      the number of objects in this container (cached)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">number</span>
+    </td><td class="summary">
+        <a name="size_used"></a><span class="summary-name">size_used</span><br />
+      the sum of the sizes of all objects in this container (cached)
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">connection</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">name</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">count</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">size</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </table>
+  
+  <p>Containers will rarely if ever need to be instantiated directly by the
+  user.</p>
+  Instead, use the <a 
+  href="cloudfiles.connection.Connection-class.html#create_container" 
+  class="link">create_container</a>, <a 
+  href="cloudfiles.connection.Connection-class.html#get_container" 
+  class="link">get_container</a>, <a 
+  href="cloudfiles.connection.Connection-class.html#list_containers" 
+  class="link">list_containers</a> and other methods on a valid Connection 
+  object.
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="make_public"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_public</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">ttl</span>=<span class="sig-default">3600</span>,
+        <span class="sig-arg">user_agent_acl</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">referer_acl</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  Either publishes the current container to the CDN or updates its CDN 
+  attributes.  Requires CDN be enabled on the account.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ttl</code></strong> (number) - cache duration in seconds of the CDN server</li>
+        <li><strong class="pname"><code>user_agent_acl</code></strong> (str) - no documentation at this time</li>
+        <li><strong class="pname"><code>referer_acl</code></strong> (str) - no documentation at this time</li>
+    </ul></dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="make_private"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_private</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  Disables CDN access to this container. It may continue to be available
+  until its TTL expires.
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="is_public"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_public</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.is_public">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </table>
+  
+  Returns a boolean indicating whether or not this container is 
+  publically accessible via the CDN.
+  <dl class="fields">
+    <dt>Returns: bool</dt>
+        <dd>whether or not this container is published to the CDN</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="public_uri"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">public_uri</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  Return the URI for this container, if it is publically accessible via 
+  the CDN.
+  <dl class="fields">
+    <dt>Returns: str</dt>
+        <dd>the public URI for this container</dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="create_object"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">create_object</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">object_name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  <p>Return an <a href="cloudfiles.storage_object.Object-class.html" 
+  class="link">Object</a> instance, creating it if necessary.</p>
+  When passed the name of an existing object, this method will return an
+  instance of that object, otherwise it will create a new one.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>object_name</code></strong> (str) - the name of the object to create</li>
+    </ul></dd>
+    <dt>Returns: <a href="cloudfiles.storage_object.Object-class.html" 
+      class="link">Object</a></dt>
+        <dd>an object representing the newly created storage object</dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_objects"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_objects</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">**parms</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  <p>Return a result set of all Objects in the Container.</p>
+  Keyword arguments are treated as HTTP query parameters and can be used
+  limit the result set (see the API documentation).
+  <dl class="fields">
+    <dt>Returns: <a href="cloudfiles.storage_object.ObjectResults-class.html" 
+      class="link">ObjectResults</a></dt>
+        <dd>an iterable collection of all storage objects in the 
+          container</dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_object"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_object</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">object_name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  <p>Return an Object instance for an existing storage object.</p>
+  If an object with a name matching object_name does not exist then a <a
+  href="cloudfiles.errors.NoSuchObject-class.html" 
+  class="link">NoSuchObject</a> exception is raised.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>object_name</code></strong> (str) - the name of the object to retrieve</li>
+    </ul></dd>
+    <dt>Returns: <a href="cloudfiles.storage_object.Object-class.html" 
+      class="link">Object</a></dt>
+        <dd>an Object representing the storage object requested</dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="list_objects"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">list_objects</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">**parms</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  <p>Returns a list of storage object names.</p>
+  Keyword arguments are treated as HTTP query parameters and can be used
+  limit the result set (see the API documentation).
+  <dl class="fields">
+    <dt>Returns: list(str)</dt>
+        <dd>a list of the names of all objects in the container</dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="delete_object"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">delete_object</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">object_name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </table>
+  
+  Permanently remove a storage object.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>object_name</code></strong> (str) - the name of the object to retrieve</li>
+    </ul></dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== INSTANCE VARIABLE DETAILS ==================== -->
+<a name="section-InstanceVariableDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Variable Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceVariableDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="name"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">name</h3>
+  the container's name (generally treated as read-only)
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>.&lt;lambda&gt;(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#__set_name" class="summary-sig-name">cloudfiles.container.Container.__set_name</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="cloudfiles-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.mosso.com/">Cloud Files Python API</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0beta1 on Tue Oct 21 14:03:53 2008
+    </td>
+    <td align="right" class="footer">
+      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie()
+  // -->
+</script>
+  
+</body>
+</html>

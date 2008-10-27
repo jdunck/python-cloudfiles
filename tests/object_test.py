@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
 import unittest, md5
-from freerange         import Object, Connection
-from freerange.errors  import ResponseError, InvalidObjectName
-from freerange.authentication import MockAuthentication as Auth
+from cloudfiles        import Object, Connection
+from cloudfiles.errors  import ResponseError, InvalidObjectName
+from cloudfiles.authentication import MockAuthentication as Auth
 from fakehttp          import CustomHTTPConnection
 from misc              import printdoc
 from tempfile          import mktemp
@@ -18,7 +18,7 @@ class ObjectTest(unittest.TestCase):
         """
         Test an Object's ability to read.
         """
-        assert "teapot" in self.storage_object.read()
+        self.assert_("teapot" in self.storage_object.read())
 
     @printdoc
     def test_read_pass_headers(self):
@@ -29,7 +29,7 @@ class ObjectTest(unittest.TestCase):
         hdrs = {}
         hdrs['x-bogus-header-1'] = 'bogus value'
         hdrs['x-bogus-header-2'] = 'boguser value'
-        assert "teapot" in self.storage_object.read(hdrs=hdrs)
+        self.assert_("teapot" in self.storage_object.read(hdrs=hdrs))
 
     @printdoc
     def test_response_error(self):
@@ -78,8 +78,8 @@ class ObjectTest(unittest.TestCase):
         self.storage_object.save_to_filename(tmpnam)
         rdr = open(tmpnam, 'r')
         try:
-            assert rdr.read() == self.storage_object.read(), \
-                   "save_to_filename() stored invalid content!"
+            self.assert_(rdr.read() == self.storage_object.read(),
+                   "save_to_filename() stored invalid content!")
         finally:
             rdr.close()
             os.unlink(tmpnam)
@@ -97,7 +97,7 @@ class ObjectTest(unittest.TestCase):
         f.seek(0)
         try:
             sum2 = Object.compute_md5sum(f)
-            assert sum1 == sum2, "%s != %s" % (sum1, sum2)
+            self.assert_(sum1 == sum2, "%s != %s" % (sum1, sum2))
         finally:
             f.close()
             
@@ -123,10 +123,10 @@ class ObjectTest(unittest.TestCase):
         """
         Test to see that the total bytes on the account is size of the samplefile
         """
-        assert self.conn.get_info()[1] == 79
+        self.assert_(self.conn.get_info()[1] == 79)
        
     def setUp(self):
-        self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
+        self.auth = Auth('jsmith', 'qwerty')
         self.conn = Connection(auth=self.auth)
         self.conn.conn_class = CustomHTTPConnection
         self.conn.http_connect()

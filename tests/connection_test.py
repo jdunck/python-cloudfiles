@@ -3,9 +3,9 @@
 import unittest
 from misc       import printdoc
 from fakehttp   import CustomHTTPConnection
-from freerange  import Connection, Container
-from freerange.authentication import MockAuthentication as Auth
-from freerange.errors import InvalidContainerName
+from cloudfiles import Connection, Container
+from cloudfiles.authentication import MockAuthentication as Auth
+from cloudfiles.errors import InvalidContainerName
 
 class ConnectionTest(unittest.TestCase):
     """
@@ -17,7 +17,7 @@ class ConnectionTest(unittest.TestCase):
         Verify that Connection.create_container() returns a Container instance.
         """
         container = self.conn.create_container('container1')
-        assert isinstance(container, Container)
+        self.assert_(isinstance(container, Container))
 
     @printdoc
     def test_delete_container(self):
@@ -34,9 +34,9 @@ class ConnectionTest(unittest.TestCase):
         """
         containers = self.conn.get_all_containers()
         for instance in containers:
-            assert isinstance(instance, Container)
-        assert containers.count('container1') == 1
-        assert containers.index('container3') == 2
+            self.assert_(isinstance(instance, Container))
+        self.assert_(containers.count('container1') == 1)
+        self.assert_(containers.index('container3') == 2)
 
     @printdoc
     def test_get_container(self):
@@ -44,14 +44,14 @@ class ConnectionTest(unittest.TestCase):
         Verify that Connection.get_container() returns a Container instance.
         """
         container = self.conn.get_container('container1')
-        assert isinstance(container, Container)
+        self.assert_(isinstance(container, Container))
 
     @printdoc
     def test_list_containers(self):
         """
         Verify that Connection.list_containers() returns a list object.
         """
-        assert isinstance(self.conn.list_containers(), list)
+        self.assert_(isinstance(self.conn.list_containers(), list))
 
     @printdoc
     def test_bad_names(self):
@@ -69,11 +69,12 @@ class ConnectionTest(unittest.TestCase):
         """
         Test to see if the account has only one container
         """
-        container = self.conn.get_container('container1')
-        assert self.conn.get_info()[0] == 1
+        #container = self.conn.get_container('container1')
+        print self.conn.get_info()
+        self.assert_(self.conn.get_info()[0] == 1)
 
     def setUp(self):
-        self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
+        self.auth = Auth('jsmith', 'qwerty')
         self.conn = Connection(auth=self.auth)
         self.conn.conn_class = CustomHTTPConnection
         self.conn.http_connect()

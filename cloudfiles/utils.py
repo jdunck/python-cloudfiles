@@ -37,7 +37,8 @@ def requires_name(exc_class):
             if hasattr(args[0], 'name') and not args[0].name:
                 raise exc_class(args[0].name)
             return f(*args, **kwargs)
-        decorator.__doc__ = f.__doc__
         decorator.__name__ = f.__name__
+        decorator.__doc__ = f.__doc__
+        decorator.parent_func = f
         return decorator
     return wrapper

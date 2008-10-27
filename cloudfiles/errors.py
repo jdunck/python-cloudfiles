@@ -1,4 +1,3 @@
-
 """
 exception classes
 
@@ -73,3 +72,28 @@ class IncompleteSend(Exception):
     Raised when there is a insufficient amount of data to send.
     """
     pass
+
+class ContainerNotPublic(Exception):
+    """
+    Raised when public features of a non-public container are accessed.
+    """
+    pass
+
+class CDNNotEnabled(Exception):
+    """
+    CDN is not enabled for this account.
+    """
+    pass
+
+class AuthenticationFailed(Exception):
+    """
+    Raised on a failure to authenticate.
+    """
+    pass
+
+class AuthenticationError(Exception):
+    """
+    Raised when an unspecified authentication error has occurred.
+    """
+    pass
+

@@ -1,7 +1,7 @@
 
 import unittest
 from misc             import printdoc
-from freerange.utils  import parse_url
+from cloudfiles.utils  import parse_url
 
 @printdoc
 def test_parse_url():

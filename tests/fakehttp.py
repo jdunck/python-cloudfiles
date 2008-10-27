@@ -3,12 +3,12 @@
 fakehttp/socket implementation
 
 - TrackerSocket: an object which masquerades as a socket and responds to
-  requests in a manner consistent with a *very* stupid CloudFS tracker. 
+  requests in a manner consistent with a *very* stupid cloudfiles tracker. 
    
 - CustomHTTPConnection: an object which subclasses httplib.HTTPConnection
   in order to replace it's socket with a TrackerSocket instance.
 
-The unittests each have setup methods which create freerange connection 
+The unittests each have setup methods which create cloudfiles connection 
 instances that have had their HTTPConnection instances replaced by 
 intances of CustomHTTPConnection.
 """
@@ -78,11 +78,18 @@ class TrackerSocket(FakeSocket):
             self.write('I am a teapot, short and stout\n')
 
     def render_HEAD(self, path):
-        self.write('HTTP/1.1 200 Ok\n')
-        self.write('Content-Type: text/plain\n')
-        self.write('ETag: d5c7f3babf6c602a8da902fb301a9f27\n')
-        self.write('Content-Length: 21\n')
-        self.write('Connection: close\n\n')
+        if len(path) == 2:
+            self.write('HTTP/1.1 204 Ok\n')
+            self.write('Content-Type: text/plain\n')
+            self.write('X-Account-Container-Count: 1\n')
+            self.write('X-Account-Bytes-Used: 79\n')
+            self.write('Connection: close\n\n')
+        else:
+            self.write('HTTP/1.1 200 Ok\n')
+            self.write('Content-Type: text/plain\n')
+            self.write('ETag: d5c7f3babf6c602a8da902fb301a9f27\n')
+            self.write('Content-Length: 21\n')
+            self.write('Connection: close\n\n')
 
     def render_POST(self, path):
         self.write('HTTP/1.1 202 Ok\n')

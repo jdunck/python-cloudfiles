@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
 import unittest
-from freerange  import Connection, Container, Object
-from freerange.authentication import MockAuthentication as Auth
-from freerange.errors import InvalidContainerName, InvalidObjectName
+from cloudfiles  import Connection, Container, Object
+from cloudfiles.authentication import MockAuthentication as Auth
+from cloudfiles.errors import InvalidContainerName, InvalidObjectName
 from fakehttp   import CustomHTTPConnection
 from misc       import printdoc
 
@@ -17,7 +17,7 @@ class ContainerTest(unittest.TestCase):
         Verify that Container.create_object() returns an Object instance.
         """
         storage_object = self.container.create_object('object1')
-        assert isinstance(storage_object, Object)
+        self.assert_(isinstance(storage_object, Object))
 
     @printdoc
     def test_delete_object(self):
@@ -32,7 +32,7 @@ class ContainerTest(unittest.TestCase):
         Verify that Container.get_object() returns an Object instance.
         """
         storage_object = self.container.get_object('object1')
-        assert isinstance(storage_object, Object)
+        self.assert_(isinstance(storage_object, Object))
 
     @printdoc
     def test_get_objects(self):
@@ -42,23 +42,23 @@ class ContainerTest(unittest.TestCase):
         """
         objects = self.container.get_objects()
         for storage_object in objects:
-            assert isinstance(storage_object, Object)
-        assert objects.count('object1') == 1
-        assert objects.index('object3') == 2
+            self.assert_(isinstance(storage_object, Object))
+        self.assert_(objects.count('object1') == 1)
+        self.assert_(objects.index('object3') == 2)
         
     @printdoc
     def test_list_objects(self):
         """
         Verify that Container.list_objects() returns a list object.
         """
-        assert isinstance(self.container.list_objects(), list)
+        self.assert_(isinstance(self.container.list_objects(), list))
 
     @printdoc
     def test_limited_list_objects(self):
         """
         Verify that query parameter passing works by passing a limit.
         """
-        assert len(self.container.list_objects(limit=3)) == 3
+        self.assert_(len(self.container.list_objects(limit=3)) == 3)
         
     @printdoc
     def test_bad_name_assignment(self):
@@ -80,7 +80,7 @@ class ContainerTest(unittest.TestCase):
         self.assertRaises(InvalidObjectName, self.container.delete_object, '')
             
     def setUp(self):
-        self.auth = Auth('fakeaccount', 'jsmith', 'qwerty', 'http://localhost')
+        self.auth = Auth('jsmith', 'qwerty')
         self.conn = Connection(auth=self.auth)
         self.conn.conn_class = CustomHTTPConnection
         self.conn.http_connect()

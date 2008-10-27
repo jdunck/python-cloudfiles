@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>cloudfiles</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.mosso.com/">Cloud Files Python API</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;cloudfiles
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="cloudfiles-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package cloudfiles</h1><span class="codelink"><a href="cloudfiles-pysrc.html">source&nbsp;code</a></span><br /><br />
+<p>Cloud Files python client API.</p>
+  Working with result sets:
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> cloudfiles
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># conn = cloudfiles.get_connection(username='jsmith', api_key='1234567890')</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>conn = cloudfiles.get_connection(<span class="py-string">'jsmith'</span>, <span class="py-string">'1234567890'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>containers = conn.get_all_containers()
+<span class="py-prompt">&gt;&gt;&gt; </span>type(containers)
+<span class="py-output">&lt;class 'cloudfiles.container.ContainerResults'&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>len(containers)
+<span class="py-output">2</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> container <span class="py-keyword">in</span> containers:
+<span class="py-prompt">&gt;&gt;&gt; </span>    <span class="py-keyword">print</span> container.name
+<span class="py-output">fruit</span>
+<span class="py-output">vegitables</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span> container[0].name
+<span class="py-output">fruit</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>fruit_container = container[0]
+<span class="py-prompt">&gt;&gt;&gt; </span>objects = fruit_container.get_all_objects()
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> storage_object <span class="py-keyword">in</span> objects:
+<span class="py-prompt">&gt;&gt;&gt; </span>    <span class="py-keyword">print</span> storage_object.name
+<span class="py-output">apple</span>
+<span class="py-output">orange</span>
+<span class="py-output">bannana</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt;</span></pre>
+  Creating Containers and adding Objects to them:
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>pic_container = conn.create_container(<span class="py-string">'pictures'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_dog = pic_container.create_object(<span class="py-string">'fido.jpg'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>my_dog.load_from_file(<span class="py-string">'images/IMG-0234.jpg'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>text_obj = pic_container.create_object(<span class="py-string">'sample.txt'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>text_obj.write(<span class="py-string">'This is not the object you are looking for.\n'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>text_obj.read()
+<span class="py-output">'This is not the object you are looking for.'</span></pre>
+  Object instances support streaming through the use of a generator:
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>deb_iso = pic_container.get_object(<span class="py-string">'debian-40r3-i386-netinst.iso'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>f = open(<span class="py-string">'/tmp/debian.iso'</span>, <span class="py-string">'w'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> chunk <span class="py-keyword">in</span> deb_iso.stream():
+<span class="py-output">..     f.write(chunk)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>f.close()</pre>
+  See COPYING for license information.<br /><br />
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        1.1.0
+      </p>
+</div><!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li> <strong class="uidlink"><a href="cloudfiles.connection-module.html">cloudfiles.connection</a></strong>: <em class="summary">connection operations</em>    </li>
+    <li> <strong class="uidlink"><a href="cloudfiles.container-module.html">cloudfiles.container</a></strong>: <em class="summary">container operations</em>    </li>
+    <li> <strong class="uidlink"><a href="cloudfiles.errors-module.html">cloudfiles.errors</a></strong>: <em class="summary">exception classes</em>    </li>
+    <li> <strong class="uidlink"><a href="cloudfiles.storage_object-module.html">cloudfiles.storage_object</a></strong>: <em class="summary">Object operations</em>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type"><a href="cloudfiles.connection.Connection-class.html" 
+      class="link">Connection</a></span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles-module.html#get_connection" class="summary-sig-name">get_connection</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Helper function for creating connection instances.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles-pysrc.html#get_connection">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="get_connection"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_connection</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cloudfiles-pysrc.html#get_connection">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </table>
+  
+  Helper function for creating connection instances.
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>username</code></strong> (string) - a Mosso username</li>
+        <li><strong class="pname"><code>api_key</code></strong> (string) - a Mosso API key</li>
+    </ul></dd>
+    <dt>Returns: <a href="cloudfiles.connection.Connection-class.html" 
+      class="link">Connection</a></dt>
+        <dd>a connection object</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.mosso.com/">Cloud Files Python API</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0beta1 on Tue Oct 21 14:03:52 2008
+    </td>
+    <td align="right" class="footer">
+      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie()
+  // -->
+</script>
+  
+</body>
+</html>

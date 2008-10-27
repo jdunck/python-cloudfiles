@@ -1,0 +1,38 @@
+<html><head><title>Epydoc Redirect Page</title>
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="pragma" content="no-cache" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+<!--
+var pages = ["cloudfiles.storage_object.ObjectResults-c", "cloudfiles.errors.AuthenticationFailed-c", "cloudfiles.errors.InvalidContainerName-c", "cloudfiles.container.ContainerResults-c", "cloudfiles.errors.AuthenticationError-c", "cloudfiles.connection.ConnectionPool-c", "cloudfiles.errors.ContainerNotPublic-c", "cloudfiles.errors.ContainerNotEmpty-c", "cloudfiles.errors.InvalidObjectName-c", "cloudfiles.errors.InvalidObjectSize-c", "cloudfiles.errors.NoSuchContainer-c", "cloudfiles.connection.Connection-c", "cloudfiles.errors.IncompleteSend-c", "cloudfiles.storage_object.Object-c", "cloudfiles.errors.CDNNotEnabled-c", "cloudfiles.errors.ResponseError-c", "cloudfiles.container.Container-c", "cloudfiles.errors.NoSuchObject-c", "cloudfiles.errors.InvalidUrl-c", "cloudfiles.storage_object-m", "cloudfiles.connection-m", "cloudfiles.container-m", "cloudfiles.errors-m", "cloudfiles-m"];
+var dottedName = get_anchor();
+if (dottedName) {
+    var target = redirect_url(dottedName);
+    if (target) window.location.replace(target);
+}
+// -->
+</script>
+
+<h3>Epydoc Auto-redirect page</h3>
+
+<p>When javascript is enabled, this page will redirect URLs of
+the form <tt>redirect.html#<i>dotted.name</i></tt> to the
+documentation for the object with the given fully-qualified
+dotted name.</p>
+<p><a id="message"> &nbsp; </a></p>
+
+<script type="text/javascript">
+<!--
+if (dottedName) {
+    var msg = document.getElementById("message");
+    msg.innerHTML = "No documentation found for <tt>"+
+                    dottedName+"</tt>";
+}
+// -->
+</script>
+
+</body>
+</html>

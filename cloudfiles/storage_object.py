@@ -1,4 +1,3 @@
-
 """
 Object operations
 
@@ -23,7 +22,21 @@ from utils   import requires_name
 
 class Object(object):
     """
-    Storage data representing an Object, (metadata and data).
+    Storage data representing an object, (metadata and data).
+
+    @undocumented: compute_md5sum
+    @ivar name: the object's name (generally treat as read-only)
+    @type name: str
+    @ivar content_type: the object's content-type (set or read)
+    @type content_type: str
+    @ivar metadata: metadata associated with the object (set or read)
+    @type metadata: dict
+    @ivar size: the object's size (cached)
+    @type size: number
+    @ivar last_modified: date and time of last file modification (cached)
+    @type last_modified: str
+    @ivar container: the object's container (generally treat as read-only)
+    @type container: L{Container}
     """
     # R/O support of the legacy objsum attr.
     objsum = property(lambda self: self._etag)
@@ -35,6 +48,15 @@ class Object(object):
     etag = property(lambda self: self._etag, __set_etag)
     
     def __init__(self, container, name=None, force_exists=False):
+        """
+        Storage objects rarely if ever need to be instantiated directly by the
+        user.
+
+        Instead, use the L{create_object<Container.create_object>},
+        L{get_object<Container.get_object>},
+        L{list_objects<Container.list_objects>} and other
+        methods on its parent L{Container} object.
+        """
         self.name = name
         self.container = container
         self.content_type = None
@@ -51,13 +73,6 @@ class Object(object):
         """
         Read the content from the remote storage object.
         
-        Keyword arguments:
-        size -- currently unimplemented
-        offset -- currently unimplemented
-        hdrs -- an optional dict of headers to send in the request
-        buffer -- an optional file-like object to write the content to
-        callback -- function to be used as a progress callback
-
         By default this method will buffer the response in memory and
         return it as a string. However, if a file-like object is passed
         in using the buffer keyword, the response will be written to it
@@ -68,6 +83,19 @@ class Object(object):
         will be for the amount of data written so far, the second for
         the total size of the transfer. Note: This option is only
         applicable when used in conjunction with the buffer option.
+
+        @param size: combined with offset, defines the length of data to be read
+        @type size: number
+        @param offset: combined with size, defines the start location to be read
+        @type offset: number
+        @param hdrs: an optional dict of headers to send with the request
+        @type hdrs: dictionary
+        @param buffer: an optional file-like object to write the content to
+        @type buffer: file-like object
+        @param callback: function to be used as a progress callback
+        @type callback: callable(transferred, size)
+        @rtype: str or None
+        @return: a string of all data in the object, or None if a buffer is used
         """
         if size > 0:
             range = 'bytes=%d-%d' % (offset, (offset + size) - 1)
@@ -98,6 +126,11 @@ class Object(object):
     def save_to_filename(self, filename, callback=None):
         """
         Save the contents of the object to filename.
+
+        @param filename: name of the file
+        @type filename: str
+        @param callback: function to be used as a progress callback
+        @type callback: callable(transferred, size)
         """
         # Pedantry rocks!
         try:
@@ -109,15 +142,18 @@ class Object(object):
     @requires_name(InvalidObjectName)
     def stream(self, chunksize=8192, hdrs=None):
         """
-        Return a generator of the remote storage object data.
-        
-        Keyword arguments:
-        chunksize -- size in bytes yielded by the generator
-        hdrs -- an optional dict of headers to send in the request
+        Return a generator of the remote storage object's data.
         
         Warning: The HTTP response is only complete after this generator
         has raised a StopIteration. No other methods can be called until
         this has occurred.
+
+        @param chunksize: size in bytes yielded by the generator
+        @type chunksize: number
+        @param hdrs: an optional dict of headers to send in the request
+        @type hdrs: dict
+        @rtype: str generator
+        @return: a generator which yields strings as the object is downloaded
         """
         response = self.container.conn.make_request('GET', 
                 path = [self.container.name, self.name], hdrs = hdrs)
@@ -135,6 +171,9 @@ class Object(object):
     def sync_metadata(self):
         """
         Commits the metadata to the remote storage system.
+
+        Object metadata can be set and retrieved through the object's
+        .metadata attribute.
         """
         if self.metadata:
             headers = self._make_headers()
@@ -149,13 +188,13 @@ class Object(object):
     def __get_conn_for_write(self):
         headers = self._make_headers()
 
-        headers['X-Storage-Token'] = self.container.conn.token
+        headers['X-Auth-Token'] = self.container.conn.token
 
         path = "/%s/%s/%s" % (self.container.conn.uri.rstrip('/'), \
                 quote(self.container.name), quote(self.name))
 
         # Requests are handled a little differently for writes ...
-        http = self.container.conn._get_http_conn_instance()
+        http = self.container.conn.connection
         
         # TODO: more/better exception handling please
         http.putrequest('PUT', path)
@@ -171,11 +210,6 @@ class Object(object):
         """
         Write data to the remote storage system.
         
-        Keyword arguments:
-        data -- the data to be written, a string or a file-like object
-        verify -- enable/disable server-side checksum verification
-        callback -- function to be used as a progress callback
-
         By default, server-side verification is enabled, (verify=True), and
         end-to-end verification is performed using an md5 checksum. When
         verification is disabled, (verify=False), the etag attribute will 
@@ -188,6 +222,13 @@ class Object(object):
         the upload. The callback should accept two integers, the first
         will be for the amount of data written so far, the second for
         the total size of the transfer.
+
+        @param data: the data to be written
+        @type data: str or file
+        @param verify: enable/disable server-side checksum verification
+        @type verify: boolean
+        @param callback: function to be used as a progress callback
+        @type callback: callable(transferred, size)
         """
         if isinstance(data, file):
             # pylint: disable-msg=E1101
@@ -252,9 +293,6 @@ class Object(object):
         """
         Write data to the remote storage system using a generator.
         
-        Arguments:
-        iterable -- a generator which yields the content to upload
-        
         You must set the size attribute of the instance prior to calling
         this method. Failure to do so will result in an 
         InvalidObjectSize exception.
@@ -270,6 +308,9 @@ class Object(object):
         otherwise no verification will be performed, (verification
         can be performed afterward though by using the etag attribute
         which is set to the value returned by the server).
+
+        @param iterable: a generator which yields the content to upload
+        @type iterable: generator
         """
         if not isinstance(self.size, (int, long)):
             raise InvalidObjectSize(self.size)
@@ -311,6 +352,13 @@ class Object(object):
     def load_from_filename(self, filename, verify=True, callback=None):
         """
         Put the contents of the named file into remote storage.
+
+        @param filename: path to the file
+        @type filename: str
+        @param verify: enable/disable server-side checksum verification
+        @type verify: boolean
+        @param callback: function to be used as a progress callback
+        @type callback: callable(transferred, size)
         """
         fobj = open(filename, 'rb')
         self.write(fobj, verify=verify, callback=callback)
@@ -318,7 +366,7 @@ class Object(object):
         
     def _initialize(self):
         """
-        Initialize the Object with values from the remote service, (if any).
+        Initialize the Object with values from the remote service (if any).
         """
         if not self.name:
             return False
@@ -377,9 +425,20 @@ class Object(object):
         return checksum.hexdigest()
     compute_md5sum = classmethod(compute_md5sum)
 
+    def public_uri(self):
+        """
+        Retrieve the URI for this object, if its container is public.
+        @return: the public URI for this object
+        @rtype: str
+        """
+        return "%s/%s" % (self.container.public_uri.rstrip('/'),
+                quote(self.name))
+
 class ObjectResults(object):
     """
     An iterable results set object for Objects.
+
+    This class implements dictionary- and list-like interfaces.
     """
     def __init__(self, container, objects=None):
         self._objects = objects and objects or list()

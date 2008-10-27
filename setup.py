@@ -2,10 +2,10 @@
 
 from distutils.core import setup
 setup(
-    name='freerange',
+    name='cloudfiles',
     version='1.0.0',
-    description='CloudFS client library for python',
+    description='CloudFiles client library for python',
     author='Racklabs',
-    url='https://www.mosso.com/cloudfs',
-    packages=['freerange']
+    url='https://www.mosso.com/',
+    packages=['cloudfiles']
 )
