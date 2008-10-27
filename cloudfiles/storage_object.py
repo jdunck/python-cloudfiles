@@ -431,7 +431,7 @@ class Object(object):
         @return: the public URI for this object
         @rtype: str
         """
-        return "%s/%s" % (self.container.public_uri.rstrip('/'),
+        return "%s/%s" % (self.container.public_uri().rstrip('/'),
                 quote(self.name))
 
 class ObjectResults(object):
