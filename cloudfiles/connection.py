@@ -68,23 +68,22 @@ class Connection(object):
         """
         Authenticate and setup this instance with the values returned.
         """
-        (url, cdn_url, self.token) = self.auth.authenticate()
+        (url, self.cdn_url, self.token) = self.auth.authenticate()
         self.connection_args = parse_url(url)
         self.conn_class = self.connection_args[3] and HTTPSConnection or \
                                                       HTTPConnection
         self.http_connect()
-        if cdn_url:
-            self.cdn_enabled = True
-            self.cdn_args = parse_url(cdn_url)
+        if self.cdn_url:
             self.cdn_connect()
 
     def cdn_connect(self):
         """
         Setup the http connection instance for the CDN service.
         """
-        (host, port, self.cdn_uri, is_ssl) = self.cdn_args
+        (host, port, cdn_uri, is_ssl) = parse_url(self.cdn_url)
         conn_class = is_ssl and HTTPSConnection or HTTPConnection
         self.cdn_connection = conn_class(host, port)
+        self.cdn_enabled = True
 
     def http_connect(self):
         """
@@ -102,9 +101,9 @@ class Connection(object):
         """
         if not self.cdn_enabled:
             raise CDNNotEnabled()
+
         path = '/%s/%s' % \
-                 (self.cdn_uri.rstrip('/'), '/'.join([quote(i) for i in path]))
-        
+                 (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
         headers = {'Content-Length': len(data), 'User-Agent': user_agent, 
                    'X-Auth-Token': self.token}
         if isinstance(hdrs, dict):
@@ -123,7 +122,7 @@ class Connection(object):
             response = self.cdn_connection.getresponse()
         except HTTPException:
             response = retry_request()
-            
+
         if response.status == 401:
             self._authenticate()
             response = retry_request()
@@ -235,7 +234,8 @@ class Connection(object):
             raise ResponseError(response.status, response.reason)
 
         if self.cdn_enabled:
-            response = self.cdn_request('DELETE', [container_name])
+            response = self.cdn_request('POST', [container_name],
+                                hdrs={'X-CDN-Enabled': 'False'})
 
     def get_all_containers(self):
         """

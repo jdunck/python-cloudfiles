@@ -67,7 +67,7 @@ class Authentication(BaseAuthentication):
             raise ResponseError(response.status, response.reason)
 
         storage_url = cdn_url = auth_token = None
-        
+
         for hdr in response.getheaders():
             if hdr[0].lower() == "x-storage-url":
                 storage_url = hdr[1]

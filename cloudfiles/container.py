@@ -13,6 +13,7 @@ from storage_object import Object, ObjectResults
 from errors import ResponseError, InvalidContainerName, InvalidObjectName, \
                    ContainerNotPublic, CDNNotEnabled
 from utils import requires_name
+from consts import default_cdn_ttl
 
 # Because HTTPResponse objects *have* to have read() called on them 
 # before they can be used again ...
@@ -85,7 +86,8 @@ class Container(object):
                     self.cdn_referer_acl = hdr[1]
 
     @requires_name(InvalidContainerName)
-    def make_public(self, ttl=3600, user_agent_acl=None, referer_acl=None):
+    def make_public(self, ttl=default_cdn_ttl, user_agent_acl=None,
+            referer_acl=None):
         """
         Either publishes the current container to the CDN or updates its
         CDN attributes.  Requires CDN be enabled on the account.
@@ -132,7 +134,6 @@ class Container(object):
         response = self.conn.cdn_request('POST', [self.name], hdrs=hdrs)
         if (response.status < 200) or (response.status >= 300):
             raise ResponseError(response.status, response.reason)
-        self.cdn_uri = None
 
     def is_public(self):
         """
