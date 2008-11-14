@@ -63,8 +63,6 @@ class Container(object):
         self.size_used = size
         self.cdn_uri = None
         self.cdn_ttl = None
-        self.cdn_agent_acl = None
-        self.cdn_referer_acl = None
         if connection.cdn_enabled:
             self._fetch_cdn_data()
 
@@ -80,44 +78,27 @@ class Container(object):
                     self.cdn_uri = hdr[1]
                 if hdr[0].lower() == 'x-ttl':
                     self.cdn_ttl = int(hdr[1])
-                if hdr[0].lower() == 'x-user-agent-acl':
-                    self.cdn_agent_acl = hdr[1]
-                if hdr[0].lower() == 'x-referrer-acl':
-                    self.cdn_referer_acl = hdr[1]
 
     @requires_name(InvalidContainerName)
-    def make_public(self, ttl=default_cdn_ttl, user_agent_acl=None,
-            referer_acl=None):
+    def make_public(self, ttl=default_cdn_ttl):
         """
         Either publishes the current container to the CDN or updates its
         CDN attributes.  Requires CDN be enabled on the account.
 
         @param ttl: cache duration in seconds of the CDN server
         @type ttl: number
-        @param user_agent_acl: no documentation at this time
-        @type user_agent_acl: str
-        @param referer_acl: no documentation at this time
-        @type referer_acl: str
         """
         if not self.conn.cdn_enabled:
             raise CDNNotEnabled()
         if self.cdn_uri:
             request_method = 'POST'
-            user_agent_acl = user_agent_acl or self.cdn_agent_acl
-            referer_acl = referer_acl or self.cdn_referer_acl
         else:
             request_method = 'PUT'
         hdrs = {'X-TTL': str(ttl), 'X-CDN-Enabled': 'True'}
-        if user_agent_acl:
-            hdrs['X-User-Agent-ACL'] = user_agent_acl
-        if referer_acl:
-            hdrs['X-Referrer-ACL'] = referer_acl
         response = self.conn.cdn_request(request_method, [self.name], hdrs=hdrs)
         if (response.status < 200) or (response.status >= 300):
             raise ResponseError(response.status, response.reason)
         self.cdn_ttl = ttl
-        self.cdn_agent_acl = user_agent_acl
-        self.cdn_referer_acl = referer_acl
         for hdr in response.getheaders():
             if hdr[0].lower() == 'x-cdn-uri':
                 self.cdn_uri = hdr[1]
