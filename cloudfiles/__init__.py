@@ -44,6 +44,14 @@ Object instances support streaming through the use of a generator:
     ..     f.write(chunk)
     >>> f.close()
 
+Marking a Container as CDN-enabled/public with a TTL of 30 days
+
+    >>> pic_container.make_public(2592000)
+    >>> pic_container.public_uri()
+    'http://cdn.cloudfiles.mosso.com/c1234/'
+    >>> my_dog.public_uri()
+    'http://cdn.cloudfiles.mosso.com/c1234/fido.jpg'
+
 See COPYING for license information.
 """
 
