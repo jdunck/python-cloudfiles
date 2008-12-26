@@ -3,12 +3,12 @@
 fakehttp/socket implementation
 
 - TrackerSocket: an object which masquerades as a socket and responds to
-  requests in a manner consistent with a *very* stupid cloudfiles tracker. 
+  requests in a manner consistent with a *very* stupid CloudFS tracker. 
    
 - CustomHTTPConnection: an object which subclasses httplib.HTTPConnection
   in order to replace it's socket with a TrackerSocket instance.
 
-The unittests each have setup methods which create cloudfiles connection 
+The unittests each have setup methods which create freerange connection 
 instances that have had their HTTPConnection instances replaced by 
 intances of CustomHTTPConnection.
 """
@@ -43,7 +43,73 @@ class TrackerSocket(FakeSocket):
     def read(self, length=-1):
         return self._rbuffer.read(length)
 
-    def render_GET(self, path):
+    def _create_GET_account_content(self, path, args):
+        if args.has_key('format') and args['format'] == 'json':
+            containers = []
+            containers.append('[\n');
+            containers.append('{"name":"container1","count":2,"size":78},\n')
+            containers.append('{"name":"container2","count":1,"size":39},\n')
+            containers.append('{"name":"container3","count":3,"size":117}\n')
+            containers.append(']\n')
+        elif args.has_key('format') and args['format'] == 'xml':
+            containers = []
+            containers.append('<?xml version="1.0" encoding="UTF-8"?>\n')
+            containers.append('<account name="FakeAccount">\n')
+            containers.append('<container><name>container1</name><count>2</count><size>78</size></container>\n')
+            containers.append('<container><name>container2</name><count>1</count><size>39</size></container>\n')
+            containers.append('<container><name>container3</name><count>3</count><size>117</size></container>\n')
+            containers.append('</account>\n')
+        else:
+            containers = ['container%s\n' % i for i in range(1,4)]
+        return ''.join(containers)
+
+    def _create_GET_container_content(self, path, args):
+        left = 0
+        right = 9
+        if args.has_key('offset'):
+            left = int(args['offset'])
+        if args.has_key('limit'):
+            right = left + int(args['limit'])
+
+        if args.has_key('format') and args['format'] == 'json':
+            objects = []
+            objects.append('{"name":"object1","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object2","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object3","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object4","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object5","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object6","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object7","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object8","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
+            objects = objects[left:right]
+            objects.insert(0, '[\n')
+            objects.append(']\n')
+        elif args.has_key('format') and args['format'] == 'xml':
+            objects = []
+            objects.append('<object><name>object1</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object2</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object3</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object4</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object5</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object6</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object7</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object8</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
+            objects = objects[left:right]
+            objects.insert(0, '<?xml version="1.0" encoding="UTF-8"?>\n')
+            objects.insert(1, '<container name="test_container_1"\n')
+            objects.append('</container>\n')
+        else:
+            objects = ['object%s\n' % i for i in range(1,9)]
+            objects = objects[left:right]
+
+        # prefix/order_by/path don't make much sense given our test data
+        if args.has_key('prefix') or \
+                args.has_key('order_by') or \
+                args.has_key('path'):
+            pass
+        return ''.join(objects)
+
+    def render_GET(self, path, args):
         # Special path that returns 404 Not Found
         if (len(path) == 4) and (path[3] == 'bogus'):
             self.write('HTTP/1.1 404 Not Found\n')
@@ -51,39 +117,28 @@ class TrackerSocket(FakeSocket):
             self.write('Content-Length: 0\n')
             self.write('Connection: close\n\n')
             return
+
         self.write('HTTP/1.1 200 Ok\n')
         self.write('Content-Type: text/plain\n')
         if len(path) == 2:
-            self.write('Content-Length: 33\n')
-            self.write('Connection: close\n\n')
-            self.write('container1\n')
-            self.write('container2\n')
-            self.write('container3\n')
-        if len(path) == 3:
-            objects = ['object%s\n' % i for i in range(1,9)]
-            resrc = path[2]
-            # Support for the optional limit query parm
-            if '?' in resrc:
-                query = resrc[resrc.find('?')+1:].strip('&').split('&')
-                args = dict([tuple(i.split('=', 1)) for i in query])
-                if args.has_key('limit'):
-                    objects = objects[:int(args['limit'])]
-            content = ''.join(objects)
-            self.write('Content-Length: %d\n' % len(content))
-            self.write('Connection: close\n\n')
-            self.write(content)
-        if len(path) == 4:
-            self.write('Content-Length: 31\n')
-            self.write('Connection: close\n\n')
-            self.write('I am a teapot, short and stout\n')
+            content = self._create_GET_account_content(path, args)
+        elif len(path) == 3:
+            content = self._create_GET_container_content(path, args)
+        # Object
+        elif len(path) == 4:
+            content = 'I am a teapot, short and stout\n'
+        self.write('Content-Length: %d\n' % len(content))
+        self.write('Connection: close\n\n')
+        self.write(content)
 
-    def render_HEAD(self, path):
+    def render_HEAD(self, path, args):
+        # Account
         if len(path) == 2:
-            self.write('HTTP/1.1 204 Ok\n')
+            self.write('HTTP/1.1 204 No Content\n')
             self.write('Content-Type: text/plain\n')
-            self.write('X-Account-Container-Count: 1\n')
-            self.write('X-Account-Bytes-Used: 79\n')
-            self.write('Connection: close\n\n')
+            self.write('Connection: close\n')
+            self.write('X-Account-Container-Count: 3\n')
+            self.write('X-Account-Bytes-Used: 234\n\n')
         else:
             self.write('HTTP/1.1 200 Ok\n')
             self.write('Content-Type: text/plain\n')
@@ -91,20 +146,28 @@ class TrackerSocket(FakeSocket):
             self.write('Content-Length: 21\n')
             self.write('Connection: close\n\n')
 
-    def render_POST(self, path):
+    def render_POST(self, path, args):
         self.write('HTTP/1.1 202 Ok\n')
         self.write('Connection: close\n\n')
 
-    def render_PUT(self, path):
+    def render_PUT(self, path, args):
         self.write('HTTP/1.1 200 Ok\n')
         self.write('Content-Type: text/plain\n')
         self.write('Connection: close\n\n')
     render_DELETE = render_PUT
 
     def render(self, method, uri):
-        path = uri.strip('/').split('/')
+        if '?' in uri:
+            parts = uri.split('?')
+            query = parts[1].strip('&').split('&')
+            args = dict([tuple(i.split('=', 1)) for i in query])
+            path = parts[0].strip('/').split('/')
+        else:
+            args = {}
+            path = uri.strip('/').split('/')
+
         if hasattr(self, 'render_%s' % method):
-            getattr(self, 'render_%s' % method)(path)
+            getattr(self, 'render_%s' % method)(path, args)
         else:
             self.write('HTTP/1.1 406 Not Acceptable\n')
             self.write('Content-Type: text/plain\n')

@@ -55,6 +55,18 @@ class InvalidObjectName(Exception):
     """
     pass
 
+class InvalidMetaName(Exception):
+    """
+    Raised for invalid metadata names.
+    """
+    pass
+
+class InvalidMetaValue(Exception):
+    """
+    Raised for invalid metadata value.
+    """
+    pass
+
 class InvalidUrl(Exception):
     """
     Not a valid url for use with this software.

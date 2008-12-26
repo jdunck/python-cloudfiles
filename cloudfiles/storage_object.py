@@ -10,10 +10,13 @@ See COPYING for license information.
 
 import md5, StringIO, mimetypes, os, tempfile
 from urllib  import quote
-from errors  import ResponseError, NoSuchObject, InvalidObjectName, \
-                    InvalidObjectSize, IncompleteSend
+from errors  import ResponseError, NoSuchObject, \
+                    InvalidObjectName, InvalidObjectSize, \
+                    InvalidMetaName, InvalidMetaValue, \
+                    IncompleteSend
 from socket  import timeout
-from consts  import user_agent
+from consts  import user_agent, object_name_limit, \
+                    meta_name_limit, meta_value_limit
 from utils   import requires_name
 
 # Because HTTPResponse objects *have* to have read() called on them 
@@ -47,7 +50,7 @@ class Object(object):
     
     etag = property(lambda self: self._etag, __set_etag)
     
-    def __init__(self, container, name=None, force_exists=False):
+    def __init__(self, container, name=None, force_exists=False, object_record=None):
         """
         Storage objects rarely if ever need to be instantiated directly by the
         user.
@@ -57,18 +60,25 @@ class Object(object):
         L{list_objects<Container.list_objects>} and other
         methods on its parent L{Container} object.
         """
-        self.name = name
         self.container = container
-        self.content_type = None
-        self.size = None
         self.last_modified = None
-        self._etag = None
-        self._etag_override = False
         self.metadata = {}
-        if not self._initialize() and force_exists:
-            raise NoSuchObject(self.name)
+        if object_record:
+            self.name = object_record['name']
+            self.content_type = object_record['type']
+            self.size = object_record['size']
+            self._etag = object_record['hash']
+            self._etag_override = False
+        else:
+            self.name = name
+            self.content_type = None
+            self.size = None
+            self._etag = None
+            self._etag_override = False
+            if not self._initialize() and force_exists:
+                raise NoSuchObject(self.name)
 
-    @requires_name(InvalidObjectName)
+    @requires_name(InvalidObjectName, object_name_limit)
     def read(self, size=-1, offset=0, hdrs=None, buffer=None, callback=None):
         """
         Read the content from the remote storage object.
@@ -139,7 +149,7 @@ class Object(object):
         finally:
             fobj.close()
         
-    @requires_name(InvalidObjectName)
+    @requires_name(InvalidObjectName, object_name_limit)
     def stream(self, chunksize=8192, hdrs=None):
         """
         Return a generator of the remote storage object's data.
@@ -167,7 +177,7 @@ class Object(object):
         # I hate you httplib
         buff = response.read()
     
-    @requires_name(InvalidObjectName)
+    @requires_name(InvalidObjectName, object_name_limit)
     def sync_metadata(self):
         """
         Commits the metadata to the remote storage system.
@@ -205,7 +215,7 @@ class Object(object):
         return http
             
     # pylint: disable-msg=W0622
-    @requires_name(InvalidObjectName)
+    @requires_name(InvalidObjectName, object_name_limit)
     def write(self, data='', verify=True, callback=None):
         """
         Write data to the remote storage system.
@@ -288,7 +298,7 @@ class Object(object):
                 if hdr[0].lower() == 'etag':
                     self._etag = hdr[1]
 
-    @requires_name(InvalidObjectName)
+    @requires_name(InvalidObjectName, object_name_limit)
     def send(self, iterable):
         """
         Write data to the remote storage system using a generator.
@@ -409,6 +419,10 @@ class Object(object):
         else: headers['Content-Type'] = 'application/octet-stream'
 
         for key in self.metadata:
+            if len(key) > meta_name_limit:
+                raise(InvalidMetaName(key))
+            if len(self.metadata[key]) > meta_value_limit:
+                raise(InvalidMetaValue(self.metadata[key]))
             headers['X-Object-Meta-'+key] = self.metadata[key]
         return headers
 
@@ -442,13 +456,14 @@ class ObjectResults(object):
     """
     def __init__(self, container, objects=None):
         self._objects = objects and objects or list()
+        self._names = [obj['name'] for obj in self._objects]
         self.container = container
 
     def __getitem__(self, key):
-        return Object(self.container, self._objects[key])
+        return Object(self.container, object_record=self._objects[key])
 
     def __getslice__(self, i, j):
-        return [Object(self.container, k) for k in self._objects[i:j]]
+        return [Object(self.container, object_record=k) for k in self._objects[i:j]]
 
     def __contains__(self, item):
         return item in self._objects
@@ -457,18 +472,19 @@ class ObjectResults(object):
         return len(self._objects)
 
     def __repr__(self):
-        return repr(self._objects)
+        return 'ObjectResults: %s objects' % len(self._objects)
+    __str__ = __repr__
 
     def index(self, value, *args):
         """
         returns an integer for the first index of value
         """
-        return self._objects.index(value, *args)
+        return self._names.index(value, *args)
 
     def count(self, value):
         """
         returns the number of occurrences of value
         """
-        return self._objects.count(value)
+        return self._names.count(value)
 
 # vim:set ai sw=4 ts=4 tw=0 expandtab:

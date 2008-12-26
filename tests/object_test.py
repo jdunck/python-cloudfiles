@@ -2,8 +2,11 @@
 
 import unittest, md5
 from cloudfiles        import Object, Connection
-from cloudfiles.errors  import ResponseError, InvalidObjectName
+from cloudfiles.errors import ResponseError, InvalidObjectName,\
+                              InvalidMetaName, InvalidMetaValue
 from cloudfiles.authentication import MockAuthentication as Auth
+from cloudfiles.consts import meta_name_limit, meta_value_limit,\
+                              object_name_limit
 from fakehttp          import CustomHTTPConnection
 from misc              import printdoc
 from tempfile          import mktemp
@@ -117,13 +120,41 @@ class ObjectTest(unittest.TestCase):
         self.assertRaises(InvalidObjectName, obj.stream)
         self.assertRaises(InvalidObjectName, obj.sync_metadata)
         self.assertRaises(InvalidObjectName, obj.write, '')
+
+        obj.name = 'a'*(object_name_limit+1) # too-long string
+        self.assertRaises(InvalidObjectName, obj.read)
+        self.assertRaises(InvalidObjectName, obj.stream)
+        self.assertRaises(InvalidObjectName, obj.sync_metadata)
+        self.assertRaises(InvalidObjectName, obj.write, '')
+
+        obj.name = 'a'*(object_name_limit) # ok name
+        obj.read()
+        obj.stream()
+        obj.sync_metadata()
+        obj.write('')
+
+    @printdoc
+    def test_bad_meta_data(self):
+        """
+        Ensure you can't sync bad metadata.
+        """
+        # too-long name
+        self.storage_object.metadata['a'*(meta_name_limit+1)] = 'test'
+        self.assertRaises(InvalidMetaName, 
+                          self.storage_object.sync_metadata)
+        del(self.storage_object.metadata['a'*(meta_name_limit+1)])
+
+        # too-long value
+        self.storage_object.metadata['a'*(meta_name_limit)] = 'a'*(meta_value_limit+1)
+        self.assertRaises(InvalidMetaValue, 
+                          self.storage_object.sync_metadata)
  
     @printdoc
     def test_account_size(self):
         """
         Test to see that the total bytes on the account is size of the samplefile
         """
-        self.assert_(self.conn.get_info()[1] == 79)
+        self.assert_(self.conn.get_info()[1] == 234)
        
     def setUp(self):
         self.auth = Auth('jsmith', 'qwerty')

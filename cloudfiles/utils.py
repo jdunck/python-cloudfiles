@@ -3,6 +3,7 @@
 import re
 from urlparse  import urlparse
 from errors    import InvalidUrl
+from consts    import object_name_limit
 
 def parse_url(url):
     """
@@ -30,11 +31,14 @@ def parse_url(url):
 
     return (host, int(port), path.strip('/'), is_ssl)
 
-def requires_name(exc_class):
+def requires_name(exc_class, length_limit):
     """Decorator to guard against invalid or unset names."""
     def wrapper(f):
         def decorator(*args, **kwargs):
-            if hasattr(args[0], 'name') and not args[0].name:
+            if not hasattr(args[0], 'name'):
+                raise exc_class('')
+            if not args[0].name or\
+                    len(args[0].name) > length_limit:
                 raise exc_class(args[0].name)
             return f(*args, **kwargs)
         decorator.__name__ = f.__name__

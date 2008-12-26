@@ -54,6 +54,13 @@ class ConnectionTest(unittest.TestCase):
         self.assert_(isinstance(self.conn.list_containers(), list))
 
     @printdoc
+    def test_list_containers_info(self):
+        """
+        Verify that Connection.list_containers_info() returns a list object.
+        """
+        self.assert_(isinstance(self.conn.list_containers_info(), list))
+
+    @printdoc
     def test_bad_names(self):
         """
         Verify that methods do not accept invalid container names.
@@ -69,9 +76,7 @@ class ConnectionTest(unittest.TestCase):
         """
         Test to see if the account has only one container
         """
-        #container = self.conn.get_container('container1')
-        print self.conn.get_info()
-        self.assert_(self.conn.get_info()[0] == 1)
+        self.assert_(self.conn.get_info()[0] == 3)
 
     def setUp(self):
         self.auth = Auth('jsmith', 'qwerty')

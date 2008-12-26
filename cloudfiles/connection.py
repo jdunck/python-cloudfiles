@@ -17,8 +17,9 @@ from    errors    import ResponseError, NoSuchContainer, ContainerNotEmpty, \
                          InvalidContainerName, CDNNotEnabled
 from    Queue     import Queue, Empty, Full
 from    time      import time
-from    consts    import user_agent, default_authurl
+from    consts    import user_agent, default_authurl, container_name_limit
 from    authentication import Authentication
+from    fjson     import json_loads
 
 # Because HTTPResponse objects *have* to have read() called on them 
 # before they can be used again ...
@@ -96,8 +97,7 @@ class Connection(object):
     def cdn_request(self, method, path=[], data='', hdrs=None):
         """
         Given a method (i.e. GET, PUT, POST, etc), a path, data, header and
-        metadata dicts, and an option dictionary of query parameters, 
-        performs an http request.
+        metadata dicts, performs an http request against the CDN service.
         """
         if not self.cdn_enabled:
             raise CDNNotEnabled()
@@ -133,7 +133,7 @@ class Connection(object):
     def make_request(self, method, path=[], data='', hdrs=None, parms=None):
         """
         Given a method (i.e. GET, PUT, POST, etc), a path, data, header and
-        metadata dicts, and an option dictionary of query parameters, 
+        metadata dicts, and an optional dictionary of query parameters, 
         performs an http request.
         """
         path = '/%s/%s' % \
@@ -148,9 +148,6 @@ class Connection(object):
                    'X-Auth-Token': self.token}
         isinstance(hdrs, dict) and headers.update(hdrs)
         
-        # Send the request
-        self.connection.request(method, path, data, headers)
-
         def retry_request():
             '''Re-connect and re-try a failed request once'''
             self.http_connect()
@@ -158,6 +155,7 @@ class Connection(object):
             return self.connection.getresponse()
 
         try:
+            self.connection.request(method, path, data, headers)
             response = self.connection.getresponse()
         except HTTPException:
             response = retry_request()
@@ -204,7 +202,9 @@ class Connection(object):
         @rtype: L{Container}
         @return: an object representing the newly created container
         """
-        if not container_name or '/' in container_name:
+        if not container_name or \
+                '/' in container_name or \
+                len(container_name) > container_name_limit:
             raise InvalidContainerName(container_name)
         
         response = self.make_request('PUT', [container_name])
@@ -245,7 +245,7 @@ class Connection(object):
         @return: an iterable set of objects representing all containers on the
                  account
         """
-        return ContainerResults(self, self.list_containers())
+        return ContainerResults(self, self.list_containers_info())
 
     def get_container(self, container_name):
         """
@@ -291,6 +291,20 @@ class Connection(object):
             buff = response.read()
             raise ResponseError(response.status, response.reason)
         return response.read().splitlines()
+
+    def list_containers_info(self):
+        """
+        Returns a list of Containers, including object count and size.
+
+        @rtype: list({"name":"...", "count":..., "size":...})
+        @return: a list of all container info as dictionaries with the
+                 keys "name", "count", and "size"
+        """
+        response = self.make_request('GET', [''], parms={'format': 'json'})
+        if (response.status < 200) or (response.status > 299):
+            buff = response.read()
+            raise ResponseError(response.status, response.reason)
+        return json_loads(response.read())
 
     def list_containers(self):
         """

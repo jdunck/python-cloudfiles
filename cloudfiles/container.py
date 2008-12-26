@@ -12,8 +12,9 @@ See COPYING for license information.
 from storage_object import Object, ObjectResults
 from errors import ResponseError, InvalidContainerName, InvalidObjectName, \
                    ContainerNotPublic, CDNNotEnabled
-from utils import requires_name
-from consts import default_cdn_ttl
+from utils  import requires_name
+from consts import default_cdn_ttl, container_name_limit
+from fjson  import json_loads
 
 # Because HTTPResponse objects *have* to have read() called on them 
 # before they can be used again ...
@@ -39,7 +40,8 @@ class Container(object):
     """
     def __set_name(self, name):
         # slashes make for invalid names
-        if isinstance(name, (str, unicode)) and '/' in name:
+        if isinstance(name, (str, unicode)) and \
+                ('/' in name or len(name) > container_name_limit):
             raise InvalidContainerName(name)
         self._name = name
 
@@ -66,7 +68,7 @@ class Container(object):
         if connection.cdn_enabled:
             self._fetch_cdn_data()
 
-    @requires_name(InvalidContainerName)
+    @requires_name(InvalidContainerName, container_name_limit)
     def _fetch_cdn_data(self):
         """
         Fetch the object's CDN data from the CDN service
@@ -79,7 +81,7 @@ class Container(object):
                 if hdr[0].lower() == 'x-ttl':
                     self.cdn_ttl = int(hdr[1])
 
-    @requires_name(InvalidContainerName)
+    @requires_name(InvalidContainerName, container_name_limit)
     def make_public(self, ttl=default_cdn_ttl):
         """
         Either publishes the current container to the CDN or updates its
@@ -103,7 +105,7 @@ class Container(object):
             if hdr[0].lower() == 'x-cdn-uri':
                 self.cdn_uri = hdr[1]
 
-    @requires_name(InvalidContainerName)
+    @requires_name(InvalidContainerName, container_name_limit)
     def make_private(self):
         """
         Disables CDN access to this container.
@@ -127,7 +129,7 @@ class Container(object):
             raise CDNNotEnabled()
         return self.cdn_uri is not None
 
-    @requires_name(InvalidContainerName)
+    @requires_name(InvalidContainerName, container_name_limit)
     def public_uri(self):
         """
         Return the URI for this container, if it is publically
@@ -139,7 +141,7 @@ class Container(object):
             raise ContainerNotPublic()
         return self.cdn_uri
 
-    @requires_name(InvalidContainerName)
+    @requires_name(InvalidContainerName, container_name_limit)
     def create_object(self, object_name):
         """
         Return an L{Object} instance, creating it if necessary.
@@ -155,20 +157,67 @@ class Container(object):
         """
         return Object(self, object_name)
 
-    @requires_name(InvalidContainerName)
-    def get_objects(self, **parms):
+    """
+    order_by constants (can be either ascending or descending)
+
+    create date/time
+    name
+    size
+    content
+    """
+    OB_MODIFIED_ASC = 1
+    OB_MODIFIED_DESC = 2
+    OB_NAME_ASC = 3
+    OB_NAME_DESC = 4
+    OB_SIZE_ASC = 5
+    OB_SIZE_DESC = 6
+    OB_CONTENT_ASC = 7
+    OB_CONTENT_DESC = 8
+    ORDER_BY = {
+        OB_MODIFIED_ASC: 'last_modified',
+        OB_MODIFIED_DESC: 'last_modified desc',
+        OB_NAME_ASC: 'name',
+        OB_NAME_DESC: 'name desc',
+        OB_SIZE_ASC: 'size',
+        OB_SIZE_DESC: 'size desc',
+        OB_CONTENT_ASC: 'content_type',
+        OB_CONTENT_DESC: 'content_type desc'
+        }
+
+    @requires_name(InvalidContainerName, container_name_limit)
+    def get_objects(self, prefix=None, limit=None, offset=None, 
+                    order_by=None, path=None, **parms):
         """
         Return a result set of all Objects in the Container.
         
         Keyword arguments are treated as HTTP query parameters and can
         be used limit the result set (see the API documentation).
 
+        @param prefix: filter the results using this prefix
+        @type prefix: str
+        @param limit: return the first "limit" objects found
+        @type limit: int
+        @param offset: return objects starting at "offset" in list
+        @type offset: int
+        @param order_by: order results by ????
+        @type order_by: OB_CREATED_ASC: created date ascending
+                        OB_CREATED_DESC: created date descending
+                        OB_NAME_ASC: name ascending
+                        OB_NAME_DESC: name descending
+                        OB_SIZE_ASC: size ascending
+                        OB_SIZE_DESC: size descending
+                        OB_CONTENT_ASC: content type ascending
+                        OB_CONTENT_DESC: content type descending
+        @param path: return all objects in "path"
+        @type path: str
+
         @rtype: L{ObjectResults}
         @return: an iterable collection of all storage objects in the container
         """
-        return ObjectResults(self, self.list_objects(**parms))
+        return ObjectResults(self, self.list_objects_info(
+                prefix, limit, offset, order_by, path, **parms))
 
-    @requires_name(InvalidContainerName)
+    @requires_name(InvalidContainerName, container_name_limit)
     def get_object(self, object_name):
         """
         Return an Object instance for an existing storage object.
@@ -183,22 +232,92 @@ class Container(object):
         """
         return Object(self, object_name, force_exists=True)
 
-    @requires_name(InvalidContainerName)
-    def list_objects(self, **parms):
+    @requires_name(InvalidContainerName, container_name_limit)
+    def list_objects_info(self, prefix=None, limit=None, offset=None, 
+                          order_by=None, path=None, **parms):
         """
-        Returns a list of storage object names.
+        Return information about all Objects in the Container.
         
         Keyword arguments are treated as HTTP query parameters and can
         be used limit the result set (see the API documentation).
 
-        @rtype: list(str)
-        @return: a list of the names of all objects in the container
+        @param prefix: filter the results using this prefix
+        @type prefix: str
+        @param limit: return the first "limit" objects found
+        @type limit: int
+        @param offset: return objects starting at "offset" in list
+        @type offset: int
+        @param order_by: order results by ????
+        @type order_by: OB_CREATED_ASC: created date ascending
+                        OB_CREATED_DESC: created date descending
+                        OB_NAME_ASC: name ascending
+                        OB_NAME_DESC: name descending
+                        OB_SIZE_ASC: size ascending
+                        OB_SIZE_DESC: size descending
+                        OB_CONTENT_ASC: content type ascending
+                        OB_CONTENT_DESC: content type descending
+        @param path: return all objects in "path"
+        @type path: str
+
+        @rtype: list({"name":"...", "hash":..., "size":..., "type":...})
+        @return: a list of all container info as dictionaries with the
+                 keys "name", "hash", "size", and "type"
         """
+        parms['format'] = 'json'
+        resp = self._list_objects_raw(
+            prefix, limit, offset, order_by, path, **parms)
+        return json_loads(resp)
+
+    @requires_name(InvalidContainerName, container_name_limit)
+    def list_objects(self, prefix=None, limit=None, offset=None, 
+                     order_by=None, path=None, **parms):
+        """
+        Return names of all Objects in the Container.
+        
+        Keyword arguments are treated as HTTP query parameters and can
+        be used limit the result set (see the API documentation).
+
+        @param prefix: filter the results using this prefix
+        @type prefix: str
+        @param limit: return the first "limit" objects found
+        @type limit: int
+        @param offset: return objects starting at "offset" in list
+        @type offset: int
+        @param order_by: order results by ????
+        @type order_by: OB_CREATED_ASC: created date ascending
+                        OB_CREATED_DESC: created date descending
+                        OB_NAME_ASC: name ascending
+                        OB_NAME_DESC: name descending
+                        OB_SIZE_ASC: size ascending
+                        OB_SIZE_DESC: size descending
+                        OB_CONTENT_ASC: content type ascending
+                        OB_CONTENT_DESC: content type descending
+        @param path: return all objects in "path"
+        @type path: str
+
+        @rtype: list(str)
+        @return: a list of all container names
+        """
+        resp = self._list_objects_raw(
+            prefix, limit, offset, order_by, path, **parms)
+        return resp.splitlines()
+
+    @requires_name(InvalidContainerName, container_name_limit)
+    def _list_objects_raw(self, prefix=None, limit=None, offset=None, 
+                     order_by=None, path=None, **parms):
+        """
+        Returns a chunk list of storage object info.
+        """
+        if prefix: parms['prefix'] = prefix
+        if limit: parms['limit'] = limit
+        if offset: parms['offset'] = offset
+        if order_by: parms['order_by'] = Container.ORDER_BY[order_by]
+        if path: parms['path'] = path
         response = self.conn.make_request('GET', [self.name], parms=parms)
         if (response.status < 200) or (response.status > 299):
             buff = response.read()
             raise ResponseError(response.status, response.reason)
-        return response.read().splitlines()
+        return response.read()
 
     def __getitem__(self, key):
         return self.get_object(key)
@@ -206,7 +325,7 @@ class Container(object):
     def __str__(self):
         return self.name
 
-    @requires_name(InvalidContainerName)
+    @requires_name(InvalidContainerName, container_name_limit)
     def delete_object(self, object_name):
         """
         Permanently remove a storage object.
@@ -232,20 +351,25 @@ class ContainerResults(object):
     """
     def __init__(self, conn, containers=list()):
         self._containers = containers
+        self._names = [k['name'] for k in containers]
         self.conn = conn
 
     def __getitem__(self, key):
-        return Container(self.conn, self._containers[key])
+        return Container(self.conn,
+                         self._containers[key]['name'], 
+                         self._containers[key]['count'], 
+                         self._containers[key]['size'])
 
     def __getslice__(self, i, j):
-        return [Container(self._containers, k) for k in self._containers[i:j]]
+        return [Container(self.conn, k['name'], k['count'], k['size']) for k in self._containers[i:j] ]
 
     def __contains__(self, item):
-        return item in self._containers
+        return item in self._names
 
     def __repr__(self):
-        return repr(self._containers)
-
+        return 'ContainerResults: %s containers' % len(self._containers)
+    __str__ = __repr__
+    
     def __len__(self):
         return len(self._containers)
 
@@ -253,12 +377,12 @@ class ContainerResults(object):
         """
         returns an integer for the first index of value
         """
-        return self._containers.index(value, *args)
+        return self._names.index(value, *args)
 
     def count(self, value):
         """
         returns the number of occurrences of value
         """
-        return self._containers.count(value)
+        return self._names.count(value)
 
 # vim:set ai sw=4 ts=4 tw=0 expandtab:
