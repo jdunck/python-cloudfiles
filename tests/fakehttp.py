@@ -47,17 +47,17 @@ class TrackerSocket(FakeSocket):
         if args.has_key('format') and args['format'] == 'json':
             containers = []
             containers.append('[\n');
-            containers.append('{"name":"container1","count":2,"size":78},\n')
-            containers.append('{"name":"container2","count":1,"size":39},\n')
-            containers.append('{"name":"container3","count":3,"size":117}\n')
+            containers.append('{"name":"container1","count":2,"bytes":78},\n')
+            containers.append('{"name":"container2","count":1,"bytes":39},\n')
+            containers.append('{"name":"container3","count":3,"bytes":117}\n')
             containers.append(']\n')
         elif args.has_key('format') and args['format'] == 'xml':
             containers = []
             containers.append('<?xml version="1.0" encoding="UTF-8"?>\n')
             containers.append('<account name="FakeAccount">\n')
-            containers.append('<container><name>container1</name><count>2</count><size>78</size></container>\n')
-            containers.append('<container><name>container2</name><count>1</count><size>39</size></container>\n')
-            containers.append('<container><name>container3</name><count>3</count><size>117</size></container>\n')
+            containers.append('<container><name>container1</name><count>2</count><bytes>78</bytes></container>\n')
+            containers.append('<container><name>container2</name><count>1</count><bytes>39</bytes></container>\n')
+            containers.append('<container><name>container3</name><count>3</count><bytes>117</bytes></container>\n')
             containers.append('</account>\n')
         else:
             containers = ['container%s\n' % i for i in range(1,4)]
@@ -73,27 +73,27 @@ class TrackerSocket(FakeSocket):
 
         if args.has_key('format') and args['format'] == 'json':
             objects = []
-            objects.append('{"name":"object1","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
-            objects.append('{"name":"object2","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
-            objects.append('{"name":"object3","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
-            objects.append('{"name":"object4","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
-            objects.append('{"name":"object5","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
-            objects.append('{"name":"object6","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
-            objects.append('{"name":"object7","hash":"4281c348eaf83e70ddce0e07221c3d28","size":14,"type":"application\/octet-stream"},\n')
-            objects.append('{"name":"object8","hash":"b039efe731ad111bc1b0ef221c3849d0","size":64,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object1","hash":"4281c348eaf83e70ddce0e07221c3d28","bytes":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object2","hash":"b039efe731ad111bc1b0ef221c3849d0","bytes":64,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object3","hash":"4281c348eaf83e70ddce0e07221c3d28","bytes":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object4","hash":"b039efe731ad111bc1b0ef221c3849d0","bytes":64,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object5","hash":"4281c348eaf83e70ddce0e07221c3d28","bytes":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object6","hash":"b039efe731ad111bc1b0ef221c3849d0","bytes":64,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object7","hash":"4281c348eaf83e70ddce0e07221c3d28","bytes":14,"type":"application\/octet-stream"},\n')
+            objects.append('{"name":"object8","hash":"b039efe731ad111bc1b0ef221c3849d0","bytes":64,"type":"application\/octet-stream"},\n')
             objects = objects[left:right]
             objects.insert(0, '[\n')
             objects.append(']\n')
         elif args.has_key('format') and args['format'] == 'xml':
             objects = []
-            objects.append('<object><name>object1</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
-            objects.append('<object><name>object2</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
-            objects.append('<object><name>object3</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
-            objects.append('<object><name>object4</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
-            objects.append('<object><name>object5</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
-            objects.append('<object><name>object6</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
-            objects.append('<object><name>object7</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><size>14</size><type>application/octet-stream</type></object>\n')
-            objects.append('<object><name>object8</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><size>64</size><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object1</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><bytes>14</bytes><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object2</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><bytes>64</bytes><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object3</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><bytes>14</bytes><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object4</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><bytes>64</bytes><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object5</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><bytes>14</bytes><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object6</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><bytes>64</bytes><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object7</name><hash>4281c348eaf83e70ddce0e07221c3d28</hash><bytes>14</bytes><type>application/octet-stream</type></object>\n')
+            objects.append('<object><name>object8</name><hash>b039efe731ad111bc1b0ef221c3849d0</hash><bytes>64</bytes><type>application/octet-stream</type></object>\n')
             objects = objects[left:right]
             objects.insert(0, '<?xml version="1.0" encoding="UTF-8"?>\n')
             objects.insert(1, '<container name="test_container_1"\n')

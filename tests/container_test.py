@@ -113,9 +113,9 @@ class ContainerTest(unittest.TestCase):
         self.assert_(isinstance(self.container.list_objects(
                     order_by=Container.OB_NAME_DESC), list))
         self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_SIZE_ASC), list))
+                    order_by=Container.OB_BYTES_ASC), list))
         self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_SIZE_DESC), list))
+                    order_by=Container.OB_BYTES_DESC), list))
         self.assert_(isinstance(self.container.list_objects(
                     order_by=Container.OB_CONTENT_ASC), list))
         self.assert_(isinstance(self.container.list_objects(

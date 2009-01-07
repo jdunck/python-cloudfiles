@@ -6,6 +6,7 @@ from fakehttp   import CustomHTTPConnection
 from cloudfiles import Connection, Container
 from cloudfiles.authentication import MockAuthentication as Auth
 from cloudfiles.errors import InvalidContainerName
+from cloudfiles.consts import container_name_limit
 
 class ConnectionTest(unittest.TestCase):
     """
@@ -66,7 +67,8 @@ class ConnectionTest(unittest.TestCase):
         Verify that methods do not accept invalid container names.
         """
         exccls = InvalidContainerName
-        for badname in ('', 'yougivelove/abadname'):
+        for badname in ('', 'yougivelove/abadname', 
+                        'a'*(container_name_limit+1)):
             self.assertRaises(exccls, self.conn.create_container, badname)
             self.assertRaises(exccls, self.conn.get_container, badname)
             self.assertRaises(exccls, self.conn.delete_container, badname)

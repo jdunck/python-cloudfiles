@@ -192,6 +192,12 @@ class Connection(object):
             raise ResponseError(response.status, response.reason)
         return (count, size)
 
+    def _check_container_name(self, container_name):
+        if not container_name or \
+                '/' in container_name or \
+                len(container_name) > container_name_limit:
+            raise InvalidContainerName(container_name)
+
     def create_container(self, container_name):
         """
         Given a container name, returns a L{Container} item, creating a new
@@ -202,10 +208,7 @@ class Connection(object):
         @rtype: L{Container}
         @return: an object representing the newly created container
         """
-        if not container_name or \
-                '/' in container_name or \
-                len(container_name) > container_name_limit:
-            raise InvalidContainerName(container_name)
+        self._check_container_name(container_name)
         
         response = self.make_request('PUT', [container_name])
         buff = response.read()
@@ -222,8 +225,7 @@ class Connection(object):
         """
         if isinstance(container_name, Container):
             container_name = container_name.name
-        if not container_name or '/' in container_name:
-            raise InvalidContainerName(container_name)
+        self._check_container_name(container_name)
         
         response = self.make_request('DELETE', [container_name])
         buff = response.read()
@@ -256,8 +258,7 @@ class Connection(object):
         @rtype: L{Container}
         @return: an object representing the container
         """
-        if not container_name or '/' in container_name:
-            raise InvalidContainerName(container_name)
+        self._check_container_name(container_name)
         
         response = self.make_request('HEAD', [container_name])
         count = size = None

@@ -169,8 +169,8 @@ class Container(object):
     OB_MODIFIED_DESC = 2
     OB_NAME_ASC = 3
     OB_NAME_DESC = 4
-    OB_SIZE_ASC = 5
-    OB_SIZE_DESC = 6
+    OB_BYTES_ASC = 5
+    OB_BYTES_DESC = 6
     OB_CONTENT_ASC = 7
     OB_CONTENT_DESC = 8
     ORDER_BY = {
