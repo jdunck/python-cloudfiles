@@ -65,8 +65,9 @@ class Object(object):
         self.metadata = {}
         if object_record:
             self.name = object_record['name']
-            self.content_type = object_record['type']
+            self.content_type = object_record['content_type']
             self.size = object_record['bytes']
+            self.last_modified = object_record['last_modified']
             self._etag = object_record['hash']
             self._etag_override = False
         else:
