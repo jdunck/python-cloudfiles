@@ -66,7 +66,7 @@ class Object(object):
         if object_record:
             self.name = object_record['name']
             self.content_type = object_record['type']
-            self.size = object_record['size']
+            self.size = object_record['bytes']
             self._etag = object_record['hash']
             self._etag_override = False
         else:

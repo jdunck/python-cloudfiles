@@ -178,8 +178,8 @@ class Container(object):
         OB_MODIFIED_DESC: 'last_modified desc',
         OB_NAME_ASC: 'name',
         OB_NAME_DESC: 'name desc',
-        OB_SIZE_ASC: 'size',
-        OB_SIZE_DESC: 'size desc',
+        OB_BYTES_ASC: 'bytes',
+        OB_BYTES_DESC: 'bytes desc',
         OB_CONTENT_ASC: 'content_type',
         OB_CONTENT_DESC: 'content_type desc'
         }
@@ -200,12 +200,12 @@ class Container(object):
         @param offset: return objects starting at "offset" in list
         @type offset: int
         @param order_by: order results by ????
-        @type order_by: OB_CREATED_ASC: created date ascending
-                        OB_CREATED_DESC: created date descending
+        @type order_by: OB_MODIFIED_ASC: created date ascending
+                        OB_MODIFIED_DESC: created date descending
                         OB_NAME_ASC: name ascending
                         OB_NAME_DESC: name descending
-                        OB_SIZE_ASC: size ascending
-                        OB_SIZE_DESC: size descending
+                        OB_BYTES_ASC: size ascending
+                        OB_BYTES_DESC: size descending
                         OB_CONTENT_ASC: content type ascending
                         OB_CONTENT_DESC: content type descending
         @param path: return all objects in "path"
@@ -248,12 +248,12 @@ class Container(object):
         @param offset: return objects starting at "offset" in list
         @type offset: int
         @param order_by: order results by ????
-        @type order_by: OB_CREATED_ASC: created date ascending
-                        OB_CREATED_DESC: created date descending
+        @type order_by: OB_MODIFIED_ASC: created date ascending
+                        OB_MODIFIED_DESC: created date descending
                         OB_NAME_ASC: name ascending
                         OB_NAME_DESC: name descending
-                        OB_SIZE_ASC: size ascending
-                        OB_SIZE_DESC: size descending
+                        OB_BYTES_ASC: size ascending
+                        OB_BYTES_DESC: size descending
                         OB_CONTENT_ASC: content type ascending
                         OB_CONTENT_DESC: content type descending
         @param path: return all objects in "path"
@@ -284,12 +284,12 @@ class Container(object):
         @param offset: return objects starting at "offset" in list
         @type offset: int
         @param order_by: order results by ????
-        @type order_by: OB_CREATED_ASC: created date ascending
-                        OB_CREATED_DESC: created date descending
+        @type order_by: OB_MODIFIED_ASC: created date ascending
+                        OB_MODIFIED_DESC: created date descending
                         OB_NAME_ASC: name ascending
                         OB_NAME_DESC: name descending
-                        OB_SIZE_ASC: size ascending
-                        OB_SIZE_DESC: size descending
+                        OB_BYTES_ASC: size ascending
+                        OB_BYTES_DESC: size descending
                         OB_CONTENT_ASC: content type ascending
                         OB_CONTENT_DESC: content type descending
         @param path: return all objects in "path"
@@ -358,7 +358,7 @@ class ContainerResults(object):
         return Container(self.conn,
                          self._containers[key]['name'], 
                          self._containers[key]['count'], 
-                         self._containers[key]['size'])
+                         self._containers[key]['bytes'])
 
     def __getslice__(self, i, j):
         return [Container(self.conn, k['name'], k['count'], k['size']) for k in self._containers[i:j] ]

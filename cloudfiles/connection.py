@@ -296,9 +296,9 @@ class Connection(object):
         """
         Returns a list of Containers, including object count and size.
 
-        @rtype: list({"name":"...", "count":..., "size":...})
+        @rtype: list({"name":"...", "count":..., "bytes":...})
         @return: a list of all container info as dictionaries with the
-                 keys "name", "count", and "size"
+                 keys "name", "count", and "bytes"
         """
         response = self.make_request('GET', [''], parms={'format': 'json'})
         if (response.status < 200) or (response.status > 299):
