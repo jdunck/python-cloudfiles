@@ -157,36 +157,9 @@ class Container(object):
         """
         return Object(self, object_name)
 
-    """
-    order_by constants (can be either ascending or descending)
-
-    create date/time
-    name
-    size
-    content
-    """
-    OB_MODIFIED_ASC = 1
-    OB_MODIFIED_DESC = 2
-    OB_NAME_ASC = 3
-    OB_NAME_DESC = 4
-    OB_BYTES_ASC = 5
-    OB_BYTES_DESC = 6
-    OB_CONTENT_ASC = 7
-    OB_CONTENT_DESC = 8
-    ORDER_BY = {
-        OB_MODIFIED_ASC: 'last_modified',
-        OB_MODIFIED_DESC: 'last_modified desc',
-        OB_NAME_ASC: 'name',
-        OB_NAME_DESC: 'name desc',
-        OB_BYTES_ASC: 'bytes',
-        OB_BYTES_DESC: 'bytes desc',
-        OB_CONTENT_ASC: 'content_type',
-        OB_CONTENT_DESC: 'content_type desc'
-        }
-
     @requires_name(InvalidContainerName, container_name_limit)
     def get_objects(self, prefix=None, limit=None, offset=None, 
-                    order_by=None, path=None, **parms):
+                    path=None, **parms):
         """
         Return a result set of all Objects in the Container.
         
@@ -199,15 +172,6 @@ class Container(object):
         @type limit: int
         @param offset: return objects starting at "offset" in list
         @type offset: int
-        @param order_by: order results by ????
-        @type order_by: OB_MODIFIED_ASC: created date ascending
-                        OB_MODIFIED_DESC: created date descending
-                        OB_NAME_ASC: name ascending
-                        OB_NAME_DESC: name descending
-                        OB_BYTES_ASC: size ascending
-                        OB_BYTES_DESC: size descending
-                        OB_CONTENT_ASC: content type ascending
-                        OB_CONTENT_DESC: content type descending
         @param path: return all objects in "path"
         @type path: str
 
@@ -215,7 +179,7 @@ class Container(object):
         @return: an iterable collection of all storage objects in the container
         """
         return ObjectResults(self, self.list_objects_info(
-                prefix, limit, offset, order_by, path, **parms))
+                prefix, limit, offset, path, **parms))
 
     @requires_name(InvalidContainerName, container_name_limit)
     def get_object(self, object_name):
@@ -234,7 +198,7 @@ class Container(object):
 
     @requires_name(InvalidContainerName, container_name_limit)
     def list_objects_info(self, prefix=None, limit=None, offset=None, 
-                          order_by=None, path=None, **parms):
+                          path=None, **parms):
         """
         Return information about all Objects in the Container.
         
@@ -247,15 +211,6 @@ class Container(object):
         @type limit: int
         @param offset: return objects starting at "offset" in list
         @type offset: int
-        @param order_by: order results by ????
-        @type order_by: OB_MODIFIED_ASC: created date ascending
-                        OB_MODIFIED_DESC: created date descending
-                        OB_NAME_ASC: name ascending
-                        OB_NAME_DESC: name descending
-                        OB_BYTES_ASC: size ascending
-                        OB_BYTES_DESC: size descending
-                        OB_CONTENT_ASC: content type ascending
-                        OB_CONTENT_DESC: content type descending
         @param path: return all objects in "path"
         @type path: str
 
@@ -265,12 +220,12 @@ class Container(object):
         """
         parms['format'] = 'json'
         resp = self._list_objects_raw(
-            prefix, limit, offset, order_by, path, **parms)
+            prefix, limit, offset, path, **parms)
         return json_loads(resp)
 
     @requires_name(InvalidContainerName, container_name_limit)
     def list_objects(self, prefix=None, limit=None, offset=None, 
-                     order_by=None, path=None, **parms):
+                     path=None, **parms):
         """
         Return names of all Objects in the Container.
         
@@ -283,15 +238,6 @@ class Container(object):
         @type limit: int
         @param offset: return objects starting at "offset" in list
         @type offset: int
-        @param order_by: order results by ????
-        @type order_by: OB_MODIFIED_ASC: created date ascending
-                        OB_MODIFIED_DESC: created date descending
-                        OB_NAME_ASC: name ascending
-                        OB_NAME_DESC: name descending
-                        OB_BYTES_ASC: size ascending
-                        OB_BYTES_DESC: size descending
-                        OB_CONTENT_ASC: content type ascending
-                        OB_CONTENT_DESC: content type descending
         @param path: return all objects in "path"
         @type path: str
 
@@ -299,19 +245,18 @@ class Container(object):
         @return: a list of all container names
         """
         resp = self._list_objects_raw(
-            prefix, limit, offset, order_by, path, **parms)
+            prefix, limit, offset, path, **parms)
         return resp.splitlines()
 
     @requires_name(InvalidContainerName, container_name_limit)
     def _list_objects_raw(self, prefix=None, limit=None, offset=None, 
-                     order_by=None, path=None, **parms):
+                          path=None, **parms):
         """
         Returns a chunk list of storage object info.
         """
         if prefix: parms['prefix'] = prefix
         if limit: parms['limit'] = limit
         if offset: parms['offset'] = offset
-        if order_by: parms['order_by'] = Container.ORDER_BY[order_by]
         if path: parms['path'] = path
         response = self.conn.make_request('GET', [self.name], parms=parms)
         if (response.status < 200) or (response.status > 299):

@@ -53,9 +53,8 @@ class ContainerTest(unittest.TestCase):
         Iterate an ObjectResults and verify that it returns Object instances.
         Validate that the count() and index() methods work as expected.
         """
-        objects = self.container.get_objects(prefix='object', limit=3, offset=3, 
-                                             order_by=Container.OB_NAME_ASC, 
-                                             path='/')
+        objects = self.container.get_objects(prefix='object', limit=3, 
+                                             offset=3, path='/')
         for storage_object in objects:
             self.assert_(isinstance(storage_object, Object))
         self.assert_(objects.count('object4') == 1)
@@ -99,28 +98,6 @@ class ContainerTest(unittest.TestCase):
         self.assert_(isinstance(
                 self.container.list_objects(path='/'), list))
 
-    @printdoc
-    def test_list_objects_ordered(self):
-        """
-        Verify that all the various order_by query paramete permutations work.
-        """
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_MODIFIED_ASC), list))
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_MODIFIED_DESC), list))
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_NAME_ASC), list))
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_NAME_DESC), list))
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_BYTES_ASC), list))
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_BYTES_DESC), list))
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_CONTENT_ASC), list))
-        self.assert_(isinstance(self.container.list_objects(
-                    order_by=Container.OB_CONTENT_DESC), list))
-        
     @printdoc
     def test_bad_name_assignment(self):
         """

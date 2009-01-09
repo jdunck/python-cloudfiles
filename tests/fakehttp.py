@@ -180,10 +180,8 @@ class TrackerSocket(FakeSocket):
             objects = ['object%s\n' % i for i in range(1,9)]
             objects = objects[left:right]
 
-        # prefix/order_by/path don't make much sense given our test data
-        if args.has_key('prefix') or \
-                args.has_key('order_by') or \
-                args.has_key('path'):
+        # prefix/path don't make much sense given our test data
+        if args.has_key('prefix') or args.has_key('path'):
             pass
         return ''.join(objects)
 
