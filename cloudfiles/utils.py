@@ -31,14 +31,13 @@ def parse_url(url):
 
     return (host, int(port), path.strip('/'), is_ssl)
 
-def requires_name(exc_class, length_limit):
+def requires_name(exc_class):
     """Decorator to guard against invalid or unset names."""
     def wrapper(f):
         def decorator(*args, **kwargs):
             if not hasattr(args[0], 'name'):
                 raise exc_class('')
-            if not args[0].name or\
-                    len(args[0].name) > length_limit:
+            if not args[0].name:
                 raise exc_class(args[0].name)
             return f(*args, **kwargs)
         decorator.__name__ = f.__name__

@@ -13,7 +13,7 @@ from storage_object import Object, ObjectResults
 from errors import ResponseError, InvalidContainerName, InvalidObjectName, \
                    ContainerNotPublic, CDNNotEnabled
 from utils  import requires_name
-from consts import default_cdn_ttl, container_name_limit
+import consts
 from fjson  import json_loads
 
 # Because HTTPResponse objects *have* to have read() called on them 
@@ -41,7 +41,7 @@ class Container(object):
     def __set_name(self, name):
         # slashes make for invalid names
         if isinstance(name, (str, unicode)) and \
-                ('/' in name or len(name) > container_name_limit):
+                ('/' in name or len(name) > consts.container_name_limit):
             raise InvalidContainerName(name)
         self._name = name
 
@@ -68,7 +68,7 @@ class Container(object):
         if connection.cdn_enabled:
             self._fetch_cdn_data()
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def _fetch_cdn_data(self):
         """
         Fetch the object's CDN data from the CDN service
@@ -81,8 +81,8 @@ class Container(object):
                 if hdr[0].lower() == 'x-ttl':
                     self.cdn_ttl = int(hdr[1])
 
-    @requires_name(InvalidContainerName, container_name_limit)
-    def make_public(self, ttl=default_cdn_ttl):
+    @requires_name(InvalidContainerName)
+    def make_public(self, ttl=consts.default_cdn_ttl):
         """
         Either publishes the current container to the CDN or updates its
         CDN attributes.  Requires CDN be enabled on the account.
@@ -105,7 +105,7 @@ class Container(object):
             if hdr[0].lower() == 'x-cdn-uri':
                 self.cdn_uri = hdr[1]
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def make_private(self):
         """
         Disables CDN access to this container.
@@ -129,7 +129,7 @@ class Container(object):
             raise CDNNotEnabled()
         return self.cdn_uri is not None
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def public_uri(self):
         """
         Return the URI for this container, if it is publically
@@ -141,7 +141,7 @@ class Container(object):
             raise ContainerNotPublic()
         return self.cdn_uri
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def create_object(self, object_name):
         """
         Return an L{Object} instance, creating it if necessary.
@@ -157,7 +157,7 @@ class Container(object):
         """
         return Object(self, object_name)
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def get_objects(self, prefix=None, limit=None, offset=None, 
                     path=None, **parms):
         """
@@ -181,7 +181,7 @@ class Container(object):
         return ObjectResults(self, self.list_objects_info(
                 prefix, limit, offset, path, **parms))
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def get_object(self, object_name):
         """
         Return an Object instance for an existing storage object.
@@ -196,7 +196,7 @@ class Container(object):
         """
         return Object(self, object_name, force_exists=True)
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def list_objects_info(self, prefix=None, limit=None, offset=None, 
                           path=None, **parms):
         """
@@ -223,7 +223,7 @@ class Container(object):
             prefix, limit, offset, path, **parms)
         return json_loads(resp)
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def list_objects(self, prefix=None, limit=None, offset=None, 
                      path=None, **parms):
         """
@@ -244,11 +244,11 @@ class Container(object):
         @rtype: list(str)
         @return: a list of all container names
         """
-        resp = self._list_objects_raw(
-            prefix, limit, offset, path, **parms)
+        resp = self._list_objects_raw(prefix=prefix, limit=limit, 
+                                      offset=offset, path=path, **parms)
         return resp.splitlines()
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def _list_objects_raw(self, prefix=None, limit=None, offset=None, 
                           path=None, **parms):
         """
@@ -257,7 +257,7 @@ class Container(object):
         if prefix: parms['prefix'] = prefix
         if limit: parms['limit'] = limit
         if offset: parms['offset'] = offset
-        if path: parms['path'] = path
+        if not path is None: parms['path'] = path # empty strings are valid
         response = self.conn.make_request('GET', [self.name], parms=parms)
         if (response.status < 200) or (response.status > 299):
             buff = response.read()
@@ -270,7 +270,7 @@ class Container(object):
     def __str__(self):
         return self.name
 
-    @requires_name(InvalidContainerName, container_name_limit)
+    @requires_name(InvalidContainerName)
     def delete_object(self, object_name):
         """
         Permanently remove a storage object.

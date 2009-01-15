@@ -48,6 +48,7 @@ class InvalidContainerName(Exception):
     """
     Raised for invalid storage container names.
     """
+    pass
 
 class InvalidObjectName(Exception):
     """
