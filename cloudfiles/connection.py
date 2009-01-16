@@ -17,7 +17,7 @@ from    errors    import ResponseError, NoSuchContainer, ContainerNotEmpty, \
                          InvalidContainerName, CDNNotEnabled
 from    Queue     import Queue, Empty, Full
 from    time      import time
-from    consts    import user_agent, default_authurl, container_name_limit
+import  consts
 from    authentication import Authentication
 from    fjson     import json_loads
 
@@ -57,7 +57,7 @@ class Connection(object):
         self.auth = kwargs.has_key('auth') and kwargs['auth'] or None
         
         if not self.auth:
-            authurl = kwargs.get('authurl', default_authurl)
+            authurl = kwargs.get('authurl', consts.default_authurl)
             if username and api_key and authurl:
                 self.auth = Authentication(username, api_key, authurl)
             else:
@@ -104,7 +104,7 @@ class Connection(object):
 
         path = '/%s/%s' % \
                  (self.uri.rstrip('/'), '/'.join([quote(i) for i in path]))
-        headers = {'Content-Length': len(data), 'User-Agent': user_agent, 
+        headers = {'Content-Length': len(data), 'User-Agent': consts.user_agent, 
                    'X-Auth-Token': self.token}
         if isinstance(hdrs, dict):
             headers.update(hdrs)
@@ -144,7 +144,7 @@ class Connection(object):
                 ['%s=%s' % (quote(x),quote(str(y))) for (x,y) in parms.items()]
             path = '%s?%s' % (path, '&'.join(query_args))
             
-        headers = {'Content-Length': len(data), 'User-Agent': user_agent, 
+        headers = {'Content-Length': len(data), 'User-Agent': consts.user_agent, 
                    'X-Auth-Token': self.token}
         isinstance(hdrs, dict) and headers.update(hdrs)
         
@@ -195,7 +195,7 @@ class Connection(object):
     def _check_container_name(self, container_name):
         if not container_name or \
                 '/' in container_name or \
-                len(container_name) > container_name_limit:
+                len(container_name) > consts.container_name_limit:
             raise InvalidContainerName(container_name)
 
     def create_container(self, container_name):
