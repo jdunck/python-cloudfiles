@@ -239,7 +239,7 @@ class Connection(object):
             response = self.cdn_request('POST', [container_name],
                                 hdrs={'X-CDN-Enabled': 'False'})
 
-    def get_all_containers(self):
+    def get_all_containers(self, **parms):
         """
         Returns a Container item result set.
 
@@ -247,7 +247,7 @@ class Connection(object):
         @return: an iterable set of objects representing all containers on the
                  account
         """
-        return ContainerResults(self, self.list_containers_info())
+        return ContainerResults(self, self.list_containers_info(**parms))
 
     def get_container(self, container_name):
         """
@@ -293,7 +293,7 @@ class Connection(object):
             raise ResponseError(response.status, response.reason)
         return response.read().splitlines()
 
-    def list_containers_info(self):
+    def list_containers_info(self, **parms):
         """
         Returns a list of Containers, including object count and size.
 
@@ -301,20 +301,21 @@ class Connection(object):
         @return: a list of all container info as dictionaries with the
                  keys "name", "count", and "bytes"
         """
-        response = self.make_request('GET', [''], parms={'format': 'json'})
+        parms['format'] = 'json'
+        response = self.make_request('GET', [''], parms=parms)
         if (response.status < 200) or (response.status > 299):
             buff = response.read()
             raise ResponseError(response.status, response.reason)
         return json_loads(response.read())
 
-    def list_containers(self):
+    def list_containers(self, **parms):
         """
         Returns a list of Containers.
 
         @rtype: list(str)
         @return: a list of all containers names as strings
         """
-        response = self.make_request('GET', [''])
+        response = self.make_request('GET', [''], parms=parms)
         if (response.status < 200) or (response.status > 299):
             buff = response.read()
             raise ResponseError(response.status, response.reason)
