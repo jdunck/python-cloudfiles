@@ -459,6 +459,10 @@
   the amount of data written so far, the second for the total size of the 
   transfer. Note: This option is only applicable when used in conjunction 
   with the buffer option.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.write(<span class="py-string">'hello'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.read()
+<span class="py-output">'hello'</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -494,6 +498,10 @@
   </tr></table>
   
   <p>Save the contents of the object to filename.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container = connection[<span class="py-string">'container1'</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span>obj = container.get_object(<span class="py-string">'backup_file'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>obj.save_to_filename(<span class="py-string">'./backup_file'</span>)</pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -522,6 +530,12 @@
   <p>Warning: The HTTP response is only complete after this generator has 
   raised a StopIteration. No other methods can be called until this has 
   occurred.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.write(<span class="py-string">'hello'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.stream()
+<span class="py-output">&lt;generator object at 0xb77939cc&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-string">'-'</span>.join(test_object.stream(chunksize=1))
+<span class="py-output">'h-e-l-l-o'</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -553,6 +567,10 @@
   </tr></table>
   
   <p>Commits the metadata to the remote storage system.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object = container[<span class="py-string">'paradise_lost.pdf'</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.metadata = {<span class="py-string">'author'</span>: <span class="py-string">'John Milton'</span>}
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.sync_metadata()</pre>
   <p>Object metadata can be set and retrieved through the object's 
   .metadata attribute.</p>
   <dl class="fields">
@@ -590,6 +608,11 @@
   upload. The callback should accept two integers, the first will be for 
   the amount of data written so far, the second for the total size of the 
   transfer.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object = container.create_object(<span class="py-string">'file.txt'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.content_type = <span class="py-string">'text/plain'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>fp = open(<span class="py-string">'./file.txt'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.write(fp)</pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -633,6 +656,10 @@
   verification will be performed, (verification can be performed afterward 
   though by using the etag attribute which is set to the value returned by 
   the server).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object = container.create_object(<span class="py-string">'backup.tar.gz'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>pfd = os.popen(<span class="py-string">'tar -czvf - ./data/'</span>, <span class="py-string">'r'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.send(pfd)</pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -663,6 +690,10 @@
   </tr></table>
   
   <p>Put the contents of the named file into remote storage.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object = container.create_object(<span class="py-string">'file.txt'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.content_type = <span class="py-string">'text/plain'</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>test_object.load_from_filename(<span class="py-string">'./my_file.txt'</span>)</pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -712,6 +743,12 @@
   </tr></table>
   
   <p>Retrieve the URI for this object, if its container is public.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container1 = connection[<span class="py-string">'container1'</span>]
+<span class="py-prompt">&gt;&gt;&gt; </span>container1.make_public()
+<span class="py-prompt">&gt;&gt;&gt; </span>container1.create_object(<span class="py-string">'file.txt'</span>).write(<span class="py-string">'testing'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>container1[<span class="py-string">'file.txt'</span>].public_uri()
+<span class="py-output">'http://cdn.cloudfiles.mosso.com/c61/file.txt'</span></pre>
   <dl class="fields">
     <dt>Returns: str</dt>
         <dd>the public URI for this object</dd>
@@ -792,7 +829,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 12 03:28:24 2009
+    Generated by Epydoc 3.0.1 on Fri Mar  6 07:40:58 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
