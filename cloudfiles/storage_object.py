@@ -216,7 +216,7 @@ class Object(object):
         http.putheader('User-Agent', consts.user_agent)
         http.endheaders()
         return http
-            
+
     # pylint: disable-msg=W0622
     @requires_name(InvalidObjectName)
     def write(self, data='', verify=True, callback=None):
@@ -305,14 +305,15 @@ class Object(object):
     @requires_name(InvalidObjectName)
     def send(self, iterable):
         """
-        Write data to the remote storage system using a generator.
+        Write potentially transient data to the remote storage system using a
+        generator or stream.
         
-        You must set the size attribute of the instance prior to calling
-        this method. Failure to do so will result in an 
-        InvalidObjectSize exception.
-        
-        If the generator raises StopIteration prior to yielding the 
-        right number of bytes, an IncompleteSend exception is raised.
+        If the object's size is not set, chunked transfer encoding will be
+        used to upload the file.
+
+        If the object's size attribute is set, it will be used as the
+        Content-Length.  If the generator raises StopIteration prior to yielding
+        the right number of bytes, an IncompleteSend exception is raised.
         
         If the content_type attribute is not set then a value of
         application/octet-stream will be used.
@@ -323,31 +324,56 @@ class Object(object):
         can be performed afterward though by using the etag attribute
         which is set to the value returned by the server).
 
-        @param iterable: a generator which yields the content to upload
-        @type iterable: generator
+        @param iterable: stream or generator which yields the content to upload
+        @type iterable: generator or stream
         """
         self._name_check()
-        if not isinstance(self.size, (int, long)):
-            raise InvalidObjectSize(self.size)
-        
+
+        if hasattr(iterable, 'read'):
+            def file_iterator(file):
+                chunk = file.read(4095)
+                while chunk:
+                    yield chunk
+                    chunk = file.read(4095)
+                raise StopIteration()
+            iterable = file_iterator(iterable)
+
         # This method implicitly diables verification
         if not self._etag_override:
             self._etag = None
         
         if not self.content_type:
             self.content_type = 'application/octet-stream'
-            
-        http = self.__get_conn_for_write()
-        
+
+        path = "/%s/%s/%s" % (self.container.conn.uri.rstrip('/'), \
+                quote(self.container.name), quote(self.name))
+        headers = self._make_headers()
+        if self.size is None:
+            del headers['Content-Length']
+            headers['Transfer-Encoding'] = 'chunked'
+        headers['X-Auth-Token'] = self.container.conn.token
+        headers['User-Agent'] = consts.user_agent
+        http = self.container.conn.connection
+        http.putrequest('PUT', path)
+        for key, value in headers.iteritems():
+            http.putheader(key, value)
+        http.endheaders()
+
         response = None
         transferred = 0
-
         try:
             for chunk in iterable:
-                http.send(chunk)
+                if self.size is None:
+                    http.send("%X\r\n" % len(chunk))
+                    http.send(chunk)
+                    http.send("\r\n")
+                else:
+                    http.send(chunk)
                 transferred += len(chunk)
+            if self.size is None:
+                http.send("0\r\n\r\n")
             # If the generator didn't yield enough data, stop, drop, and roll.
-            if transferred < self.size:
+            elif transferred < self.size:
                 raise IncompleteSend()
             response = http.getresponse()
             buff = response.read()
