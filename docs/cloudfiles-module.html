@@ -48,8 +48,6 @@
     <td>
       <table cellpadding="0" cellspacing="0">
         <!-- hide/show private -->
-        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
-    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
             >]&nbsp;|&nbsp;<a href="cloudfiles-module.html"
@@ -59,9 +57,9 @@
   </tr>
 </table>
 <!-- ==================== PACKAGE DESCRIPTION ==================== -->
-<h1 class="epydoc">Package cloudfiles</h1><span class="codelink"><a href="cloudfiles-pysrc.html">source&nbsp;code</a></span><br /><br />
+<h1 class="epydoc">Package cloudfiles</h1><p class="nomargin-top"><span class="codelink"><a href="cloudfiles-pysrc.html">source&nbsp;code</a></span></p>
 <p>Cloud Files python client API.</p>
-  Working with result sets:
+  <p>Working with result sets:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> cloudfiles
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-comment"># conn = cloudfiles.get_connection(username='jsmith', api_key='1234567890')</span>
@@ -78,14 +76,14 @@
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span> container[0].name
 <span class="py-output">fruit</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>fruit_container = container[0]
-<span class="py-prompt">&gt;&gt;&gt; </span>objects = fruit_container.get_all_objects()
+<span class="py-prompt">&gt;&gt;&gt; </span>objects = fruit_container.get_objects()
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> storage_object <span class="py-keyword">in</span> objects:
 <span class="py-prompt">&gt;&gt;&gt; </span>    <span class="py-keyword">print</span> storage_object.name
 <span class="py-output">apple</span>
 <span class="py-output">orange</span>
 <span class="py-output">bannana</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt;</span></pre>
-  Creating Containers and adding Objects to them:
+  <p>Creating Containers and adding Objects to them:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>pic_container = conn.create_container(<span class="py-string">'pictures'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>my_dog = pic_container.create_object(<span class="py-string">'fido.jpg'</span>)
@@ -94,21 +92,21 @@
 <span class="py-prompt">&gt;&gt;&gt; </span>text_obj.write(<span class="py-string">'This is not the object you are looking for.\n'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>text_obj.read()
 <span class="py-output">'This is not the object you are looking for.'</span></pre>
-  Object instances support streaming through the use of a generator:
+  <p>Object instances support streaming through the use of a generator:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>deb_iso = pic_container.get_object(<span class="py-string">'debian-40r3-i386-netinst.iso'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>f = open(<span class="py-string">'/tmp/debian.iso'</span>, <span class="py-string">'w'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> chunk <span class="py-keyword">in</span> deb_iso.stream():
 <span class="py-output">..     f.write(chunk)</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>f.close()</pre>
-  Marking a Container as CDN-enabled/public with a TTL of 30 days
+  <p>Marking a Container as CDN-enabled/public with a TTL of 30 days</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>pic_container.make_public(2592000)
 <span class="py-prompt">&gt;&gt;&gt; </span>pic_container.public_uri()
 <span class="py-output">'http://cdn.cloudfiles.mosso.com/c1234/'</span>
 <span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>my_dog.public_uri()
 <span class="py-output">'http://cdn.cloudfiles.mosso.com/c1234/fido.jpg'</span></pre>
-  See COPYING for license information.<br /><br />
+  <p>See COPYING for license information.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
@@ -119,23 +117,15 @@
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Submodules</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Submodules"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Submodules</span></td>
 </tr>
   <tr><td class="summary">
   <ul class="nomargin">
     <li> <strong class="uidlink"><a href="cloudfiles.connection-module.html">cloudfiles.connection</a></strong>: <em class="summary">connection operations</em>    </li>
     <li> <strong class="uidlink"><a href="cloudfiles.container-module.html">cloudfiles.container</a></strong>: <em class="summary">container operations</em>    </li>
     <li> <strong class="uidlink"><a href="cloudfiles.errors-module.html">cloudfiles.errors</a></strong>: <em class="summary">exception classes</em>    </li>
+    <li> <strong class="uidlink"><a href="cloudfiles.fjson-module.html">cloudfiles.fjson</a></strong>    </li>
     <li> <strong class="uidlink"><a href="cloudfiles.storage_object-module.html">cloudfiles.storage_object</a></strong>: <em class="summary">Object operations</em>    </li>
   </ul></td></tr>
 </table>
@@ -146,17 +136,8 @@
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Functions</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Functions"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Functions</span></td>
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
@@ -183,17 +164,8 @@
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Function Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-FunctionDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Function Details</span></td>
 </tr>
 </table>
 <a name="get_connection"></a>
@@ -209,9 +181,9 @@
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles-pysrc.html#get_connection">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Helper function for creating connection instances.
+  <p>Helper function for creating connection instances.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -256,10 +228,11 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0beta1 on Wed Nov 19 06:42:17 2008
+    Generated by Epydoc 3.0.1 on Thu Mar 12 03:28:23 2009
     </td>
     <td align="right" class="footer">
-      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
     </td>
   </tr>
 </table>
@@ -270,9 +243,8 @@
   // javascript is turned off then we want them to be
   // visible); but by default, we want to hide them.  So hide
   // them unless we have a cookie that says to show them.
-  checkCookie()
+  checkCookie();
   // -->
 </script>
-  
 </body>
 </html>
