@@ -164,7 +164,7 @@ class Container(object):
         Return a result set of all Objects in the Container.
         
         Keyword arguments are treated as HTTP query parameters and can
-        be used limit the result set (see the API documentation).
+        be used to limit the result set (see the API documentation).
 
         @param prefix: filter the results using this prefix
         @type prefix: str
@@ -230,7 +230,7 @@ class Container(object):
         Return names of all Objects in the Container.
         
         Keyword arguments are treated as HTTP query parameters and can
-        be used limit the result set (see the API documentation).
+        be used to limit the result set (see the API documentation).
 
         @param prefix: filter the results using this prefix
         @type prefix: str
