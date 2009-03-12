@@ -261,7 +261,15 @@ class Connection(object):
         @rtype: L{ContainerResults}
         @return: an iterable set of objects representing all containers on the
                  account
+        @param limit: number of results to return, up to 10,000
+        @type limit: int
+        @param marker: return only results whose name is greater than "marker"
+        @type marker: str
         """
+        if limit:
+            parms['limit'] = limit
+        if marker:
+            parms['marker'] = marker
         return ContainerResults(self, self.list_containers_info(**parms))
 
     def get_container(self, container_name):
@@ -317,7 +325,7 @@ class Connection(object):
             raise ResponseError(response.status, response.reason)
         return response.read().splitlines()
 
-    def list_containers_info(self, **parms):
+    def list_containers_info(self, limit=None, marker=None, **parms):
         """
         Returns a list of Containers, including object count and size.
 
@@ -332,7 +340,15 @@ class Connection(object):
         @rtype: list({"name":"...", "count":..., "bytes":...})
         @return: a list of all container info as dictionaries with the
                  keys "name", "count", and "bytes"
+        @param limit: number of results to return, up to 10,000
+        @type limit: int
+        @param marker: return only results whose name is greater than "marker"
+        @type marker: str
         """
+        if limit:
+            parms['limit'] = limit
+        if marker:
+            parms['marker'] = marker
         parms['format'] = 'json'
         response = self.make_request('GET', [''], parms=parms)
         if (response.status < 200) or (response.status > 299):
@@ -340,7 +356,7 @@ class Connection(object):
             raise ResponseError(response.status, response.reason)
         return json_loads(response.read())
 
-    def list_containers(self, **parms):
+    def list_containers(self, limit=None, marker=None, **parms):
         """
         Returns a list of Containers.
 
@@ -354,7 +370,15 @@ class Connection(object):
 
         @rtype: list(str)
         @return: a list of all containers names as strings
+        @param limit: number of results to return, up to 10,000
+        @type limit: int
+        @param marker: return only results whose name is greater than "marker"
+        @type marker: str
         """
+        if limit:
+            parms['limit'] = limit
+        if marker:
+            parms['marker'] = marker
         response = self.make_request('GET', [''], parms=parms)
         if (response.status < 200) or (response.status > 299):
             buff = response.read()

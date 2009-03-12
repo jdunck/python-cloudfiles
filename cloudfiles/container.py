@@ -183,7 +183,7 @@ class Container(object):
         return Object(self, object_name)
 
     @requires_name(InvalidContainerName)
-    def get_objects(self, prefix=None, limit=None, offset=None, 
+    def get_objects(self, prefix=None, limit=None, marker=None, 
                     path=None, **parms):
         """
         Return a result set of all Objects in the Container.
@@ -202,8 +202,8 @@ class Container(object):
         @type prefix: str
         @param limit: return the first "limit" objects found
         @type limit: int
-        @param offset: return objects whose names are greater than "offset"
-        @type offset: str
+        @param marker: return objects whose names are greater than "marker"
+        @type marker: str
         @param path: return all objects in "path"
         @type path: str
 
@@ -211,7 +211,7 @@ class Container(object):
         @return: an iterable collection of all storage objects in the container
         """
         return ObjectResults(self, self.list_objects_info(
-                prefix, limit, offset, path, **parms))
+                prefix, limit, marker, path, **parms))
 
     @requires_name(InvalidContainerName)
     def get_object(self, object_name):
@@ -233,7 +233,7 @@ class Container(object):
         return Object(self, object_name, force_exists=True)
 
     @requires_name(InvalidContainerName)
-    def list_objects_info(self, prefix=None, limit=None, offset=None, 
+    def list_objects_info(self, prefix=None, limit=None, marker=None, 
                           path=None, **parms):
         """
         Return information about all objects in the Container.
@@ -257,8 +257,8 @@ class Container(object):
         @type prefix: str
         @param limit: return the first "limit" objects found
         @type limit: int
-        @param offset: return objects with names greater than "offset"
-        @type offset: str
+        @param marker: return objects with names greater than "marker"
+        @type marker: str
         @param path: return all objects in "path"
         @type path: str
 
@@ -268,11 +268,11 @@ class Container(object):
         """
         parms['format'] = 'json'
         resp = self._list_objects_raw(
-            prefix, limit, offset, path, **parms)
+            prefix, limit, marker, path, **parms)
         return json_loads(resp)
 
     @requires_name(InvalidContainerName)
-    def list_objects(self, prefix=None, limit=None, offset=None, 
+    def list_objects(self, prefix=None, limit=None, marker=None, 
                      path=None, **parms):
         """
         Return names of all L{Object}s in the L{Container}.
@@ -287,8 +287,8 @@ class Container(object):
         @type prefix: str
         @param limit: return the first "limit" objects found
         @type limit: int
-        @param offset: return objects with names greater than "offset"
-        @type offset: str
+        @param marker: return objects with names greater than "marker"
+        @type marker: str
         @param path: return all objects in "path"
         @type path: str
 
@@ -296,18 +296,18 @@ class Container(object):
         @return: a list of all container names
         """
         resp = self._list_objects_raw(prefix=prefix, limit=limit, 
-                                      offset=offset, path=path, **parms)
+                                      marker=marker, path=path, **parms)
         return resp.splitlines()
 
     @requires_name(InvalidContainerName)
-    def _list_objects_raw(self, prefix=None, limit=None, offset=None, 
+    def _list_objects_raw(self, prefix=None, limit=None, marker=None, 
                           path=None, **parms):
         """
         Returns a chunk list of storage object info.
         """
         if prefix: parms['prefix'] = prefix
         if limit: parms['limit'] = limit
-        if offset: parms['offset'] = offset
+        if marker: parms['marker'] = marker
         if not path is None: parms['path'] = path # empty strings are valid
         response = self.conn.make_request('GET', [self.name], parms=parms)
         if (response.status < 200) or (response.status > 299):
