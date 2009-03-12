@@ -50,8 +50,6 @@
     <td>
       <table cellpadding="0" cellspacing="0">
         <!-- hide/show private -->
-        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
-    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
             >]&nbsp;|&nbsp;<a href="cloudfiles.storage_object.Object-class.html"
@@ -61,25 +59,46 @@
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Object</h1><span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object">source&nbsp;code</a></span><br /><br />
-Storage data representing an object, (metadata and data).<br /><br />
+<h1 class="epydoc">Class Object</h1><p class="nomargin-top"><span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object">source&nbsp;code</a></span></p>
+<center>
+<center>  <map id="uml_class_diagram_for_cloudfil_20" name="uml_class_diagram_for_cloudfil_20">
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html" title="Container object and Object instance factory." alt="" coords="185,400,313,426"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#objsum" title="cloudfiles.storage_object.Object.objsum" alt="" coords="17,28,481,46"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#etag" title="cloudfiles.storage_object.Object.etag" alt="" coords="17,46,481,65"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#content_type" title="the object&#39;s content&#45;type (set or read)" alt="" coords="17,65,481,84"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#last_modified" title="date and time of last file modification (cached)" alt="" coords="17,84,481,102"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#metadata" title="metadata associated with the object (set or read)" alt="" coords="17,102,481,121"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#name" title="the object&#39;s name (generally treat as read&#45;only)" alt="" coords="17,121,481,140"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#size" title="the object&#39;s size (cached)" alt="" coords="17,140,481,158"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#__init__" title="Storage objects rarely if ever need to be instantiated directly by the &#160;user." alt="" coords="17,161,481,180"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#read" title="Read the content from the remote storage object." alt="" coords="17,180,481,198"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#save_to_filename" title="Save the contents of the object to filename." alt="" coords="17,198,481,217"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#stream" title="Return a generator of the remote storage object&#39;s data." alt="" coords="17,217,481,236"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#sync_metadata" title="Commits the metadata to the remote storage system." alt="" coords="17,236,481,254"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#write" title="Write data to the remote storage system." alt="" coords="17,254,481,273"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#send" title="Write potentially transient data to the remote storage system using a &#160;generator or stream." alt="" coords="17,273,481,292"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#load_from_filename" title="Put the contents of the named file into remote storage." alt="" coords="17,292,481,310"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#__str__" title="str(x)" alt="" coords="17,310,481,329"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#public_uri" title="Retrieve the URI for this object, if its container is public." alt="" coords="17,329,481,348"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html" title="Storage data representing an object, (metadata and data)." alt="" coords="16,10,483,349"/>
+<area shape="poly" href="cloudfiles.storage_object.Object&#45;class.html#container" title="cloudfiles.storage_object.Object.container" alt="" coords="252,349 252,386 247,386 247,349"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#container" title="cloudfiles.storage_object.Object.container" alt="" coords="245,345,253,353"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#container" title="cloudfiles.storage_object.Object.container" alt="" coords="245,396,253,404"/>
+<area shape="rect" href="cloudfiles.storage_object.Object&#45;class.html#container" title="container" alt="" coords="249,366,303,383"/>
+</map>
+  <img src="uml_class_diagram_for_cloudfil_20.gif" alt='' usemap="#uml_class_diagram_for_cloudfil_20" ismap="ismap" class="graph-without-title" />
+</center>
+</center>
+<hr />
+<p>Storage data representing an object, (metadata and data).</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Instance Methods</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceMethods"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
@@ -90,8 +109,9 @@ Storage data representing an object, (metadata and data).<br /><br />
           <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">container</span>,
         <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">force_exists</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Storage objects rarely if ever need to be instantiated directly by
+        <span class="summary-sig-arg">force_exists</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">object_record</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Storage objects rarely if ever need to be instantiated directly by 
       the user.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object.__init__">source&nbsp;code</a></span>
@@ -108,12 +128,8 @@ Storage data representing an object, (metadata and data).<br /><br />
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">-1</span>,
-        <span class="summary-sig-arg">offset</span>=<span class="summary-sig-default">0</span>,
-        <span class="summary-sig-arg">hdrs</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">buffer</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">callback</span>=<span class="summary-sig-default">None</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#read" class="summary-sig-name">read</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Read the content from the remote storage object.</td>
           <td align="right" valign="top">
             
@@ -149,9 +165,8 @@ Storage data representing an object, (metadata and data).<br /><br />
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#stream" class="summary-sig-name">stream</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">chunksize</span>=<span class="summary-sig-default">8192</span>,
-        <span class="summary-sig-arg">hdrs</span>=<span class="summary-sig-default">None</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#stream" class="summary-sig-name">stream</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Return a generator of the remote storage object's data.</td>
           <td align="right" valign="top">
             
@@ -168,7 +183,8 @@ Storage data representing an object, (metadata and data).<br /><br />
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#sync_metadata" class="summary-sig-name">sync_metadata</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#sync_metadata" class="summary-sig-name">sync_metadata</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Commits the metadata to the remote storage system.</td>
           <td align="right" valign="top">
             
@@ -185,10 +201,8 @@ Storage data representing an object, (metadata and data).<br /><br />
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#write" class="summary-sig-name">write</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">data</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">verify</span>=<span class="summary-sig-default">True</span>,
-        <span class="summary-sig-arg">callback</span>=<span class="summary-sig-default">None</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#write" class="summary-sig-name">write</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Write data to the remote storage system.</td>
           <td align="right" valign="top">
             
@@ -205,9 +219,10 @@ Storage data representing an object, (metadata and data).<br /><br />
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#send" class="summary-sig-name">send</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">iterable</span>)</span><br />
-      Write data to the remote storage system using a generator.</td>
+          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#send" class="summary-sig-name">send</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Write potentially transient data to the remote storage system using a
+      generator or stream.</td>
           <td align="right" valign="top">
             
             
@@ -239,6 +254,23 @@ Storage data representing an object, (metadata and data).<br /><br />
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">str</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -254,23 +286,28 @@ Storage data representing an object, (metadata and data).<br /><br />
       
     </td>
   </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>
+      </p>
+    </td>
+  </tr>
 </table>
 <!-- ==================== INSTANCE VARIABLES ==================== -->
 <a name="section-InstanceVariables"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Instance Variables</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceVariables"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Variables</span></td>
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
@@ -327,17 +364,8 @@ Storage data representing an object, (metadata and data).<br /><br />
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Properties</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Properties"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
@@ -353,23 +381,21 @@ Storage data representing an object, (metadata and data).<br /><br />
         <a href="cloudfiles.storage_object.Object-class.html#etag" class="summary-name">etag</a>
     </td>
   </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
 </table>
 <!-- ==================== METHOD DETAILS ==================== -->
 <a name="section-MethodDetails"></a>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Method Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-MethodDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Method Details</span></td>
 </tr>
 </table>
 <a name="__init__"></a>
@@ -382,17 +408,18 @@ Storage data representing an object, (metadata and data).<br /><br />
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">container</span>,
         <span class="sig-arg">name</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">force_exists</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">force_exists</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">object_record</span>=<span class="sig-default">None</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Storage objects rarely if ever need to be instantiated directly by the
   user.</p>
-  Instead, use the <a 
+  <p>Instead, use the <a 
   href="cloudfiles.container.Container-class.html#create_object" 
   class="link">create_object</a>, <a 
   href="cloudfiles.container.Container-class.html#get_object" 
@@ -400,8 +427,11 @@ Storage data representing an object, (metadata and data).<br /><br />
   href="cloudfiles.container.Container-class.html#list_objects" 
   class="link">list_objects</a> and other methods on its parent <a 
   href="cloudfiles.container.Container-class.html" 
-  class="link">Container</a> object.
+  class="link">Container</a> object.</p>
   <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -412,40 +442,34 @@ Storage data representing an object, (metadata and data).<br /><br />
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">size</span>=<span class="sig-default">-1</span>,
-        <span class="sig-arg">offset</span>=<span class="sig-default">0</span>,
-        <span class="sig-arg">hdrs</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">buffer</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">callback</span>=<span class="sig-default">None</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">read</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Read the content from the remote storage object.</p>
   <p>By default this method will buffer the response in memory and return 
   it as a string. However, if a file-like object is passed in using the 
   buffer keyword, the response will be written to it instead.</p>
-  A callback can be passed in for reporting on the progress of the 
+  <p>A callback can be passed in for reporting on the progress of the 
   download. The callback should accept two integers, the first will be for 
   the amount of data written so far, the second for the total size of the 
   transfer. Note: This option is only applicable when used in conjunction 
-  with the buffer option.
+  with the buffer option.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>size</code></strong> (number) - combined with offset, defines the length of data to be 
-          read</li>
+        <li><strong class="pname"><code>size</code></strong> (number) - combined with offset, defines the length of data to be read</li>
         <li><strong class="pname"><code>offset</code></strong> (number) - combined with size, defines the start location to be read</li>
         <li><strong class="pname"><code>hdrs</code></strong> (dictionary) - an optional dict of headers to send with the request</li>
         <li><strong class="pname"><code>buffer</code></strong> (file-like object) - an optional file-like object to write the content to</li>
         <li><strong class="pname"><code>callback</code></strong> (callable(transferred, size)) - function to be used as a progress callback</li>
     </ul></dd>
     <dt>Returns: str or None</dt>
-        <dd>a string of all data in the object, or None if a buffer is 
-          used</dd>
+        <dd>a string of all data in the object, or None if a buffer is used</dd>
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
         <li><code>@requires_name(InvalidObjectName)</code></li>
@@ -467,9 +491,9 @@ Storage data representing an object, (metadata and data).<br /><br />
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object.save_to_filename">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Save the contents of the object to filename.
+  <p>Save the contents of the object to filename.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -486,19 +510,18 @@ Storage data representing an object, (metadata and data).<br /><br />
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">stream</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">chunksize</span>=<span class="sig-default">8192</span>,
-        <span class="sig-arg">hdrs</span>=<span class="sig-default">None</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">stream</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Return a generator of the remote storage object's data.</p>
-  Warning: The HTTP response is only complete after this generator has 
+  <p>Warning: The HTTP response is only complete after this generator has 
   raised a StopIteration. No other methods can be called until this has 
-  occurred.
+  occurred.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -506,8 +529,7 @@ Storage data representing an object, (metadata and data).<br /><br />
         <li><strong class="pname"><code>hdrs</code></strong> (dict) - an optional dict of headers to send in the request</li>
     </ul></dd>
     <dt>Returns: str generator</dt>
-        <dd>a generator which yields strings as the object is 
-          downloaded</dd>
+        <dd>a generator which yields strings as the object is downloaded</dd>
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
         <li><code>@requires_name(InvalidObjectName)</code></li>
@@ -522,16 +544,17 @@ Storage data representing an object, (metadata and data).<br /><br />
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">sync_metadata</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sync_metadata</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Commits the metadata to the remote storage system.</p>
-  Object metadata can be set and retrieved through the object's 
-  .metadata attribute.
+  <p>Object metadata can be set and retrieved through the object's 
+  .metadata attribute.</p>
   <dl class="fields">
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
@@ -547,15 +570,13 @@ Storage data representing an object, (metadata and data).<br /><br />
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">write</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">data</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">verify</span>=<span class="sig-default">True</span>,
-        <span class="sig-arg">callback</span>=<span class="sig-default">None</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">write</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Write data to the remote storage system.</p>
   <p>By default, server-side verification is enabled, (verify=True), and 
@@ -565,10 +586,10 @@ Storage data representing an object, (metadata and data).<br /><br />
   disabling verification, there is no guarantee that what you think was 
   uploaded matches what was actually stored. Use this optional carefully. 
   You have been warned.</p>
-  A callback can be passed in for reporting on the progress of the 
+  <p>A callback can be passed in for reporting on the progress of the 
   upload. The callback should accept two integers, the first will be for 
   the amount of data written so far, the second for the total size of the 
-  transfer.
+  transfer.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -590,31 +611,32 @@ Storage data representing an object, (metadata and data).<br /><br />
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">send</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">iterable</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">send</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  <p>Write data to the remote storage system using a generator.</p>
-  <p>You must set the size attribute of the instance prior to calling this 
-  method. Failure to do so will result in an InvalidObjectSize 
-  exception.</p>
-  <p>If the generator raises StopIteration prior to yielding the right 
-  number of bytes, an IncompleteSend exception is raised.</p>
+  <p>Write potentially transient data to the remote storage system using a 
+  generator or stream.</p>
+  <p>If the object's size is not set, chunked transfer encoding will be 
+  used to upload the file.</p>
+  <p>If the object's size attribute is set, it will be used as the 
+  Content-Length.  If the generator raises StopIteration prior to yielding 
+  the right number of bytes, an IncompleteSend exception is raised.</p>
   <p>If the content_type attribute is not set then a value of 
   application/octet-stream will be used.</p>
-  Server-side verification will be performed if an md5 checksum is 
+  <p>Server-side verification will be performed if an md5 checksum is 
   assigned to the etag property before calling this method, otherwise no 
   verification will be performed, (verification can be performed afterward 
   though by using the etag attribute which is set to the value returned by 
-  the server).
+  the server).</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>iterable</code></strong> (generator) - a generator which yields the content to upload</li>
+        <li><strong class="pname"><code>iterable</code></strong> (generator or stream) - stream or generator which yields the content to upload</li>
     </ul></dd>
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
@@ -638,9 +660,9 @@ Storage data representing an object, (metadata and data).<br /><br />
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object.load_from_filename">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Put the contents of the named file into remote storage.
+  <p>Put the contents of the named file into remote storage.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -648,6 +670,30 @@ Storage data representing an object, (metadata and data).<br /><br />
         <li><strong class="pname"><code>verify</code></strong> (boolean) - enable/disable server-side checksum verification</li>
         <li><strong class="pname"><code>callback</code></strong> (callable(transferred, size)) - function to be used as a progress callback</li>
     </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>str(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -663,9 +709,9 @@ Storage data representing an object, (metadata and data).<br /><br />
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.storage_object-pysrc.html#Object.public_uri">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Retrieve the URI for this object, if its container is public.
+  <p>Retrieve the URI for this object, if its container is public.</p>
   <dl class="fields">
     <dt>Returns: str</dt>
         <dd>the public URI for this object</dd>
@@ -678,17 +724,8 @@ Storage data representing an object, (metadata and data).<br /><br />
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Property Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-PropertyDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
 </tr>
 </table>
 <a name="objsum"></a>
@@ -700,7 +737,7 @@ Storage data representing an object, (metadata and data).<br /><br />
   
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.&lt;lambda&gt;(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
     </dd>
   </dl>
 </td></tr></table>
@@ -714,10 +751,10 @@ Storage data representing an object, (metadata and data).<br /><br />
   
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.&lt;lambda&gt;(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#__set_etag" class="summary-sig-name">cloudfiles.storage_object.Object.__set_etag</a>(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig"><a href="cloudfiles.storage_object.Object-class.html#__set_etag" class="summary-sig-name" onclick="show_private();">__set_etag</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span>
     </dd>
   </dl>
@@ -755,10 +792,11 @@ Storage data representing an object, (metadata and data).<br /><br />
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0beta1 on Wed Nov 19 06:42:17 2008
+    Generated by Epydoc 3.0.1 on Thu Mar 12 03:28:24 2009
     </td>
     <td align="right" class="footer">
-      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
     </td>
   </tr>
 </table>
@@ -769,9 +807,8 @@ Storage data representing an object, (metadata and data).<br /><br />
   // javascript is turned off then we want them to be
   // visible); but by default, we want to hide them.  So hide
   // them unless we have a cookie that says to show them.
-  checkCookie()
+  checkCookie();
   // -->
 </script>
-  
 </body>
 </html>

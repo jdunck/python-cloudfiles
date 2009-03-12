@@ -50,8 +50,6 @@
     <td>
       <table cellpadding="0" cellspacing="0">
         <!-- hide/show private -->
-        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
-    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
             >]&nbsp;|&nbsp;<a href="cloudfiles.connection.Connection-class.html"
@@ -61,26 +59,35 @@
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Connection</h1><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection">source&nbsp;code</a></span><br /><br />
-Manages the connection to the storage system and serves as a factory 
-  for Container instances.<br /><br />
+<h1 class="epydoc">Class Connection</h1><p class="nomargin-top"><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection">source&nbsp;code</a></span></p>
+<center>
+<center>  <map id="uml_class_diagram_for_cloudfil" name="uml_class_diagram_for_cloudfil">
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#__init__" title="Accepts keyword arguments for Mosso username and api key." alt="" coords="17,36,353,55"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#get_info" title="Return tuple for number of containers and total bytes in the account" alt="" coords="17,55,353,74"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#create_container" title="Given a container name, returns a Container item, creating a new Container &#160;if one does not already exist." alt="" coords="17,74,353,92"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#delete_container" title="Given a container name, delete it." alt="" coords="17,92,353,111"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#get_all_containers" title="Returns a Container item result set." alt="" coords="17,111,353,130"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#get_container" title="Return a single Container item for the given Container." alt="" coords="17,130,353,148"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#list_public_containers" title="Returns a list of containers that have been published to the CDN." alt="" coords="17,148,353,167"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#list_containers_info" title="Returns a list of Containers, including object count and size." alt="" coords="17,167,353,186"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#list_containers" title="Returns a list of Containers." alt="" coords="17,186,353,204"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html#__getitem__" title="cloudfiles.connection.Connection.__getitem__" alt="" coords="17,204,353,223"/>
+<area shape="rect" href="cloudfiles.connection.Connection&#45;class.html" title="Manages the connection to the storage system and serves as a factory for Container instances." alt="" coords="16,11,355,224"/>
+</map>
+  <img src="uml_class_diagram_for_cloudfil.gif" alt='' usemap="#uml_class_diagram_for_cloudfil" ismap="ismap" class="graph-without-title" />
+</center>
+</center>
+<hr />
+<p>Manages the connection to the storage system and serves as a factory 
+  for Container instances.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Instance Methods</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceMethods"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
@@ -109,8 +116,7 @@ Manages the connection to the storage system and serves as a factory
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="cloudfiles.connection.Connection-class.html#get_info" class="summary-sig-name">get_info</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return tuple for number of containers and total bytes in the 
-      account</td>
+      Return tuple for number of containers and total bytes in the account</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.get_info">source&nbsp;code</a></span>
             
@@ -167,7 +173,8 @@ Manages the connection to the storage system and serves as a factory
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.connection.Connection-class.html#get_all_containers" class="summary-sig-name">get_all_containers</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.connection.Connection-class.html#get_all_containers" class="summary-sig-name">get_all_containers</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**parms</span>)</span><br />
       Returns a Container item result set.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.get_all_containers">source&nbsp;code</a></span>
@@ -204,10 +211,28 @@ Manages the connection to the storage system and serves as a factory
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="cloudfiles.connection.Connection-class.html#list_public_containers" class="summary-sig-name">list_public_containers</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Returns a list of containers that have been published to the 
-      CDN.</td>
+      Returns a list of containers that have been published to the CDN.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.list_public_containers">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list({&quot;name&quot;:&quot;...&quot;, &quot;count&quot;:..., 
+      &quot;bytes&quot;:...})</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.connection.Connection-class.html#list_containers_info" class="summary-sig-name">list_containers_info</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**parms</span>)</span><br />
+      Returns a list of Containers, including object count and size.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.list_containers_info">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -221,7 +246,8 @@ Manages the connection to the storage system and serves as a factory
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.connection.Connection-class.html#list_containers" class="summary-sig-name">list_containers</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.connection.Connection-class.html#list_containers" class="summary-sig-name">list_containers</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">**parms</span>)</span><br />
       Returns a list of Containers.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.list_containers">source&nbsp;code</a></span>
@@ -232,23 +258,62 @@ Manages the connection to the storage system and serves as a factory
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__str__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
 </table>
 <!-- ==================== METHOD DETAILS ==================== -->
 <a name="section-MethodDetails"></a>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Method Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-MethodDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Method Details</span></td>
 </tr>
 </table>
 <a name="__init__"></a>
@@ -267,17 +332,20 @@ Manages the connection to the storage system and serves as a factory
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Accepts keyword arguments for Mosso username and api key. Optionally, 
+  <p>Accepts keyword arguments for Mosso username and api key. Optionally, 
   you can omit these keywords and supply an Authentication object using the
-  auth keyword.
+  auth keyword.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>username</code></strong> (str) - a Mosso username</li>
         <li><strong class="pname"><code>api_key</code></strong> (str) - a Mosso API key</li>
     </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -293,14 +361,14 @@ Manages the connection to the storage system and serves as a factory
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.get_info">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Return tuple for number of containers and total bytes in the 
-  account
+  <p>Return tuple for number of containers and total bytes in the 
+  account</p>
   <dl class="fields">
     <dt>Returns: tuple</dt>
-        <dd>a tuple containing the number of containers and total bytes 
-          used by the account</dd>
+        <dd>a tuple containing the number of containers and total bytes used 
+          by the account</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -317,12 +385,12 @@ Manages the connection to the storage system and serves as a factory
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.create_container">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Given a container name, returns a <a 
+  <p>Given a container name, returns a <a 
   href="cloudfiles.container.Container-class.html" 
   class="link">Container</a> item, creating a new Container if one does not
-  already exist.
+  already exist.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -347,9 +415,9 @@ Manages the connection to the storage system and serves as a factory
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.delete_container">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Given a container name, delete it.
+  <p>Given a container name, delete it.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -365,14 +433,15 @@ Manages the connection to the storage system and serves as a factory
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_all_containers</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_all_containers</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">**parms</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.get_all_containers">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Returns a Container item result set.
+  <p>Returns a Container item result set.</p>
   <dl class="fields">
     <dt>Returns: <a href="cloudfiles.container.ContainerResults-class.html" 
       class="link">ContainerResults</a></dt>
@@ -394,9 +463,9 @@ Manages the connection to the storage system and serves as a factory
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.get_container">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Return a single Container item for the given Container.
+  <p>Return a single Container item for the given Container.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -420,12 +489,36 @@ Manages the connection to the storage system and serves as a factory
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.list_public_containers">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Returns a list of containers that have been published to the CDN.
+  <p>Returns a list of containers that have been published to the CDN.</p>
   <dl class="fields">
     <dt>Returns: list(str)</dt>
         <dd>a list of all CDN-enabled container names as strings</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="list_containers_info"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">list_containers_info</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">**parms</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.list_containers_info">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Returns a list of Containers, including object count and size.</p>
+  <dl class="fields">
+    <dt>Returns: list({&quot;name&quot;:&quot;...&quot;, &quot;count&quot;:..., 
+      &quot;bytes&quot;:...})</dt>
+        <dd>a list of all container info as dictionaries with the keys 
+          &quot;name&quot;, &quot;count&quot;, and &quot;bytes&quot;</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -436,14 +529,15 @@ Manages the connection to the storage system and serves as a factory
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">list_containers</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">list_containers</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">**parms</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.connection-pysrc.html#Connection.list_containers">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Returns a list of Containers.
+  <p>Returns a list of Containers.</p>
   <dl class="fields">
     <dt>Returns: list(str)</dt>
         <dd>a list of all containers names as strings</dd>
@@ -482,10 +576,11 @@ Manages the connection to the storage system and serves as a factory
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0beta1 on Wed Nov 19 06:42:17 2008
+    Generated by Epydoc 3.0.1 on Thu Mar 12 03:28:23 2009
     </td>
     <td align="right" class="footer">
-      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
     </td>
   </tr>
 </table>
@@ -496,9 +591,8 @@ Manages the connection to the storage system and serves as a factory
   // javascript is turned off then we want them to be
   // visible); but by default, we want to hide them.  So hide
   // them unless we have a cookie that says to show them.
-  checkCookie()
+  checkCookie();
   // -->
 </script>
-  
 </body>
 </html>

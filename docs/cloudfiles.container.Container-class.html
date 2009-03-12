@@ -50,8 +50,6 @@
     <td>
       <table cellpadding="0" cellspacing="0">
         <!-- hide/show private -->
-        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
-    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
             >]&nbsp;|&nbsp;<a href="cloudfiles.container.Container-class.html"
@@ -61,27 +59,43 @@
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Container</h1><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container">source&nbsp;code</a></span><br /><br />
+<h1 class="epydoc">Class Container</h1><p class="nomargin-top"><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container">source&nbsp;code</a></span></p>
+<center>
+<center>  <map id="uml_class_diagram_for_cloudfil_3" name="uml_class_diagram_for_cloudfil_3">
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#name" title="the container&#39;s name (generally treated as read&#45;only)" alt="" coords="17,28,436,47"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#cdn_ttl" title="the time&#45;to&#45;live of the CDN&#39;s public cache of this container (cached, use &#160;make_public to alter)" alt="" coords="17,47,436,65"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#object_count" title="the number of objects in this container (cached)" alt="" coords="17,65,436,84"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#size_used" title="the sum of the sizes of all objects in this container (cached)" alt="" coords="17,84,436,103"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#__init__" title="Containers will rarely if ever need to be instantiated directly by the &#160;user." alt="" coords="17,105,436,124"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#make_public" title="Either publishes the current container to the CDN or updates its CDN &#160;attributes." alt="" coords="17,124,436,143"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#make_private" title="Disables CDN access to this container." alt="" coords="17,143,436,161"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#is_public" title="Returns a boolean indicating whether or not this container is publically &#160;accessible via the CDN." alt="" coords="17,161,436,180"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#public_uri" title="Return the URI for this container, if it is publically accessible via the &#160;CDN." alt="" coords="17,180,436,199"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#create_object" title="Return an Object instance, creating it if necessary." alt="" coords="17,199,436,217"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#get_objects" title="Return a result set of all Objects in the Container." alt="" coords="17,217,436,236"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#get_object" title="Return an Object instance for an existing storage object." alt="" coords="17,236,436,255"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#list_objects_info" title="Return information about all Objects in the Container." alt="" coords="17,255,436,273"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#list_objects" title="Return names of all Objects in the Container." alt="" coords="17,273,436,292"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#__getitem__" title="cloudfiles.container.Container.__getitem__" alt="" coords="17,292,436,311"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#__str__" title="str(x)" alt="" coords="17,311,436,329"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#delete_object" title="Permanently remove a storage object." alt="" coords="17,329,436,348"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html" title="Container object and Object instance factory." alt="" coords="16,11,437,349"/>
+</map>
+  <img src="uml_class_diagram_for_cloudfil_3.gif" alt='' usemap="#uml_class_diagram_for_cloudfil_3" ismap="ismap" class="graph-without-title" />
+</center>
+</center>
+<hr />
 <p>Container object and Object instance factory.</p>
-  If your account has the feature enabled, containers can be publically 
-  shared over a global content delivery network.<br /><br />
+  <p>If your account has the feature enabled, containers can be publically 
+  shared over a global content delivery network.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Instance Methods</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceMethods"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
@@ -94,7 +108,7 @@
         <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">count</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Containers will rarely if ever need to be instantiated directly by
+      Containers will rarely if ever need to be instantiated directly by 
       the user.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.__init__">source&nbsp;code</a></span>
@@ -111,10 +125,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#make_public" class="summary-sig-name">make_public</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">ttl</span>=<span class="summary-sig-default">86400</span>)</span><br />
-      Either publishes the current container to the CDN or updates its 
-      CDN attributes.</td>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#make_public" class="summary-sig-name">make_public</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Either publishes the current container to the CDN or updates its CDN 
+      attributes.</td>
           <td align="right" valign="top">
             
             
@@ -130,7 +144,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#make_private" class="summary-sig-name">make_private</a>(<span class="summary-sig-arg">self</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#make_private" class="summary-sig-name">make_private</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Disables CDN access to this container.</td>
           <td align="right" valign="top">
             
@@ -165,9 +180,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#public_uri" class="summary-sig-name">public_uri</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return the URI for this container, if it is publically accessible 
-      via the CDN.</td>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#public_uri" class="summary-sig-name">public_uri</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Return the URI for this container, if it is publically accessible via
+      the CDN.</td>
           <td align="right" valign="top">
             
             
@@ -184,8 +200,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#create_object" class="summary-sig-name">create_object</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">object_name</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#create_object" class="summary-sig-name">create_object</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Return an <a href="cloudfiles.storage_object.Object-class.html" 
       class="link">Object</a> instance, creating it if necessary.</td>
           <td align="right" valign="top">
@@ -204,8 +220,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#get_objects" class="summary-sig-name">get_objects</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">**parms</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#get_objects" class="summary-sig-name">get_objects</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Return a result set of all Objects in the Container.</td>
           <td align="right" valign="top">
             
@@ -223,9 +239,28 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#get_object" class="summary-sig-name">get_object</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">object_name</span>)</span><br />
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#get_object" class="summary-sig-name">get_object</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Return an Object instance for an existing storage object.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">list({&quot;name&quot;:&quot;...&quot;, &quot;hash&quot;:..., 
+      &quot;size&quot;:..., &quot;type&quot;:...})</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#list_objects_info" class="summary-sig-name">list_objects_info</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Return information about all Objects in the Container.</td>
           <td align="right" valign="top">
             
             
@@ -241,9 +276,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#list_objects" class="summary-sig-name">list_objects</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">**parms</span>)</span><br />
-      Returns a list of storage object names.</td>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#list_objects" class="summary-sig-name">list_objects</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
+      Return names of all Objects in the Container.</td>
           <td align="right" valign="top">
             
             
@@ -259,8 +294,42 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#delete_object" class="summary-sig-name">delete_object</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">object_name</span>)</span><br />
+          <td><span class="summary-sig"><a name="__getitem__"></a><span class="summary-sig-name">__getitem__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.__getitem__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.__str__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#delete_object" class="summary-sig-name">delete_object</a>(<span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwargs</span>)</span><br />
       Permanently remove a storage object.</td>
           <td align="right" valign="top">
             
@@ -271,23 +340,28 @@
       
     </td>
   </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>
+      </p>
+    </td>
+  </tr>
 </table>
 <!-- ==================== INSTANCE VARIABLES ==================== -->
 <a name="section-InstanceVariables"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Instance Variables</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceVariables"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Variables</span></td>
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
@@ -302,8 +376,8 @@
       <span class="summary-type">number</span>
     </td><td class="summary">
         <a name="cdn_ttl"></a><span class="summary-name">cdn_ttl</span><br />
-      the time-to-live of the CDN's public cache of this container 
-      (cached, use make_public to alter)
+      the time-to-live of the CDN's public cache of this container (cached,
+      use make_public to alter)
     </td>
   </tr>
 <tr>
@@ -323,22 +397,29 @@
     </td>
   </tr>
 </table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
 <!-- ==================== METHOD DETAILS ==================== -->
 <a name="section-MethodDetails"></a>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Method Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-MethodDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Method Details</span></td>
 </tr>
 </table>
 <a name="__init__"></a>
@@ -358,19 +439,22 @@
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.__init__">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Containers will rarely if ever need to be instantiated directly by the
   user.</p>
-  Instead, use the <a 
+  <p>Instead, use the <a 
   href="cloudfiles.connection.Connection-class.html#create_container" 
   class="link">create_container</a>, <a 
   href="cloudfiles.connection.Connection-class.html#get_container" 
   class="link">get_container</a>, <a 
   href="cloudfiles.connection.Connection-class.html#list_containers" 
   class="link">list_containers</a> and other methods on a valid Connection 
-  object.
+  object.</p>
   <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -381,16 +465,16 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_public</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">ttl</span>=<span class="sig-default">86400</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_public</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Either publishes the current container to the CDN or updates its CDN 
-  attributes.  Requires CDN be enabled on the account.
+  <p>Either publishes the current container to the CDN or updates its CDN 
+  attributes.  Requires CDN be enabled on the account.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -410,15 +494,16 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_private</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">make_private</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Disables CDN access to this container. It may continue to be available
-  until its TTL expires.
+  <p>Disables CDN access to this container. It may continue to be available
+  until its TTL expires.</p>
   <dl class="fields">
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
@@ -439,10 +524,10 @@
   </td><td align="right" valign="top"
     ><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.is_public">source&nbsp;code</a></span>&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Returns a boolean indicating whether or not this container is 
-  publically accessible via the CDN.
+  <p>Returns a boolean indicating whether or not this container is 
+  publically accessible via the CDN.</p>
   <dl class="fields">
     <dt>Returns: bool</dt>
         <dd>whether or not this container is published to the CDN</dd>
@@ -456,15 +541,16 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">public_uri</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">public_uri</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Return the URI for this container, if it is publically accessible via 
-  the CDN.
+  <p>Return the URI for this container, if it is publically accessible via 
+  the CDN.</p>
   <dl class="fields">
     <dt>Returns: str</dt>
         <dd>the public URI for this container</dd>
@@ -482,18 +568,18 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">create_object</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">object_name</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">create_object</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Return an <a href="cloudfiles.storage_object.Object-class.html" 
   class="link">Object</a> instance, creating it if necessary.</p>
-  When passed the name of an existing object, this method will return an
-  instance of that object, otherwise it will create a new one.
+  <p>When passed the name of an existing object, this method will return an
+  instance of that object, otherwise it will create a new one.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -516,22 +602,28 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_objects</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">**parms</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_objects</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Return a result set of all Objects in the Container.</p>
-  Keyword arguments are treated as HTTP query parameters and can be used
-  limit the result set (see the API documentation).
+  <p>Keyword arguments are treated as HTTP query parameters and can be used
+  to limit the result set (see the API documentation).</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>prefix</code></strong> (str) - filter the results using this prefix</li>
+        <li><strong class="pname"><code>limit</code></strong> (int) - return the first &quot;limit&quot; objects found</li>
+        <li><strong class="pname"><code>offset</code></strong> (int) - return objects starting at &quot;offset&quot; in list</li>
+        <li><strong class="pname"><code>path</code></strong> (str) - return all objects in &quot;path&quot;</li>
+    </ul></dd>
     <dt>Returns: <a href="cloudfiles.storage_object.ObjectResults-class.html" 
       class="link">ObjectResults</a></dt>
-        <dd>an iterable collection of all storage objects in the 
-          container</dd>
+        <dd>an iterable collection of all storage objects in the container</dd>
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
         <li><code>@requires_name(InvalidContainerName)</code></li>
@@ -546,18 +638,18 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_object</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">object_name</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_object</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
   <p>Return an Object instance for an existing storage object.</p>
-  If an object with a name matching object_name does not exist then a <a
+  <p>If an object with a name matching object_name does not exist then a <a
   href="cloudfiles.errors.NoSuchObject-class.html" 
-  class="link">NoSuchObject</a> exception is raised.
+  class="link">NoSuchObject</a> exception is raised.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -573,6 +665,44 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="list_objects_info"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">list_objects_info</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return information about all Objects in the Container.</p>
+  <p>Keyword arguments are treated as HTTP query parameters and can be used
+  limit the result set (see the API documentation).</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>prefix</code></strong> (str) - filter the results using this prefix</li>
+        <li><strong class="pname"><code>limit</code></strong> (int) - return the first &quot;limit&quot; objects found</li>
+        <li><strong class="pname"><code>offset</code></strong> (int) - return objects starting at &quot;offset&quot; in list</li>
+        <li><strong class="pname"><code>path</code></strong> (str) - return all objects in &quot;path&quot;</li>
+    </ul></dd>
+    <dt>Returns: list({&quot;name&quot;:&quot;...&quot;, &quot;hash&quot;:..., 
+      &quot;size&quot;:..., &quot;type&quot;:...})</dt>
+        <dd>a list of all container info as dictionaries with the keys 
+          &quot;name&quot;, &quot;hash&quot;, &quot;size&quot;, and 
+          &quot;type&quot;</dd>
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@requires_name(InvalidContainerName)</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="list_objects"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -580,24 +710,55 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">list_objects</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">**parms</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">list_objects</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  <p>Returns a list of storage object names.</p>
-  Keyword arguments are treated as HTTP query parameters and can be used
-  limit the result set (see the API documentation).
+  <p>Return names of all Objects in the Container.</p>
+  <p>Keyword arguments are treated as HTTP query parameters and can be used
+  to limit the result set (see the API documentation).</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>prefix</code></strong> (str) - filter the results using this prefix</li>
+        <li><strong class="pname"><code>limit</code></strong> (int) - return the first &quot;limit&quot; objects found</li>
+        <li><strong class="pname"><code>offset</code></strong> (int) - return objects starting at &quot;offset&quot; in list</li>
+        <li><strong class="pname"><code>path</code></strong> (str) - return all objects in &quot;path&quot;</li>
+    </ul></dd>
     <dt>Returns: list(str)</dt>
-        <dd>a list of the names of all objects in the container</dd>
+        <dd>a list of all container names</dd>
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
         <li><code>@requires_name(InvalidContainerName)</code></li>
     </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cloudfiles.container-pysrc.html#Container.__str__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>str(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -608,15 +769,15 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">delete_object</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">object_name</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">delete_object</span>(<span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwargs</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
-  </table>
+  </tr></table>
   
-  Permanently remove a storage object.
+  <p>Permanently remove a storage object.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -635,17 +796,8 @@
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Instance Variable Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-InstanceVariableDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Variable Details</span></td>
 </tr>
 </table>
 <a name="name"></a>
@@ -657,10 +809,10 @@
   the container's name (generally treated as read-only)
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig"><i>unreachable</i>.&lt;lambda&gt;(<span class="summary-sig-arg">self</span>)</span>
+    <dd class="value"><span class="summary-sig"><i>unreachable</i>(<span class="summary-sig-arg">self</span>)</span>
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#__set_name" class="summary-sig-name">cloudfiles.container.Container.__set_name</a>(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#__set_name" class="summary-sig-name" onclick="show_private();">__set_name</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>)</span>
     </dd>
   </dl>
@@ -698,10 +850,11 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0beta1 on Wed Nov 19 06:42:17 2008
+    Generated by Epydoc 3.0.1 on Thu Mar 12 03:28:23 2009
     </td>
     <td align="right" class="footer">
-      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
     </td>
   </tr>
 </table>
@@ -712,9 +865,8 @@
   // javascript is turned off then we want them to be
   // visible); but by default, we want to hide them.  So hide
   // them unless we have a cookie that says to show them.
-  checkCookie()
+  checkCookie();
   // -->
 </script>
-  
 </body>
 </html>
