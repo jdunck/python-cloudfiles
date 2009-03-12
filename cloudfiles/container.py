@@ -37,6 +37,9 @@ class Container(object):
     @ivar cdn_ttl: the time-to-live of the CDN's public cache of this container
             (cached, use make_public to alter)
     @type cdn_ttl: number
+
+    @undocumented: _fetch_cdn_data
+    @undocumented: _list_objects_raw
     """
     def __set_name(self, name):
         # slashes make for invalid names
@@ -87,6 +90,8 @@ class Container(object):
         Either publishes the current container to the CDN or updates its
         CDN attributes.  Requires CDN be enabled on the account.
 
+        >>> container.make_public(ttl=604800) # expire in 1 week
+
         @param ttl: cache duration in seconds of the CDN server
         @type ttl: number
         """
@@ -110,10 +115,13 @@ class Container(object):
         """
         Disables CDN access to this container.
         It may continue to be available until its TTL expires.
+
+        >>> container.make_private()
         """
         if not self.conn.cdn_enabled:
             raise CDNNotEnabled()
         hdrs = {'X-CDN-Enabled': 'False'}
+        self.cdn_uri = None
         response = self.conn.cdn_request('POST', [self.name], hdrs=hdrs)
         if (response.status < 200) or (response.status >= 300):
             raise ResponseError(response.status, response.reason)
@@ -122,6 +130,13 @@ class Container(object):
         """
         Returns a boolean indicating whether or not this container is
         publically accessible via the CDN.
+
+        >>> container.is_public()
+        False
+        >>> container.make_public()
+        >>> container.is_public()
+        True
+
         @rtype: bool
         @return: whether or not this container is published to the CDN
         """
@@ -134,6 +149,10 @@ class Container(object):
         """
         Return the URI for this container, if it is publically
         accessible via the CDN.
+
+        >>> connection['container1'].public_uri()
+        'http://cdn.cloudfiles.mosso.com/c61'
+
         @rtype: str
         @return: the public URI for this container
         """
@@ -149,6 +168,12 @@ class Container(object):
         When passed the name of an existing object, this method will 
         return an instance of that object, otherwise it will create a
         new one.
+
+        >>> container.create_object('new_object')
+        <cloudfiles.storage_object.Object object at 0xb778366c>
+        >>> obj = container.create_object('new_object')
+        >>> obj.name
+        'new_object'
 
         @type object_name: str
         @param object_name: the name of the object to create
@@ -166,12 +191,19 @@ class Container(object):
         Keyword arguments are treated as HTTP query parameters and can
         be used limit the result set (see the API documentation).
 
+        >>> container.get_objects(limit=2)
+        ObjectResults: 2 objects
+        >>> for obj in container.get_objects():
+        ...     print obj.name
+        new_object
+        old_object
+
         @param prefix: filter the results using this prefix
         @type prefix: str
         @param limit: return the first "limit" objects found
         @type limit: int
-        @param offset: return objects starting at "offset" in list
-        @type offset: int
+        @param offset: return objects whose names are greater than "offset"
+        @type offset: str
         @param path: return all objects in "path"
         @type path: str
 
@@ -184,10 +216,14 @@ class Container(object):
     @requires_name(InvalidContainerName)
     def get_object(self, object_name):
         """
-        Return an Object instance for an existing storage object.
+        Return an L{Object} instance for an existing storage object.
         
         If an object with a name matching object_name does not exist
         then a L{NoSuchObject} exception is raised.
+
+        >>> obj = container.get_object('old_object')
+        >>> obj.name
+        'old_object'
 
         @param object_name: the name of the object to retrieve
         @type object_name: str
@@ -200,17 +236,29 @@ class Container(object):
     def list_objects_info(self, prefix=None, limit=None, offset=None, 
                           path=None, **parms):
         """
-        Return information about all Objects in the Container.
+        Return information about all objects in the Container.
         
         Keyword arguments are treated as HTTP query parameters and can
         be used limit the result set (see the API documentation).
+
+        >>> conn['container1'].list_objects_info(limit=2)
+        [{u'bytes': 4820,
+          u'content_type': u'application/octet-stream',
+          u'hash': u'db8b55400b91ce34d800e126e37886f8',
+          u'last_modified': u'2008-11-05T00:56:00.406565',
+          u'name': u'new_object'},
+         {u'bytes': 1896,
+          u'content_type': u'application/octet-stream',
+          u'hash': u'1b49df63db7bc97cd2a10e391e102d4b',
+          u'last_modified': u'2008-11-05T00:56:27.508729',
+          u'name': u'old_object'}]
 
         @param prefix: filter the results using this prefix
         @type prefix: str
         @param limit: return the first "limit" objects found
         @type limit: int
-        @param offset: return objects starting at "offset" in list
-        @type offset: int
+        @param offset: return objects with names greater than "offset"
+        @type offset: str
         @param path: return all objects in "path"
         @type path: str
 
@@ -227,17 +275,20 @@ class Container(object):
     def list_objects(self, prefix=None, limit=None, offset=None, 
                      path=None, **parms):
         """
-        Return names of all Objects in the Container.
+        Return names of all L{Object}s in the L{Container}.
         
         Keyword arguments are treated as HTTP query parameters and can
         be used limit the result set (see the API documentation).
+
+        >>> container.list_objects()
+        ['new_object', 'old_object']
 
         @param prefix: filter the results using this prefix
         @type prefix: str
         @param limit: return the first "limit" objects found
         @type limit: int
-        @param offset: return objects starting at "offset" in list
-        @type offset: int
+        @param offset: return objects with names greater than "offset"
+        @type offset: str
         @param path: return all objects in "path"
         @type path: str
 
@@ -275,6 +326,12 @@ class Container(object):
         """
         Permanently remove a storage object.
         
+        >>> container.list_objects()
+        ['new_object', 'old_object']
+        >>> container.delete_object('old_object')
+        >>> container.list_objects()
+        ['new_object']
+
         @param object_name: the name of the object to retrieve
         @type object_name: str
         """

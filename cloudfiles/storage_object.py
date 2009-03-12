@@ -26,7 +26,11 @@ class Object(object):
     """
     Storage data representing an object, (metadata and data).
 
+    @undocumented: _make_headers
+    @undocumented: _name_check
+    @undocumented: _initialize
     @undocumented: compute_md5sum
+    @undocumented: __get_conn_for_write
     @ivar name: the object's name (generally treat as read-only)
     @type name: str
     @ivar content_type: the object's content-type (set or read)
@@ -94,6 +98,10 @@ class Object(object):
         the total size of the transfer. Note: This option is only
         applicable when used in conjunction with the buffer option.
 
+        >>> test_object.write('hello')
+        >>> test_object.read()
+        'hello'
+
         @param size: combined with offset, defines the length of data to be read
         @type size: number
         @param offset: combined with size, defines the start location to be read
@@ -138,12 +146,15 @@ class Object(object):
         """
         Save the contents of the object to filename.
 
+        >>> container = connection['container1']
+        >>> obj = container.get_object('backup_file')
+        >>> obj.save_to_filename('./backup_file')
+
         @param filename: name of the file
         @type filename: str
         @param callback: function to be used as a progress callback
         @type callback: callable(transferred, size)
         """
-        # Pedantry rocks!
         try:
             fobj = open(filename, 'wb')
             self.read(buffer=fobj, callback=callback)
@@ -158,6 +169,12 @@ class Object(object):
         Warning: The HTTP response is only complete after this generator
         has raised a StopIteration. No other methods can be called until
         this has occurred.
+
+        >>> test_object.write('hello')
+        >>> test_object.stream()
+        <generator object at 0xb77939cc>
+        >>> '-'.join(test_object.stream(chunksize=1))
+        'h-e-l-l-o'
 
         @param chunksize: size in bytes yielded by the generator
         @type chunksize: number
@@ -183,6 +200,10 @@ class Object(object):
     def sync_metadata(self):
         """
         Commits the metadata to the remote storage system.
+
+        >>> test_object = container['paradise_lost.pdf']
+        >>> test_object.metadata = {'author': 'John Milton'}
+        >>> test_object.sync_metadata()
 
         Object metadata can be set and retrieved through the object's
         .metadata attribute.
@@ -235,6 +256,11 @@ class Object(object):
         the upload. The callback should accept two integers, the first
         will be for the amount of data written so far, the second for
         the total size of the transfer.
+
+        >>> test_object = container.create_object('file.txt')
+        >>> test_object.content_type = 'text/plain'
+        >>> fp = open('./file.txt')
+        >>> test_object.write(fp)
 
         @param data: the data to be written
         @type data: str or file
@@ -324,6 +350,10 @@ class Object(object):
         can be performed afterward though by using the etag attribute
         which is set to the value returned by the server).
 
+        >>> test_object = container.create_object('backup.tar.gz')
+        >>> pfd = os.popen('tar -czvf - ./data/', 'r')
+        >>> test_object.send(pfd)
+
         @param iterable: stream or generator which yields the content to upload
         @type iterable: generator or stream
         """
@@ -393,6 +423,10 @@ class Object(object):
     def load_from_filename(self, filename, verify=True, callback=None):
         """
         Put the contents of the named file into remote storage.
+
+        >>> test_object = container.create_object('file.txt')
+        >>> test_object.content_type = 'text/plain'
+        >>> test_object.load_from_filename('./my_file.txt')
 
         @param filename: path to the file
         @type filename: str
@@ -477,6 +511,13 @@ class Object(object):
     def public_uri(self):
         """
         Retrieve the URI for this object, if its container is public.
+
+        >>> container1 = connection['container1']
+        >>> container1.make_public()
+        >>> container1.create_object('file.txt').write('testing')
+        >>> container1['file.txt'].public_uri()
+        'http://cdn.cloudfiles.mosso.com/c61/file.txt'
+
         @return: the public URI for this object
         @rtype: str
         """

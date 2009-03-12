@@ -34,6 +34,7 @@ class Connection(object):
     @undocumented: http_connect
     @undocumented: cdn_request
     @undocumented: make_request
+    @undocumented: _check_container_name
     """
     def __init__(self, username=None, api_key=None, **kwargs):
         """
@@ -170,6 +171,9 @@ class Connection(object):
         """
         Return tuple for number of containers and total bytes in the account
 
+        >>> connection.get_info()
+        (5, 2309749)
+
         @rtype: tuple
         @return: a tuple containing the number of containers and total bytes
                  used by the account
@@ -203,6 +207,9 @@ class Connection(object):
         Given a container name, returns a L{Container} item, creating a new
         Container if one does not already exist.
 
+        >>> connection.create_container('new_container')
+        <cloudfiles.container.Container object at 0xb77d628c>
+
         @param container_name: name of the container to create
         @type container_name: str
         @rtype: L{Container}
@@ -219,6 +226,8 @@ class Connection(object):
     def delete_container(self, container_name):
         """
         Given a container name, delete it.
+
+        >>> connection.delete_container('old_container')
 
         @param container_name: name of the container to delete
         @type container_name: str
@@ -243,6 +252,12 @@ class Connection(object):
         """
         Returns a Container item result set.
 
+        >>> connection.get_all_containers()
+        ContainerResults: 4 containers
+        >>> print ', '.join([container.name for container in
+                             connection.get_all_containers()])
+        new_container, old_container, pictures, music
+
         @rtype: L{ContainerResults}
         @return: an iterable set of objects representing all containers on the
                  account
@@ -252,6 +267,12 @@ class Connection(object):
     def get_container(self, container_name):
         """
         Return a single Container item for the given Container.
+
+        >>> connection.get_container('old_container')
+        <cloudfiles.container.Container object at 0xb77d628c>
+        >>> container = connection.get_container('old_container')
+        >>> container.size_used
+        23074
 
         @param container_name: name of the container to create
         @type container_name: str
@@ -284,6 +305,9 @@ class Connection(object):
         """
         Returns a list of containers that have been published to the CDN.
 
+        >>> connection.list_public_containers()
+        ['container1', 'container2', 'container3']
+
         @rtype: list(str)
         @return: a list of all CDN-enabled container names as strings
         """
@@ -296,6 +320,14 @@ class Connection(object):
     def list_containers_info(self, **parms):
         """
         Returns a list of Containers, including object count and size.
+
+        >>> connection.list_containers_info()
+        [{u'count': 510, u'bytes': 2081717, u'name': u'new_container'},
+         {u'count': 12, u'bytes': 23074, u'name': u'old_container'},
+         {u'count': 0, u'bytes': 0, u'name': u'container1'},
+         {u'count': 0, u'bytes': 0, u'name': u'container2'},
+         {u'count': 0, u'bytes': 0, u'name': u'container3'},
+         {u'count': 3, u'bytes': 2306, u'name': u'test'}]
 
         @rtype: list({"name":"...", "count":..., "bytes":...})
         @return: a list of all container info as dictionaries with the
@@ -312,6 +344,14 @@ class Connection(object):
         """
         Returns a list of Containers.
 
+        >>> connection.list_containers()
+        ['new_container',
+         'old_container',
+         'container1',
+         'container2',
+         'container3',
+         'test']
+
         @rtype: list(str)
         @return: a list of all containers names as strings
         """
@@ -322,6 +362,17 @@ class Connection(object):
         return response.read().splitlines()
 
     def __getitem__(self, key):
+        """
+        Container objects can be grabbed from a connection using index
+        syntax.
+
+        >>> container = conn['old_container']
+        >>> container.size_used
+        23074
+
+        @rtype: L{Container}
+        @return: an object representing the container
+        """
         return self.get_container(key)
 
 class ConnectionPool(Queue):
