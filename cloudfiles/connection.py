@@ -248,7 +248,7 @@ class Connection(object):
             response = self.cdn_request('POST', [container_name],
                                 hdrs={'X-CDN-Enabled': 'False'})
 
-    def get_all_containers(self, **parms):
+    def get_all_containers(self, limit=None, marker=None, **parms):
         """
         Returns a Container item result set.
 
