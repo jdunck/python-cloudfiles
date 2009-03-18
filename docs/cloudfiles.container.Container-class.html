@@ -74,7 +74,7 @@
 <area shape="rect" href="cloudfiles.container.Container&#45;class.html#create_object" title="Return an Object instance, creating it if necessary." alt="" coords="17,199,436,217"/>
 <area shape="rect" href="cloudfiles.container.Container&#45;class.html#get_objects" title="Return a result set of all Objects in the Container." alt="" coords="17,217,436,236"/>
 <area shape="rect" href="cloudfiles.container.Container&#45;class.html#get_object" title="Return an Object instance for an existing storage object." alt="" coords="17,236,436,255"/>
-<area shape="rect" href="cloudfiles.container.Container&#45;class.html#list_objects_info" title="Return information about all Objects in the Container." alt="" coords="17,255,436,273"/>
+<area shape="rect" href="cloudfiles.container.Container&#45;class.html#list_objects_info" title="Return information about all objects in the Container." alt="" coords="17,255,436,273"/>
 <area shape="rect" href="cloudfiles.container.Container&#45;class.html#list_objects" title="Return names of all Objects in the Container." alt="" coords="17,273,436,292"/>
 <area shape="rect" href="cloudfiles.container.Container&#45;class.html#__getitem__" title="cloudfiles.container.Container.__getitem__" alt="" coords="17,292,436,311"/>
 <area shape="rect" href="cloudfiles.container.Container&#45;class.html#__str__" title="str(x)" alt="" coords="17,311,436,329"/>
@@ -241,7 +241,8 @@
         <tr>
           <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#get_object" class="summary-sig-name">get_object</a>(<span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Return an Object instance for an existing storage object.</td>
+      Return an <a href="cloudfiles.storage_object.Object-class.html" 
+      class="link">Object</a> instance for an existing storage object.</td>
           <td align="right" valign="top">
             
             
@@ -260,7 +261,7 @@
         <tr>
           <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#list_objects_info" class="summary-sig-name">list_objects_info</a>(<span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Return information about all Objects in the Container.</td>
+      Return information about all objects in the Container.</td>
           <td align="right" valign="top">
             
             
@@ -278,7 +279,11 @@
         <tr>
           <td><span class="summary-sig"><a href="cloudfiles.container.Container-class.html#list_objects" class="summary-sig-name">list_objects</a>(<span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwargs</span>)</span><br />
-      Return names of all Objects in the Container.</td>
+      Return names of all <a 
+      href="cloudfiles.storage_object.Object-class.html" 
+      class="link">Object</a>s in the <a 
+      href="cloudfiles.container.Container-class.html" 
+      class="link">Container</a>.</td>
           <td align="right" valign="top">
             
             
@@ -475,6 +480,8 @@
   
   <p>Either publishes the current container to the CDN or updates its CDN 
   attributes.  Requires CDN be enabled on the account.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container.make_public(ttl=604800) <span class="py-comment"># expire in 1 week</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -504,6 +511,8 @@
   
   <p>Disables CDN access to this container. It may continue to be available
   until its TTL expires.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container.make_private()</pre>
   <dl class="fields">
     <dt>Decorators:</dt>
     <dd><ul class="nomargin-top">
@@ -528,6 +537,12 @@
   
   <p>Returns a boolean indicating whether or not this container is 
   publically accessible via the CDN.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container.is_public()
+<span class="py-output">False</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>container.make_public()
+<span class="py-prompt">&gt;&gt;&gt; </span>container.is_public()
+<span class="py-output">True</span></pre>
   <dl class="fields">
     <dt>Returns: bool</dt>
         <dd>whether or not this container is published to the CDN</dd>
@@ -551,6 +566,9 @@
   
   <p>Return the URI for this container, if it is publically accessible via 
   the CDN.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>connection[<span class="py-string">'container1'</span>].public_uri()
+<span class="py-output">'http://cdn.cloudfiles.mosso.com/c61'</span></pre>
   <dl class="fields">
     <dt>Returns: str</dt>
         <dd>the public URI for this container</dd>
@@ -580,6 +598,12 @@
   class="link">Object</a> instance, creating it if necessary.</p>
   <p>When passed the name of an existing object, this method will return an
   instance of that object, otherwise it will create a new one.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container.create_object(<span class="py-string">'new_object'</span>)
+<span class="py-output">&lt;cloudfiles.storage_object.Object object at 0xb778366c&gt;</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>obj = container.create_object(<span class="py-string">'new_object'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>obj.name
+<span class="py-output">'new_object'</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -613,12 +637,19 @@
   <p>Return a result set of all Objects in the Container.</p>
   <p>Keyword arguments are treated as HTTP query parameters and can be used
   to limit the result set (see the API documentation).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container.get_objects(limit=2)
+<span class="py-output">ObjectResults: 2 objects</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">for</span> obj <span class="py-keyword">in</span> container.get_objects():
+<span class="py-more">... </span>    <span class="py-keyword">print</span> obj.name
+<span class="py-output">new_object</span>
+<span class="py-output">old_object</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>prefix</code></strong> (str) - filter the results using this prefix</li>
         <li><strong class="pname"><code>limit</code></strong> (int) - return the first &quot;limit&quot; objects found</li>
-        <li><strong class="pname"><code>offset</code></strong> (int) - return objects starting at &quot;offset&quot; in list</li>
+        <li><strong class="pname"><code>marker</code></strong> (str) - return objects whose names are greater than &quot;marker&quot;</li>
         <li><strong class="pname"><code>path</code></strong> (str) - return all objects in &quot;path&quot;</li>
     </ul></dd>
     <dt>Returns: <a href="cloudfiles.storage_object.ObjectResults-class.html" 
@@ -646,10 +677,15 @@
     </td>
   </tr></table>
   
-  <p>Return an Object instance for an existing storage object.</p>
+  <p>Return an <a href="cloudfiles.storage_object.Object-class.html" 
+  class="link">Object</a> instance for an existing storage object.</p>
   <p>If an object with a name matching object_name does not exist then a <a
   href="cloudfiles.errors.NoSuchObject-class.html" 
   class="link">NoSuchObject</a> exception is raised.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>obj = container.get_object(<span class="py-string">'old_object'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>obj.name
+<span class="py-output">'old_object'</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -680,15 +716,27 @@
     </td>
   </tr></table>
   
-  <p>Return information about all Objects in the Container.</p>
+  <p>Return information about all objects in the Container.</p>
   <p>Keyword arguments are treated as HTTP query parameters and can be used
   limit the result set (see the API documentation).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>conn[<span class="py-string">'container1'</span>].list_objects_info(limit=2)
+<span class="py-output">[{u'bytes': 4820,</span>
+<span class="py-output">  u'content_type': u'application/octet-stream',</span>
+<span class="py-output">  u'hash': u'db8b55400b91ce34d800e126e37886f8',</span>
+<span class="py-output">  u'last_modified': u'2008-11-05T00:56:00.406565',</span>
+<span class="py-output">  u'name': u'new_object'},</span>
+<span class="py-output"> {u'bytes': 1896,</span>
+<span class="py-output">  u'content_type': u'application/octet-stream',</span>
+<span class="py-output">  u'hash': u'1b49df63db7bc97cd2a10e391e102d4b',</span>
+<span class="py-output">  u'last_modified': u'2008-11-05T00:56:27.508729',</span>
+<span class="py-output">  u'name': u'old_object'}]</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>prefix</code></strong> (str) - filter the results using this prefix</li>
         <li><strong class="pname"><code>limit</code></strong> (int) - return the first &quot;limit&quot; objects found</li>
-        <li><strong class="pname"><code>offset</code></strong> (int) - return objects starting at &quot;offset&quot; in list</li>
+        <li><strong class="pname"><code>marker</code></strong> (str) - return objects with names greater than &quot;marker&quot;</li>
         <li><strong class="pname"><code>path</code></strong> (str) - return all objects in &quot;path&quot;</li>
     </ul></dd>
     <dt>Returns: list({&quot;name&quot;:&quot;...&quot;, &quot;hash&quot;:..., 
@@ -718,15 +766,22 @@
     </td>
   </tr></table>
   
-  <p>Return names of all Objects in the Container.</p>
+  <p>Return names of all <a 
+  href="cloudfiles.storage_object.Object-class.html" 
+  class="link">Object</a>s in the <a 
+  href="cloudfiles.container.Container-class.html" 
+  class="link">Container</a>.</p>
   <p>Keyword arguments are treated as HTTP query parameters and can be used
   to limit the result set (see the API documentation).</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container.list_objects()
+<span class="py-output">['new_object', 'old_object']</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>prefix</code></strong> (str) - filter the results using this prefix</li>
         <li><strong class="pname"><code>limit</code></strong> (int) - return the first &quot;limit&quot; objects found</li>
-        <li><strong class="pname"><code>offset</code></strong> (int) - return objects starting at &quot;offset&quot; in list</li>
+        <li><strong class="pname"><code>marker</code></strong> (str) - return objects with names greater than &quot;marker&quot;</li>
         <li><strong class="pname"><code>path</code></strong> (str) - return all objects in &quot;path&quot;</li>
     </ul></dd>
     <dt>Returns: list(str)</dt>
@@ -778,6 +833,12 @@
   </tr></table>
   
   <p>Permanently remove a storage object.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>container.list_objects()
+<span class="py-output">['new_object', 'old_object']</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>container.delete_object(<span class="py-string">'old_object'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>container.list_objects()
+<span class="py-output">['new_object']</span></pre>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -850,7 +911,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 12 03:28:23 2009
+    Generated by Epydoc 3.0.1 on Fri Mar  6 07:40:57 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
