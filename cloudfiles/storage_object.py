@@ -284,14 +284,8 @@ class Object(object):
         # If override is set (and _etag is not None), then the etag has
         # been manually assigned and we will not calculate our own.
 
-
-        #if verify:
-        #    if not self._etag_override:
-        #        self._etag = Object.compute_md5sum(data)
-        #else:
-        #    self._etag = None
-
-        self._etag = None
+        if not self.etag_override:
+            self._etag = None
 
         if not self.content_type:
             # pylint: disable-msg=E1101
@@ -304,7 +298,6 @@ class Object(object):
 
         response = None
         transfered = 0
-
         running_checksum = md5.md5()
 
         buff = data.read(4096)
