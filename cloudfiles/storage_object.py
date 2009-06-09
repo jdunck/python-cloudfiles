@@ -284,7 +284,7 @@ class Object(object):
         # If override is set (and _etag is not None), then the etag has
         # been manually assigned and we will not calculate our own.
 
-        if not self.etag_override:
+        if not self._etag_override:
             self._etag = None
 
         if not self.content_type:
