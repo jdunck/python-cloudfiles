@@ -2,7 +2,7 @@
 Object operations
 
 An Object is analogous to a file on a conventional filesystem. You can
-read data from, or write data to your Objects. You can also associate 
+read data from, or write data to your Objects. You can also associate
 arbitrary metadata with them.
 
 See COPYING for license information.
@@ -46,13 +46,13 @@ class Object(object):
     """
     # R/O support of the legacy objsum attr.
     objsum = property(lambda self: self._etag)
-    
+
     def __set_etag(self, value):
         self._etag = value
         self._etag_override = True
-    
+
     etag = property(lambda self: self._etag, __set_etag)
-    
+
     def __init__(self, container, name=None, force_exists=False, object_record=None):
         """
         Storage objects rarely if ever need to be instantiated directly by the
@@ -86,12 +86,12 @@ class Object(object):
     def read(self, size=-1, offset=0, hdrs=None, buffer=None, callback=None):
         """
         Read the content from the remote storage object.
-        
+
         By default this method will buffer the response in memory and
         return it as a string. However, if a file-like object is passed
         in using the buffer keyword, the response will be written to it
         instead.
-        
+
         A callback can be passed in for reporting on the progress of
         the download. The callback should accept two integers, the first
         will be for the amount of data written so far, the second for
@@ -122,16 +122,16 @@ class Object(object):
                 hdrs['Range'] = range
             else:
                 hdrs = {'Range': range}
-        response = self.container.conn.make_request('GET', 
+        response = self.container.conn.make_request('GET',
                 path = [self.container.name, self.name], hdrs = hdrs)
         if (response.status < 200) or (response.status > 299):
             buff = response.read()
             raise ResponseError(response.status, response.reason)
-        
+
         if hasattr(buffer, 'write'):
             scratch = response.read(8192)
             transferred = 0
-            
+
             while len(scratch) > 0:
                 buffer.write(scratch)
                 transferred += len(scratch)
@@ -141,7 +141,7 @@ class Object(object):
             return None
         else:
             return response.read()
-    
+
     def save_to_filename(self, filename, callback=None):
         """
         Save the contents of the object to filename.
@@ -160,12 +160,12 @@ class Object(object):
             self.read(buffer=fobj, callback=callback)
         finally:
             fobj.close()
-        
+
     @requires_name(InvalidObjectName)
     def stream(self, chunksize=8192, hdrs=None):
         """
         Return a generator of the remote storage object's data.
-        
+
         Warning: The HTTP response is only complete after this generator
         has raised a StopIteration. No other methods can be called until
         this has occurred.
@@ -184,7 +184,7 @@ class Object(object):
         @return: a generator which yields strings as the object is downloaded
         """
         self._name_check()
-        response = self.container.conn.make_request('GET', 
+        response = self.container.conn.make_request('GET',
                 path = [self.container.name, self.name], hdrs = hdrs)
         if response.status < 200 or response.status > 299:
             buff = response.read()
@@ -195,7 +195,7 @@ class Object(object):
             buff = response.read(chunksize)
         # I hate you httplib
         buff = response.read()
-    
+
     @requires_name(InvalidObjectName)
     def sync_metadata(self):
         """
@@ -229,7 +229,7 @@ class Object(object):
 
         # Requests are handled a little differently for writes ...
         http = self.container.conn.connection
-        
+
         # TODO: more/better exception handling please
         http.putrequest('PUT', path)
         for hdr in headers:
@@ -243,15 +243,15 @@ class Object(object):
     def write(self, data='', verify=True, callback=None):
         """
         Write data to the remote storage system.
-        
+
         By default, server-side verification is enabled, (verify=True), and
         end-to-end verification is performed using an md5 checksum. When
-        verification is disabled, (verify=False), the etag attribute will 
-        be set to the value returned by the server, not one calculated 
-        locally. When disabling verification, there is no guarantee that 
-        what you think was uploaded matches what was actually stored. Use 
+        verification is disabled, (verify=False), the etag attribute will
+        be set to the value returned by the server, not one calculated
+        locally. When disabling verification, there is no guarantee that
+        what you think was uploaded matches what was actually stored. Use
         this optional carefully. You have been warned.
-        
+
         A callback can be passed in for reporting on the progress of
         the upload. The callback should accept two integers, the first
         will be for the amount of data written so far, the second for
@@ -280,15 +280,19 @@ class Object(object):
         else:
             data = StringIO.StringIO(data)
             self.size = data.len
-            
+
         # If override is set (and _etag is not None), then the etag has
         # been manually assigned and we will not calculate our own.
-        if verify:
-            if not self._etag_override:
-                self._etag = Object.compute_md5sum(data)
-        else:
-            self._etag = None
-            
+
+
+        #if verify:
+        #    if not self._etag_override:
+        #        self._etag = Object.compute_md5sum(data)
+        #else:
+        #    self._etag = None
+
+        self._etag = None
+
         if not self.content_type:
             # pylint: disable-msg=E1101
             type = None
@@ -297,14 +301,18 @@ class Object(object):
             self.content_type = type and type or 'application/octet-stream'
 
         http = self.__get_conn_for_write()
-        
+
         response = None
         transfered = 0
+
+        running_checksum = md5.md5()
 
         buff = data.read(4096)
         try:
             while len(buff) > 0:
                 http.send(buff)
+                if verify and not self._etag_override:
+                    running_checksum.update(buff)
                 buff = data.read(4096)
                 transfered += len(buff)
                 if callable(callback):
@@ -316,6 +324,10 @@ class Object(object):
                 # pylint: disable-msg=E1101
                 buff = response.read()
             raise err
+        else:
+            if verify and not self._etag_override:
+                self._etag = running_checksum.hexdigest()
+
         # ----------------------------------------------------------------
 
         if (response.status < 200) or (response.status > 299):
@@ -333,19 +345,19 @@ class Object(object):
         """
         Write potentially transient data to the remote storage system using a
         generator or stream.
-        
+
         If the object's size is not set, chunked transfer encoding will be
         used to upload the file.
 
         If the object's size attribute is set, it will be used as the
         Content-Length.  If the generator raises StopIteration prior to yielding
         the right number of bytes, an IncompleteSend exception is raised.
-        
+
         If the content_type attribute is not set then a value of
         application/octet-stream will be used.
-        
-        Server-side verification will be performed if an md5 checksum is 
-        assigned to the etag property before calling this method, 
+
+        Server-side verification will be performed if an md5 checksum is
+        assigned to the etag property before calling this method,
         otherwise no verification will be performed, (verification
         can be performed afterward though by using the etag attribute
         which is set to the value returned by the server).
@@ -371,7 +383,7 @@ class Object(object):
         # This method implicitly diables verification
         if not self._etag_override:
             self._etag = None
-        
+
         if not self.content_type:
             self.content_type = 'application/octet-stream'
 
@@ -412,14 +424,14 @@ class Object(object):
                 # pylint: disable-msg=E1101
                 buff = response.read()
             raise err
-        
+
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
 
         for hdr in response.getheaders():
             if hdr[0].lower() == 'etag':
                 self._etag = hdr[1]
-            
+
     def load_from_filename(self, filename, verify=True, callback=None):
         """
         Put the contents of the named file into remote storage.
@@ -438,19 +450,19 @@ class Object(object):
         fobj = open(filename, 'rb')
         self.write(fobj, verify=verify, callback=callback)
         fobj.close()
-        
+
     def _initialize(self):
         """
         Initialize the Object with values from the remote service (if any).
         """
         if not self.name:
             return False
-        
+
         response = self.container.conn.make_request(
                 'HEAD', [self.container.name, self.name]
         )
         buff = response.read()
-        if response.status == 404: 
+        if response.status == 404:
             return False
         if (response.status < 200) or (response.status > 299):
             raise ResponseError(response.status, response.reason)
@@ -477,7 +489,7 @@ class Object(object):
 
     def _make_headers(self):
         """
-        Returns a dictionary representing http headers based on the 
+        Returns a dictionary representing http headers based on the
         respective instance attributes.
         """
         headers = {}
@@ -495,6 +507,7 @@ class Object(object):
             headers['X-Object-Meta-'+key] = self.metadata[key]
         return headers
 
+    @classmethod
     def compute_md5sum(cls, fobj):
         """
         Given an open file object, returns the md5 hexdigest of the data.
@@ -506,7 +519,6 @@ class Object(object):
             buff = fobj.read(4096)
         fobj.seek(0)
         return checksum.hexdigest()
-    compute_md5sum = classmethod(compute_md5sum)
 
     def public_uri(self):
         """
